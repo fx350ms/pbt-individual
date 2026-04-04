@@ -7,6 +7,6 @@ namespace pbt.Warehouses
 {
     public interface IWarehouseAppService : IApplicationService
     {
-        public Task<List<WarehouseNameAndCodeDto>> GetByCountryAsync(int countryId);
+        Task<List<WarehouseDto>> GetByTypeAsync(int warehouseType);
     }
 }

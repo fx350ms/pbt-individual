@@ -19,9 +19,9 @@ public abstract class IndividualAppServiceBase : ApplicationService
 
     public UserManager UserManager { get; set; }
 
-    public readonly ConfigAppCacheService _cacheService;
+    public readonly AppCacheService _cacheService;
 
-    protected IndividualAppServiceBase(ConfigAppCacheService cacheService)
+    protected IndividualAppServiceBase(AppCacheService cacheService)
     {
         LocalizationSourceName = IndividualConsts.LocalizationSourceName;
         _cacheService = cacheService;

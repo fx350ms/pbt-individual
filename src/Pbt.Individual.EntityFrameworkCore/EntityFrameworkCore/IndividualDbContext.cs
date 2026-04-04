@@ -3,6 +3,7 @@ using Pbt.Individual.Authorization.Roles;
 using Pbt.Individual.Authorization.Users;
 using Pbt.Individual.MultiTenancy;
 using Microsoft.EntityFrameworkCore;
+using pbt.Entities;
 
 namespace Pbt.Individual.EntityFrameworkCore;
 

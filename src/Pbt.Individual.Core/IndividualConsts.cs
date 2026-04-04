@@ -17,3 +17,9 @@ public class IndividualConsts
     public static readonly string DefaultPassPhrase =
         DebugHelper.IsDebug ? "gsKxGZ012HLL3MI5" : "48a2659a3dd94a81be5cdbac97878b7c";
 }
+
+
+public class CacheKey
+{
+    public const string Warehouses_ByType = "Warehouses_ByType_{0}";
+}

@@ -1,64 +1,42 @@
-﻿using Abp.Application.Services;
-using Abp.Domain.Repositories;
-using pbt.Entities;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Abp.UI;
 using Abp.Linq.Extensions;
-
-
 using System.Collections.Generic;
+using Abp;
+using Pbt.Individual.Warehouses.Dto;
+using Pbt.Individual.Core;
+using Microsoft.Data.SqlClient;
+using PBT.CacheService;
+using Pbt.Individual;
 
 namespace pbt.Warehouses
 {
-    public class WarehouseAppService :   IWarehouseAppService
+    public class WarehouseAppService : AbpServiceBase, IWarehouseAppService
     {
+        private readonly IAppCacheService _appCacheService;
 
-        public WarehouseAppService(IRepository<Warehouse, int> repository)
-            : base(repository)
+        public WarehouseAppService(IAppCacheService appCacheService)
         {
-
+            _appCacheService = appCacheService;
         }
 
-        public async Task<GetByCountryAsync> GetAsync(int id)
+        public async Task<List<WarehouseDto>> GetByTypeAsync(int warehouseType)
         {
-            var warehouse = await Repository.GetAsync(id);
-            if (warehouse == null)
+            var key = string.Format(CacheKey.Warehouses_ByType, warehouseType);
+            if (_appCacheService.TryGetCacheValue(key, out List<WarehouseDto> cachedData))
             {
-                throw new UserFriendlyException($"Warehouse with Id {id} not found");
+                return cachedData;
             }
-            // Ánh xạ thực thể sang DTO
-            return ObjectMapper.Map<WarehouseDto>(warehouse);
-        }
 
-        protected override IQueryable<Warehouse> CreateFilteredQuery(PagedWarehouseResultRequestDto input)
-        {
-            var query = Repository.GetAll()
-               .WhereIf(!string.IsNullOrEmpty(input.Keyword), u => u.Name.Contains(input.Keyword));
-            return query;
-
-        }
-
-
-        public async Task<List<WarehouseDto>> GetByCountry(int countryId)
-        {
-            var query = Repository.GetAll()
-             .WhereIf(true, u => u.CountryId == countryId && u.Status) ;
-                
-            return ObjectMapper.Map<List<WarehouseDto>>(query.ToList());
-
-
-        }
-        public async Task<List<WarehouseDto>> GetFull()
-        {
-            var data = await Repository.GetAllAsync();
-            data = data.Where(u => u.Status);
-            if (data == null)
+            var prs = new[]
             {
-                throw new UserFriendlyException($"Warehouse is empty");
-            }
-            return ObjectMapper.Map<List<WarehouseDto>>(data);
-
+                new SqlParameter("WarehouseType", warehouseType)
+            };
+            var data = await ConnectDb.GetListAsync<WarehouseDto>("SP_Warehouses_GetByType", System.Data.CommandType.StoredProcedure, prs);
+    
+            _appCacheService.SetCacheValue(key, data);
+            return data;
         }
     }
 }

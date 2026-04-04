@@ -10,7 +10,7 @@ namespace Pbt.Individual.Configuration;
 public class ConfigurationAppService : IndividualAppServiceBase, IConfigurationAppService
 {
 
-    public ConfigurationAppService(ConfigAppCacheService cacheService) : base(cacheService)
+    public ConfigurationAppService(AppCacheService cacheService) : base(cacheService)
     {
     }
 

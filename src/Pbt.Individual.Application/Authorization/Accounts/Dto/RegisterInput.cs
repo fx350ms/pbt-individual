@@ -13,6 +13,9 @@ public class RegisterInput : IValidatableObject
     [StringLength(AbpUserBase.MaxNameLength)]
     public string Name { get; set; }
 
+    [Required]
+    [StringLength(AbpUserBase.MaxPhoneNumberLength)]
+    public string PhoneNumber { get; set; }
 
     [Required]
     [StringLength(AbpUserBase.MaxUserNameLength)]
@@ -29,7 +32,6 @@ public class RegisterInput : IValidatableObject
 
     [DisableAuditing]
     public string CaptchaResponse { get; set; }
-
 
     public int WarehouseId { get; set; }
 

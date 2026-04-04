@@ -3,13 +3,23 @@ using Microsoft.Extensions.Primitives;
 
 namespace PBT.CacheService
 {
-    public class ConfigAppCacheService
+
+    public interface IAppCacheService
+    {
+        void SetCacheValue<T>(string key, T value, TimeSpan? absoluteExpirationRelativeToNow = null);
+        bool TryGetCacheValue<T>(string key, out T value);
+            T GetOrCreate<T>(string key, Func<ICacheEntry, T> factory);
+        void RemoveCacheValue(string key);
+        void ClearCache();
+    }
+
+    public class AppCacheService : IAppCacheService
     {
         private readonly IMemoryCache _cache;
         // Token source để clear toàn bộ cache một cách an toàn
         private CancellationTokenSource _resetToken = new CancellationTokenSource();
 
-        public ConfigAppCacheService(IMemoryCache cache)
+        public AppCacheService(IMemoryCache cache)
         {
             _cache = cache;
         }
@@ -19,7 +29,7 @@ namespace PBT.CacheService
             var cacheEntryOptions = new MemoryCacheEntryOptions
             {
                 AbsoluteExpirationRelativeToNow = absoluteExpirationRelativeToNow ?? TimeSpan.FromMinutes(60),
-                 
+
             };
             cacheEntryOptions.SetSize(size: 1); // Đặt kích thước cho entry, cần thiết nếu cache có giới hạn kích thước
 

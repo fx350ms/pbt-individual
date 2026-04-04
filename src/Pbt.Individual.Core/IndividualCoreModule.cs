@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Pbt.Individual.Authorization.Roles;
 using Pbt.Individual.Authorization.Users;
 using Pbt.Individual.Configuration;
+using Pbt.Individual.Core;
 using Pbt.Individual.Localization;
 using Pbt.Individual.MultiTenancy;
 using Pbt.Individual.Timing;
@@ -28,7 +29,7 @@ public class IndividualCoreModule : AbpModule
     public override void PreInitialize()
     {
         Configuration.Auditing.IsEnabledForAnonymousUsers = false;
-
+        Configuration.Auditing.IsEnabled = false;
         // Declare entity types
         Configuration.Modules.Zero().EntityTypes.Tenant = typeof(Tenant);
         Configuration.Modules.Zero().EntityTypes.Role = typeof(Role);
@@ -53,6 +54,8 @@ public class IndividualCoreModule : AbpModule
     public override void Initialize()
     {
         IocManager.RegisterAssemblyByConvention(typeof(IndividualCoreModule).GetAssembly());
+
+         ConnectDb.Initialize(_configuration.GetConnectionString(IndividualConsts.ConnectionStringName));
     }
 
     public override void PostInitialize()

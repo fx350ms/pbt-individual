@@ -30,6 +30,6 @@ public class IndividualApplicationModule : AbpModule
         );
 
 
-        IocManager.Register<ConfigAppCacheService>();
+        IocManager.Register<IAppCacheService, AppCacheService>();
     }
 }

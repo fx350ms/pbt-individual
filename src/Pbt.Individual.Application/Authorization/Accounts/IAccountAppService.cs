@@ -9,4 +9,8 @@ public interface IAccountAppService : IApplicationService
     Task<IsTenantAvailableOutput> IsTenantAvailable(IsTenantAvailableInput input);
 
     Task<RegisterOutput> Register(RegisterInput input);
+
+    Task UpdateCustomerIdForUserAsync(long userId, long customerId);
+
+    //   Task SynchronizeCustomerWithUserAsync(long customerId, string username);
 }

@@ -15,7 +15,6 @@ namespace Pbt.Individual.Warehouses.Dto
 
     public class WarehouseNameAndCodeDto : EntityDto<int>
     {
-
         public string Code { get; set; }
         public string Name { get; set; }
     }

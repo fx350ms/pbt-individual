@@ -10,7 +10,7 @@ namespace Pbt.Individual.Sessions;
 public class SessionAppService : IndividualAppServiceBase, ISessionAppService
 {
     private readonly IConfiguration _configuration;
-    public SessionAppService(ConfigAppCacheService cacheService,
+    public SessionAppService(AppCacheService cacheService,
           IConfiguration configuration
         )
         : base(cacheService)

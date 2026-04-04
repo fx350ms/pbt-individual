@@ -36,4 +36,6 @@ public class UserDto : EntityDto<long>
     public DateTime CreationTime { get; set; }
 
     public string[] RoleNames { get; set; }
+
+      public long? CustomerId { get; set; }
 }

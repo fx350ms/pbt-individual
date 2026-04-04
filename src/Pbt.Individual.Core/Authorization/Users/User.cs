@@ -20,6 +20,7 @@ public class User : AbpUser<User>
         {
             TenantId = tenantId,
             UserName = AdminUserName,
+            
             Name = AdminUserName,
             Surname = AdminUserName,
             EmailAddress = emailAddress,

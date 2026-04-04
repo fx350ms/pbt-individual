@@ -33,6 +33,11 @@ public class RegisterViewModel : IValidatableObject
 
     public string ExternalLoginAuthSchema { get; set; }
 
+    /// <summary>
+    /// Kho nhận hàng ở Việt Nam
+    /// </summary>
+    public int WarehouseId { get; set; }
+
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (!UserName.IsNullOrEmpty())

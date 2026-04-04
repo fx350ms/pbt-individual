@@ -29,6 +29,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using pbt.Customers;
+using pbt.Warehouses;
+using Pbt.Individual.Authorization.Accounts.Dto;
+using Pbt.Individual.Authorization.Accounts;
 
 namespace Pbt.Individual.Web.Controllers;
 
@@ -46,6 +50,12 @@ public class AccountController : IndividualControllerBase
     private readonly ITenantCache _tenantCache;
     private readonly INotificationPublisher _notificationPublisher;
 
+    private readonly IWarehouseAppService _warehouseAppService;
+    private readonly ICustomerAppService _customerAppService;
+    private readonly IAccountAppService _accountAppService;
+
+
+
     public AccountController(
         UserManager userManager,
         IMultiTenancyConfig multiTenancyConfig,
@@ -57,6 +67,9 @@ public class AccountController : IndividualControllerBase
         UserRegistrationManager userRegistrationManager,
         ISessionAppService sessionAppService,
         ITenantCache tenantCache,
+        IWarehouseAppService warehouseAppService,
+        ICustomerAppService customerAppService,
+        IAccountAppService accountAppService,
         INotificationPublisher notificationPublisher)
     {
         _userManager = userManager;
@@ -70,6 +83,9 @@ public class AccountController : IndividualControllerBase
         _sessionAppService = sessionAppService;
         _tenantCache = tenantCache;
         _notificationPublisher = notificationPublisher;
+        _warehouseAppService = warehouseAppService;
+        _customerAppService = customerAppService;
+        _accountAppService = accountAppService;
     }
 
     #region Login / Logout
@@ -131,14 +147,16 @@ public class AccountController : IndividualControllerBase
 
     #region Register
 
-    public ActionResult Register()
+    public async Task<ActionResult> Register()
     {
-        return RegisterView(new RegisterViewModel());
+        return await RegisterView(new RegisterViewModel());
     }
 
-    private ActionResult RegisterView(RegisterViewModel model)
+    private async Task<ActionResult> RegisterView(RegisterViewModel model)
     {
         ViewBag.IsMultiTenancyEnabled = _multiTenancyConfig.IsEnabled;
+        var warehouses = await _warehouseAppService.GetByTypeAsync((int)WarehouseType.Destination); // Assuming 1 is the type for warehouses in Vietnam
+        ViewBag.Warehouses = warehouses;
 
         return View("Register", model);
     }
@@ -188,6 +206,8 @@ public class AccountController : IndividualControllerBase
                 true // Assumed email address is always confirmed. Change this if you want to implement email confirmation.
             );
 
+
+
             // Getting tenant-specific settings
             var isEmailConfirmationRequiredForLogin = await SettingManager.GetSettingValueAsync<bool>(AbpZeroSettingNames.UserManagement.IsEmailConfirmationRequiredForLogin);
 
@@ -213,6 +233,10 @@ public class AccountController : IndividualControllerBase
 
             await _unitOfWorkManager.Current.SaveChangesAsync();
 
+            var customerId = await CreateCustomerForRegisteredUserAsync(user.Id, model);
+
+            // await _customerAppService.SynchronizeCustomerWithUserAsync(customerId, model.UserName);
+            await _accountAppService.UpdateCustomerIdForUserAsync(user.Id, customerId);
             Debug.Assert(user.TenantId != null);
 
             var tenant = await _tenantManager.GetByIdAsync(user.TenantId.Value);
@@ -256,6 +280,21 @@ public class AccountController : IndividualControllerBase
 
             return View("Register", model);
         }
+    }
+
+    private async Task<long> CreateCustomerForRegisteredUserAsync(long userId, RegisterViewModel model)
+    {
+        var createCustomerInput = new CreateCustomerDto
+        {
+            Username = model.UserName,
+            FullName = model.Name,
+            Email = model.EmailAddress,
+            PhoneNumber = model.PhoneNumber,
+            UserId = userId,
+            WarehouseId = model.WarehouseId
+        };
+
+        return await _customerAppService.CreateFromRegistrationAsync(createCustomerInput);
     }
 
     #endregion
@@ -346,7 +385,7 @@ public class AccountController : IndividualControllerBase
             return await Register(viewModel);
         }
 
-        return RegisterView(viewModel);
+        return await RegisterView(viewModel);
     }
 
     [UnitOfWork]

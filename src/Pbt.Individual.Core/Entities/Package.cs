@@ -114,7 +114,7 @@ public class Package : FullAuditedEntity<int>
     public decimal? InsuranceValue { get; set; } // giá trị bảo hiểm
     public int? DeliveryRequestId { get; set; }
     public int? DeliveryNoteId { get; set; } // phiếu xuất kho
-    [ForeignKey("DeliveryNoteId")][CanBeNull] public virtual DeliveryNote DeliveryNote { get; set; }
+    
 
     [DefaultValue(false)]
     public bool IsRepresentForDeliveryNote { get; set; } // kiện đại diện cho phiếu xuất kho
@@ -129,11 +129,7 @@ public class Package : FullAuditedEntity<int>
     public long? CustomerId { get; set; }
     public long? CustomerFakeId { get; set; }
     public decimal? UnitPrice { get; set; }  // giá vận chuyển trên 1 kg
-    [CanBeNull] public virtual Customer Customer { get; set; }
-    [ForeignKey("OrderId")][CanBeNull] public virtual Order Order { get; set; }
     
-    [ForeignKey("ShippingPartnerId")][CanBeNull] public virtual ShippingPartner ShippingPartner { get; set; }
-    [ForeignKey("WarehouseId")][CanBeNull] public virtual Warehouse Warehouse { get; set; }
     
     //bool IsQuickBagging set default = true
     [DefaultValue(true)]
