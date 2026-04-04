@@ -27,7 +27,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "01. DataAccess", "01. DataA
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "02. Services", "02. Services", "{8F4A6E35-904F-4125-871D-2EA184647285}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PBT.CacheService", "PBT.CacheService\PBT.CacheService.csproj", "{EEC2E1F2-8189-4FA3-886C-5F5F1AB63807}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PBT.CacheService", "src\PBT.CacheService\PBT.CacheService.csproj", "{EEC2E1F2-8189-4FA3-886C-5F5F1AB63807}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

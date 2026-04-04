@@ -54,4 +54,8 @@ public class AccountAppService : IndividualAppServiceBase, IAccountAppService
             CanLogin = user.IsActive && (user.IsEmailConfirmed || !isEmailConfirmationRequiredForLogin)
         };
     }
+
+    private async Task CreateCustomerByUser()
+    {
+    }
 }

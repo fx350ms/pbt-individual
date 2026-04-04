@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
     <VersionPrefix>1.0.0.0</VersionPrefix>
     <TargetFramework>net9.0</TargetFramework>
@@ -12,7 +12,13 @@
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
   </PropertyGroup>
   <ItemGroup>
-    <ProjectReference Include="..\..\PBT.CacheService\PBT.CacheService.csproj" />
+    <Compile Remove="Roles\IRoleAppService.cs" />
+    <Compile Remove="Roles\RoleAppService.cs" />
+    <Compile Remove="Users\IUserAppService.cs" />
+    <Compile Remove="Users\UserAppService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PBT.CacheService\PBT.CacheService.csproj" />
     <ProjectReference Include="..\Pbt.Individual.Core\Pbt.Individual.Core.csproj" />
   </ItemGroup>
 </Project>

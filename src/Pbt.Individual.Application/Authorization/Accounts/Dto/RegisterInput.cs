@@ -30,6 +30,9 @@ public class RegisterInput : IValidatableObject
     [DisableAuditing]
     public string CaptchaResponse { get; set; }
 
+
+    public int WarehouseId { get; set; }
+
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {
         if (!UserName.IsNullOrEmpty())
