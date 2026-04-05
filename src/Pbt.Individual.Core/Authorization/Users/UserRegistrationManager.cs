@@ -14,6 +14,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.VisualBasic;
 
 namespace Pbt.Individual.Authorization.Users;
 
@@ -59,67 +60,51 @@ public class UserRegistrationManager : DomainService
             CreationTime = DateTime.Now,
             SecurityStamp = Guid.NewGuid().ToString("N"),
             ConcurrencyStamp = Guid.NewGuid().ToString(),
-            Roles = new List<UserRole>()
+            Roles = new List<UserRole>(),
+            Password = _passwordHasher.HashPassword(null, plainPassword)
         };
 
         user.SetNormalizedNames();
-        user.Password = _passwordHasher.HashPassword(user, plainPassword);
+       // user.Password = _passwordHasher.HashPassword(user, plainPassword);
 
-        var createdUserId = await CreateUserByStoredProcedureAsync(user);
-        var createdUser = await _userManager.GetUserByIdAsync(createdUserId);
-
-        await _userManager.InitializeOptionsAsync(tenant.Id);
-
-        foreach (var defaultRole in await _roleManager.Roles.Where(r => r.IsDefault).ToListAsync())
-        {
-            await _userManager.AddToRoleAsync(createdUser, defaultRole.Name);
-        }
-
-        await CurrentUnitOfWork.SaveChangesAsync();
-
-        return createdUser;
-    }
-
-    private async Task<long> CreateUserByStoredProcedureAsync(User user)
-    {
-        var userIdParameter = new SqlParameter("@UserId", SqlDbType.BigInt)
+        var statusPr = new SqlParameter("@Status", SqlDbType.Int)
         {
             Direction = ParameterDirection.Output
         };
-
-        var parameters = new[]
+        var msgPr = new SqlParameter("@Msg", SqlDbType.NVarChar, -1)
         {
-            new SqlParameter("@TenantId", user.TenantId ?? (object)DBNull.Value),
-            new SqlParameter("@UserName", user.UserName),
-            new SqlParameter("@NormalizedUserName", user.NormalizedUserName),
+            Direction = ParameterDirection.Output
+        };
+        var userIdPr = new SqlParameter("@UserId", SqlDbType.BigInt)
+        {
+            Direction = ParameterDirection.Output
+        };
+        var prs = new[]
+                {
+            new SqlParameter("@TenantId", AbpSession.TenantId ?? 0),
             new SqlParameter("@Name", user.Name),
-            new SqlParameter("@Surname", user.Surname),
+            new SqlParameter("@PhoneNumber", user.PhoneNumber),
             new SqlParameter("@EmailAddress", user.EmailAddress),
-            new SqlParameter("@NormalizedEmailAddress", user.NormalizedEmailAddress),
-            new SqlParameter("@PhoneNumber", (object?)user.PhoneNumber ?? DBNull.Value),
+            new SqlParameter("@UserName", user.UserName),
             new SqlParameter("@Password", user.Password),
-            new SqlParameter("@SecurityStamp", (object?)user.SecurityStamp ?? Guid.NewGuid().ToString("N")),
-            new SqlParameter("@ConcurrencyStamp", (object?)user.ConcurrencyStamp ?? Guid.NewGuid().ToString()),
-            new SqlParameter("@IsActive", user.IsActive),
-            new SqlParameter("@IsEmailConfirmed", user.IsEmailConfirmed),
-            new SqlParameter("@IsLockoutEnabled", user.IsLockoutEnabled),
-            new SqlParameter("@IsPhoneNumberConfirmed", user.IsPhoneNumberConfirmed),
-            new SqlParameter("@IsTwoFactorEnabled", user.IsTwoFactorEnabled),
-            new SqlParameter("@CreationTime", user.CreationTime),
-            new SqlParameter("@IsDeleted", user.IsDeleted),
-            new SqlParameter("@AccessFailedCount", user.AccessFailedCount),
-            userIdParameter
+            userIdPr,
+            statusPr,
+            msgPr
         };
 
-        await ConnectDb.ExecuteNonQueryAsync("SP_Users_CreateByRegistration", CommandType.StoredProcedure, parameters);
+        await ConnectDb.ExecuteNonQueryAsync("SP_AbpUsers_Register", CommandType.StoredProcedure, prs);
 
-        if (userIdParameter.Value == DBNull.Value || !long.TryParse(userIdParameter.Value.ToString(), out var userId) || userId <= 0)
+        if ((int)statusPr.Value != 0)
         {
-            throw new UserFriendlyException("Không thể tạo user bằng Store Procedure SP_Users_CreateByRegistration.");
+            throw new UserFriendlyException((string)msgPr.Value);
         }
-
-        return userId;
+        var userId = userIdPr.Value == DBNull.Value || !long.TryParse(userIdPr.Value.ToString(), out var id) || id <= 0
+            ? throw new UserFriendlyException("Không thể tạo user bằng Store Procedure SP_AbpUsers_Register.")
+            : id;
+        user.Id = userId;
+        return user;
     }
+ 
 
     private void CheckForTenant()
     {
