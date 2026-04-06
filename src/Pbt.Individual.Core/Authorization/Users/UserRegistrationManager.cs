@@ -43,68 +43,79 @@ public class UserRegistrationManager : DomainService
 
     public async Task<User> RegisterAsync(string name, string phoneNumber, string emailAddress, string userName, string plainPassword, bool isEmailConfirmed)
     {
-        CheckForTenant();
-
-        var tenant = await GetActiveTenantAsync();
-
-        var user = new User
+        try
         {
-            TenantId = tenant.Id,
-            Name = name,
-            Surname = "",
-            PhoneNumber = phoneNumber,
-            EmailAddress = emailAddress,
-            IsActive = true,
-            UserName = userName,
-            IsEmailConfirmed = isEmailConfirmed,
-            CreationTime = DateTime.Now,
-            SecurityStamp = Guid.NewGuid().ToString("N"),
-            ConcurrencyStamp = Guid.NewGuid().ToString(),
-            Roles = new List<UserRole>(),
-            Password = _passwordHasher.HashPassword(null, plainPassword)
-        };
+            CheckForTenant();
 
-        user.SetNormalizedNames();
-       // user.Password = _passwordHasher.HashPassword(user, plainPassword);
+            var tenant = await GetActiveTenantAsync();
 
-        var statusPr = new SqlParameter("@Status", SqlDbType.Int)
-        {
-            Direction = ParameterDirection.Output
-        };
-        var msgPr = new SqlParameter("@Msg", SqlDbType.NVarChar, -1)
-        {
-            Direction = ParameterDirection.Output
-        };
-        var userIdPr = new SqlParameter("@UserId", SqlDbType.BigInt)
-        {
-            Direction = ParameterDirection.Output
-        };
-        var prs = new[]
-                {
-            new SqlParameter("@TenantId", AbpSession.TenantId ?? 0),
-            new SqlParameter("@Name", user.Name),
-            new SqlParameter("@PhoneNumber", user.PhoneNumber),
-            new SqlParameter("@EmailAddress", user.EmailAddress),
-            new SqlParameter("@UserName", user.UserName),
-            new SqlParameter("@Password", user.Password),
-            userIdPr,
-            statusPr,
-            msgPr
-        };
+            var user = new User
+            {
+                TenantId = tenant.Id,
+                Name = name,
+                Surname = "",
+                PhoneNumber = phoneNumber,
+                EmailAddress = emailAddress,
+                IsActive = true,
+                UserName = userName,
+                IsEmailConfirmed = isEmailConfirmed,
+                CreationTime = DateTime.Now,
+                SecurityStamp = Guid.NewGuid().ToString("N"),
+                ConcurrencyStamp = Guid.NewGuid().ToString(),
+                Roles = new List<UserRole>(),
+                Password = _passwordHasher.HashPassword(null, plainPassword)
+            };
 
-        await ConnectDb.ExecuteNonQueryAsync("SP_AbpUsers_Register", CommandType.StoredProcedure, prs);
+            user.SetNormalizedNames();
 
-        if ((int)statusPr.Value != 0)
-        {
-            throw new UserFriendlyException((string)msgPr.Value);
+            var statusPr = new SqlParameter("@Status", SqlDbType.Int)
+            {
+                Direction = ParameterDirection.Output
+            };
+            var msgPr = new SqlParameter("@Msg", SqlDbType.NVarChar, -1)
+            {
+                Direction = ParameterDirection.Output
+            };
+            var userIdPr = new SqlParameter("@UserId", SqlDbType.BigInt)
+            {
+                Direction = ParameterDirection.Output
+            };
+            var customerIdPr = new SqlParameter("@CustomerId", SqlDbType.BigInt)
+            {
+                Direction = ParameterDirection.Output
+            };  
+            var prs = new[]
+                    {
+                    new SqlParameter("@TenantId", AbpSession.TenantId ?? 0),
+                    new SqlParameter("@Name", user.Name),
+                    new SqlParameter("@PhoneNumber", user.PhoneNumber),
+                    new SqlParameter("@EmailAddress", user.EmailAddress),
+                    new SqlParameter("@UserName", user.UserName),
+                    new SqlParameter("@Password", user.Password),
+                    userIdPr,
+                    customerIdPr,
+                    statusPr,
+                    msgPr
+            };
+
+            await ConnectDb.ExecuteNonQueryAsync("SP_AbpUsers_Register", CommandType.StoredProcedure, prs);
+
+            if ((int)statusPr.Value < 0)
+            {
+                throw new UserFriendlyException((string)msgPr.Value);
+            }
+            var userId = userIdPr.Value == DBNull.Value || !long.TryParse(userIdPr.Value.ToString(), out var id) || id <= 0
+                ? throw new UserFriendlyException("Không thể tạo user bằng Store Procedure SP_AbpUsers_Register.")
+                : id;
+            user.Id = userId;
+            return user;
         }
-        var userId = userIdPr.Value == DBNull.Value || !long.TryParse(userIdPr.Value.ToString(), out var id) || id <= 0
-            ? throw new UserFriendlyException("Không thể tạo user bằng Store Procedure SP_AbpUsers_Register.")
-            : id;
-        user.Id = userId;
-        return user;
+        catch (Exception ex)
+        {
+            throw new UserFriendlyException(ex.Message);
+        }
     }
- 
+
 
     private void CheckForTenant()
     {
