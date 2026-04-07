@@ -1,0 +1,126 @@
+@using Pbt.Individual.ApplicationUtils
+@model Pbt.Individual.Web.Models.Orders.CreateOrderModel
+@{
+    ViewBag.Title = L("CreateOrder");
+}
+@section scripts
+{
+    <environment names="Development">
+        <script src="~/view-resources/Views/Orders/Create.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/view-resources/Views/Orders/Create.min.js" asp-append-version="true"></script>
+    </environment>
+}
+
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1>@L("CreateNewWaybill") </h1>
+            </div>
+            <div class="col-sm-6">
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-body">
+                        <form id="form-create-waybills" role="form" class="form-horizontal">
+                            <input type="hidden" id="UseInsurance" name="UseInsurance" value="false" />
+                            <input type="hidden" id="UseDomesticTransportation" name="UseDomesticTransportation"
+                                   value="false" />
+                            <input type="hidden" id="UseShockproofPackaging" name="UseShockproofPackaging"
+                                   value="false" />
+                            <input type="hidden" id="UseWoodenPackaging" name="UseWoodenPackaging" value="false" />
+                            <div class="row">
+                                <div class="col-12 form-row">
+                                    <div class="col-12 col-lg-5 mb-3 mb-lg-0">
+                                        <label>@L("InputWaybillNumbers") </label><i>Các mã vận đơn ngăn cách nhau bởi dấu phảy hoặc xuống dòng</i>
+                                        <textarea type="text" class="form-control " name="WaybillCodes" style="height: 300px;" required>@Model.Dto.WaybillCodes</textarea>
+                                        <span asp-validation-for="Dto.WaybillCodes" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-3 mb-3 mb-lg-0">
+                                        <label for="Keyword">@L("SelectLine")</label>
+                                        <select class="form-control" name="ShippingLine" required>
+                                            <option selected value="">-- @L("SelectLine") --</option>
+                                            <option value="@((int)ShippingLine.Consignment)">
+                                                @ShippingLine.Consignment.GetDescription()
+                                            </option>
+                                            <option value="@((int)ShippingLine.Ecommerce)">
+                                                @ShippingLine.Ecommerce.GetDescription()
+                                            </option>
+                                            <option value="@((int)ShippingLine.Official)">
+                                                @ShippingLine.Official.GetDescription()
+                                            </option>
+                                            <option value="@((int)ShippingLine.Portable)">
+                                                @ShippingLine.Portable.GetDescription()
+                                            </option>
+                                        </select>
+                                        <span asp-validation-for="Dto.ShippingLine" class="text-danger"></span>
+                                    </div>
+                                    <div class="col-12 col-md-6 col-lg-4">
+                                        <label class="d-block font-weight-bold">Chọn dịch vụ</label>
+                                        <div class="form-group d-flex align-items-center">
+                                            <div class="custom-control custom-checkbox mr-2">
+                                                <input class="custom-control-input" data-service-target="#UseInsurance"
+                                                       name="OnUseInsurance" type="checkbox" id="select-insurance">
+                                                <label class="custom-control-label" for="select-insurance">
+                                                    Bảo
+                                                    hiểm
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input"
+                                                       data-service-target="#UseShockproofPackaging"
+                                                       name="OnUseShockproofPackaging" type="checkbox"
+                                                       id="select-shockproof-packaging">
+                                                <label class="custom-control-label"
+                                                       for="select-shockproof-packaging">Chống sốc</label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <div class="custom-control custom-checkbox">
+                                                <input class="custom-control-input"
+                                                       data-service-target="#UseWoodenPackaging"
+                                                       name="OnUseWoodenPackaging" type="checkbox"
+                                                       id="select-wooden-packaging">
+                                                <label class="custom-control-label" for="select-wooden-packaging">
+                                                    Đóng
+                                                    gỗ
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="modal-footer justify-content-end flex-column flex-md-row">
+                                <a href="@Url.Action("Index", "Orders")" type="button"
+                                       class="btn btn-default close-button mb-2 mb-md-0 mr-md-2 d-block d-md-inline-block" data-dismiss="modal">
+                                    <i class="fas fa-arrow-left"></i> @L("GoToList")
+                                </a>
+                                <button type="submit" class="btn btn-primary save-button mb-2 mb-md-0 mr-md-2 d-block d-md-inline-block"
+                                        data-url="@Url.Action("Create", "Orders")">
+                                    <i class="fas fa-share-square"></i> @L("SaveAndCreateNew")
+                                </button>
+                                <button type="submit" class="btn btn-primary save-button d-block d-md-inline-block"
+                                        data-url="@Url.Action("Index", "Orders")">
+                                    <i class="fas fa-save"></i> @L("SaveAndGoToList")
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+

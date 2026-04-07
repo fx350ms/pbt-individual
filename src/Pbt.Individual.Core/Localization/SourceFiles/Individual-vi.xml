@@ -1104,5 +1104,7 @@
 		<text name="DeliveryRequests" value="Yêu cầu giao hàng" />
 		<text name="DeliveryRequestList" value="Danh sách yêu cầu giao hàng" />
 		<text name="PaymentsList" value="Danh sách thanh toán" />
+		
+	 
 	</texts>
 </localizationDictionary>

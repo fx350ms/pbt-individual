@@ -1,4 +1,6 @@
 
+using System.ComponentModel.DataAnnotations;
+
 namespace Pbt.Individual.Orders.Dto
 {
     public class CreateWaybillListDto
@@ -7,6 +9,7 @@ namespace Pbt.Individual.Orders.Dto
         /// <summary>
         /// Mã vận đơn
         /// </summary>
+        [Required(ErrorMessage = "Vui lòng nhập mã vận đơn")]
         public string WaybillCodes { get; set; }
 
         /// <summary>

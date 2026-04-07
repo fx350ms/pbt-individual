@@ -1,7 +1,7 @@
 (function ($) {
     var _orderService = abp.services.app.order,
         _packageService = abp.services.app.package,
-        l = abp.localization.getSource('pbt'),
+        l = abp.localization.getSource('PbtIndividual'),
         _$modal = $('#OrderCreateModal'),
         _$form = _$modal.find('form'),
         _$table = $('#OrdersTable');
@@ -139,7 +139,7 @@
                 targets: 7,
                 sortable: false,
                 data: 'totalFee',
-                width: 150,
+                width: 250,
                 render: (data, type, row, meta) => {
                     
                     var woodenPackagingFee = row.woodenPackagingFee ? FormatNumberToDisplay(row.woodenPackagingFee, 0) : 0;
@@ -175,7 +175,7 @@
                 sortable: false,
                 className: 'text-right',
                 data: 'totalPrice',
-                width: 150,
+                width: 100,
                 render: (data, type, row, meta) => {
                     // return data ? `<strong class="text-primary">${FormatNumberToDisplay(data, 0)}</strong>` : '-';
                     return formatNumberWithThousandsSeparator(data);
@@ -187,6 +187,7 @@
                 sortable: false,
                 width: 250,
                 render: (data, type, row) => {
+                    debugger;
                     // Ngày tạo
                     const creation = formatDateToDDMMYYYYHHmm(row.creationTime) || '';
                     // Ngày xuất kho TQ
@@ -408,8 +409,8 @@
 
     });
     $(document).on('click', '.mark-as-completed', function () {
-        var orderId = $(this).attr("data-order-id");
-        var orderName = $(this).attr('data-order-name');
+        var orderId = $(this).attr("data-id");
+        var orderName = $(this).attr('data-name');
         abp.message.confirm(
             abp.utils.formatString(
                 l('AreYouSureWantToChangeOrderToCompleted'),
@@ -427,12 +428,11 @@
     });
 
     $(document).on('click', '.mark-as-delivered', function () {
-        var orderId = $(this).attr("data-order-id");
-        var orderName = $(this).attr('data-order-name');
+        var orderId = $(this).attr("data-id");
+        var orderName = $(this).attr('data-name');
 
         markAsDelivered(orderId, orderName);
     });
-
 
     function markAsDelivered(orderId, orderName) {
         abp.message.confirm(
@@ -476,24 +476,7 @@
             }
         );
     }
-
-    $(document).on('click', '.edit-order', function (e) {
-        var orderId = $(this).attr("data-order-id");
-
-        e.preventDefault();
-        abp.ajax({
-            url: abp.appPath + 'Orders/EditModal?Id=' + orderId,
-            type: 'POST',
-            dataType: 'html',
-            success: function (content) {
-
-                $('#OrderEditModal div.modal-content').html(content);
-            },
-            error: function (e) {
-            }
-        });
-    });
-
+ 
     $(document).on('click', '.view-package-list', function () {
         var orderId = $(this).data('order-id');
 
@@ -511,10 +494,7 @@
         });
     });
 
-    $(document).on('click', 'a[data-target="#OrdersCreateModal"]', (e) => {
-        $('.nav-tabs a[href="#order-details"]').tab('show')
-    });
-
+  
     abp.event.on('order.edited', (data) => {
         _$ordersTable.ajax.reload();
     });
@@ -536,54 +516,4 @@
             return false;
         }
     });
-
-
-    $(document).on('click', '.view-order-mote', function () {
-        var orderId = $(this).data('order-id');
-        $('#hidden-order-id').val(orderId);
-        _orderNoteService.getAllByOrderId(orderId).done(function (data) {
-            $('#noteList').empty();
-            if (Array.isArray(data) && data.length > 0) {
-                data.forEach(function (note) {
-                    const row = `
-                        <tr>
-                            <td>${note.creatorUserName}</td>
-                            <td>${formatDateToDDMMYYYYHHmm(note.creationTime)}</td>
-                            <td>${note.content}</td>
-                        </tr>
-                    `;
-                    $('#noteList').append(row);
-                });
-            } else {
-                $('#noteList').append('<tr><td colspan="3" class="text-center">Không có ghi chú nào.</td></tr>');
-            }
-        });
-    });
-
-    $('#btnSaveNote').on('click', function () {
-        const content = $('#noteContent').val().trim();
-        var orderId = $('#hidden-order-id').val();
-        if (!content) {
-            abp.message.warn('Vui lòng nhập nội dung ghi chú.');
-            return;
-        }
-        var note = {
-            OrderId: orderId,
-            Content: content,
-        };
-        _orderNoteService.create(note).done(function (data) {
-            const newRow = `
-                <tr>
-                    <td>${data.creatorUserName}</td>
-                    <td>${formatDateToDDMMYYYYHHmm(data.creationTime)}</td >
-                    <td>${data.content}</td>
-                </tr>
-            `;
-            $('#noteList').prepend(newRow);
-            $('#noteContent').val('');
-        }).always(function () {
-            abp.ui.clearBusy(_$waybillModal);
-        });
-    });
-
 })(jQuery);

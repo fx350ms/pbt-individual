@@ -2,6 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pbt.Individual.Controllers;
+using Pbt.Individual.Web.Models.Orders;
+using Pbt.Individual.Orders.Dto;
 
 
 namespace Pbt.Individual.Web.Controllers
@@ -17,7 +19,14 @@ namespace Pbt.Individual.Web.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            var model = new CreateOrderModel
+            {
+                Dto = new CreateWaybillListDto()
+                {
+                    WaybillCodes = ""
+                }
+            };
+            return View(model);
         }
     }
 }
