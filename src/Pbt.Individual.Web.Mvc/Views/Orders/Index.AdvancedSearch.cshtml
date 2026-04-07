@@ -1,4 +1,6 @@
-﻿<div class="abp-advanced-search">
+﻿@using Pbt.Individual.ApplicationUtils
+
+<div class="abp-advanced-search">
     <!-- Nút mở rộng/thu gọn -->
     <button class="btn btn-outline-primary mb-2" type="button" data-toggle="collapse" data-target="#OrderFilterCollapse">
         <i class="fas fa-filter"></i> Bộ lọc nâng cao
@@ -37,11 +39,22 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label for="Keyword">@L("Line")</label>
+                    <label for="Keyword">@L("ShippingLine")</label>
                     <div class="input-group input-group">
                         <select class="form-control" id="ShippingLine" name="ShippingLine">
                             <option value="-1">-- @L("All") --</option>
-                            
+                             <option value="@((int)ShippingLine.Consignment)">
+                                                @ShippingLine.Consignment.GetDescription()
+                                            </option>
+                                            <option value="@((int)ShippingLine.Ecommerce)">
+                                                @ShippingLine.Ecommerce.GetDescription()
+                                            </option>
+                                            <option value="@((int)ShippingLine.Official)">
+                                                @ShippingLine.Official.GetDescription()
+                                            </option>
+                                            <option value="@((int)ShippingLine.Portable)">
+                                                @ShippingLine.Portable.GetDescription()
+                                            </option>
                         </select>
                         <span class="input-group-append">
                             <button type="button" class="btn btn-flat btn-clear-value" target="ShippingLine" target-value="-1">
@@ -49,24 +62,6 @@
                             </button>
                         </span>
                     </div>
-                </div>
-
-                <div class="col-md-3">
-                    <label for="ServiceId">@L("Service")</label>
-                    <div class="input-group">
-                        <select class="form-control" id="ServiceId" name="ServiceId">
-                            <option value="-1">-- @L("All") --</option>
-                            <option value="1">@L("WoodenPackaging")</option>
-                            <option value="2">@L("ShockproofPackaging")</option>
-                            <option value="3">@L("DomesticTransportation")</option>
-                        </select>
-                        <span class="input-group-append">
-                            <button type="button" class="btn btn-flat btn-clear-value" target="ServiceId" target-value="-1">
-                                <i class="fas fa-times-circle text-danger"></i>
-                            </button>
-                        </span>
-                    </div>
-
                 </div>
 
                 <div class="col-md-3">
@@ -84,12 +79,25 @@
                 </div>
 
                 <div class="col-md-3">
-                    <label for="ExportDate">@L("ExportDateCN")</label>
+                    <label for="ImportDateCN">@L("ImportDateCN")</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control date-range" name="ImportDateCN" id="ImportDateCN" target="import-date-cn">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-danger btn-clear-value" target="ImportDateCN" target-date="import-date-cn" style="border: none;">
+                                <i class="fa fa-times-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" class="form-control float-right start-date create-date" name="ImportStartDateCNStr" id="start-import-date">
+                    <input type="hidden" class="form-control float-right end-date create-date" name="ImportEndDateCNStr" id="end-import-date">
+                </div>
+                <div class="col-md-3">
+                    <label for="ExportDateCN">@L("ExportDateCN")</label>
 
                     <div class="input-group">
-                        <input type="text" class="form-control date-range" name="ExportDate" id="ExportDate" target="export-date">
+                        <input type="text" class="form-control date-range" name="ExportDateCN" id="ExportDateCN" target="export-date">
                         <div class="input-group-append">
-                            <button type="button" class="btn btn-outline-danger btn-clear-value" target="ExportDate" target-date="export-date" style="border: none;">
+                            <button type="button" class="btn btn-outline-danger btn-clear-value" target="ExportDateCN" target-date="export-date" style="border: none;">
                                 <i class="fa fa-times-circle"></i>
                             </button>
                         </div>
@@ -110,6 +118,20 @@
                     </div>
                     <input type="hidden" class="form-control float-right start-date import-date" name="ImportStartDateStr" id="start-import-date">
                     <input type="hidden" class="form-control float-right end-date import-date" name="ImportEndDateStr" id="end-import-date">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="DeliveryDate">@L("DeliveryDate")</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control date-range" name="DeliveryDate" id="DeliveryDate" target="delivery-date">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-danger btn-clear-value" target="DeliveryDate" target-date="delivery-date" style="border: none;">
+                                <i class="fa fa-times-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" class="form-control float-right start-date delivery-date" name="DeliveryStartDateStr" id="start-delivery-date">
+                    <input type="hidden" class="form-control float-right end-date delivery-date" name="DeliveryEndDateStr" id="end-delivery-date">
                 </div>
 
   

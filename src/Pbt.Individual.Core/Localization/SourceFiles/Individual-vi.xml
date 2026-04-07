@@ -1104,7 +1104,8 @@
 		<text name="DeliveryRequests" value="Yêu cầu giao hàng" />
 		<text name="DeliveryRequestList" value="Danh sách yêu cầu giao hàng" />
 		<text name="PaymentsList" value="Danh sách thanh toán" />
-		
-	 
+		<text name="InputWaybillNumbers" value="Nhập danh sách vận đơn" />
+		<text name="Shockproof" value="Chống sốc" />
+		<text name="DomesticShipping" value="Ship nội địa" />
 	</texts>
 </localizationDictionary>

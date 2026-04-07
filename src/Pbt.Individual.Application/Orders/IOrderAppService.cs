@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Abp.Application.Services;
 using Abp.Application.Services.Dto;
 using Pbt.Individual.Orders.Dto;
@@ -16,6 +17,12 @@ namespace Pbt.Individual.Orders
     /// Danh sách đơn hàng của khách hàng hiện tại
     /// </summary>
     Task<PagedResultDto<OrderDto>> GetCustomerOrdersAsync(OrderPagedResultRequestDto input);
+
+    Task<OrderDto> GetAsync(long id);
+
+    Task<OrderDetailDto> GetDetailAsync(long id);
+
+    Task<(OrderDetailDto, List<PackageOrderViewDto>)> GetDetailWithPackagesAsync(long id);
   }
 
 }

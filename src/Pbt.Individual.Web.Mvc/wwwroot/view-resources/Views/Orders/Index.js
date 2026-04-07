@@ -1,7 +1,7 @@
 (function ($) {
     var _orderService = abp.services.app.order,
         _packageService = abp.services.app.package,
-        l = abp.localization.getSource('PbtIndividual'),
+        l = abp.localization.getSource('Individual'),
         _$modal = $('#OrderCreateModal'),
         _$form = _$modal.find('form'),
         _$table = $('#OrdersTable');
@@ -32,7 +32,7 @@
     var _$ordersTable = _$table.DataTable({
         paging: true,
         serverSide: true,
-        sortable : false,
+        sortable: false,
         listAction: {
             ajaxFunction: _orderService.getCustomerOrders,
             inputFilter: function () {
@@ -72,10 +72,11 @@
                     return meta.row + meta.settings._iDisplayStart + 1;
                 }
             },
-           
+
             {
                 targets: 2,
                 data: 'waybillNumber',
+                 width: 180,
                 sortable: false,
                 /*className: 'dt-control',*/
                 render: function (data, type, row, meta) {
@@ -101,7 +102,7 @@
 
             {
                 //BagCoverWeight
-                targets:4,
+                targets: 4,
                 width: 90,
                 sortable: false,
                 className: 'text-right',
@@ -116,7 +117,7 @@
                 data: 'weight',
                 sortable: false,
                 className: 'text-right',
-                 width: 120,
+                width: 120,
                 render: (data, type, row, meta) => {
                     return formatNumberWithThousandsSeparator(data);
                 }
@@ -129,45 +130,33 @@
                 className: 'text-right',
                 width: 100,
                 render: (data, type, row, meta) => {
-                    return  formatNumberWithThousandsSeparator(data);
+                    return formatNumberWithThousandsSeparator(data);
                 }
             },
 
-            
+
             {
                 //TotalFee -> phí vận chuyển QT
                 targets: 7,
                 sortable: false,
                 data: 'totalFee',
-                width: 250,
+              
                 render: (data, type, row, meta) => {
-                    
+
                     var woodenPackagingFee = row.woodenPackagingFee ? FormatNumberToDisplay(row.woodenPackagingFee, 0) : 0;
                     var shockproofFee = row.shockproofFee ? FormatNumberToDisplay(row.shockproofFee, 0) : 0;
                     var domesticShippingFee = row.domesticShippingFee ? FormatNumberToDisplay(row.domesticShippingFee, 0) : 0;
                     var insuranceFee = row.insuranceFee ? FormatNumberToDisplay(row.insuranceFee, 0) : 0;
+                    
                     return [
-                        `<div class="timeline-item">
-                            <span class="label">${l('WoodenPackagingFee')}:</span>
-                            <span class="value"><strong>${woodenPackagingFee}</strong></span>
-                          </div>`,
-                        `<div class="timeline-item">
-                            <span class="label">${l('ShockproofFee')}:</span>
-                            <span class="value"><strong>${shockproofFee}</strong></span>
-                          </div>`,
-                        `<div class="timeline-item">
-                            <span class="label">${l('DomesticShippingFee')}:</span>
-                            <span class="value"><strong>${domesticShippingFee}</strong></span>
-                          </div>`,
-                        `<div class="timeline-item">
-                            <span class="label">${l('InsuranceFee')}:</span>
-                            <span class="value"><strong>${insuranceFee}</strong></span>
-                          </div>`
-                    ].join('');
-
+                       `${l('WoodenPackaging')}: <strong>${woodenPackagingFee}</strong><hr/>`,
+                       `${l('Shockproof')}: <strong>${shockproofFee}</strong><hr/>`,
+                       `${l('DomesticShipping')}: <strong>${domesticShippingFee}</strong><hr/>`,
+                       `${l('Insurance')}: <strong>${insuranceFee}</strong>`
+                    ].join('');         
                 }
             },
-          
+
 
             {
                 //TotalCost
@@ -182,12 +171,25 @@
 
                 }
             },
+
+
             {
+                //NOTE
                 targets: 9,
                 sortable: false,
-                width: 250,
+                className: 'text-right',
+                data: 'Note',
+                width: 240,
+                render: (data, type, row, meta) => {
+                    return data ? `<span class="text-primary">${data}</span>` : '-';
+                }
+            },
+            {
+                targets: 10,
+                sortable: false,
+                width: 200,
                 render: (data, type, row) => {
-                    debugger;
+
                     // Ngày tạo
                     const creation = formatDateToDDMMYYYYHHmm(row.creationTime) || '';
                     // Ngày xuất kho TQ
@@ -213,7 +215,7 @@
             },
 
             {
-                targets: 10,
+                targets: 11,
                 sortable: false,
                 width: 20,
                 render: (data, type, row, meta) => {
@@ -221,7 +223,7 @@
                     const canCreatePackage = row.orderStatus === 1 || row.orderStatus === 2; // Allow creating package if status is 1 or 2
                     const canCreateDeliveryRequest = row.orderStatus === 4; // Allow creating delivery request if status is 4
                     const canMakePayment = row.paymentStatus === 1; // Allow making payment if payment status is 'Chờ thanh toán'
-
+                    const canDelete = row.orderStatus === 0; // Only allow delete if status is 0 (Thiếu thông tin)
                     return [
                         ` <div class="btn-group"> `,
                         `   <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">`,
@@ -229,37 +231,14 @@
                         ` <div class="dropdown-menu" style="">`,
 
                         `   <a target="_blank" type="button" class="dropdown-item  bg-primary" data-order-id="${row.id}" href="/Orders/Detail/${row.id}" title="${l('Detail')}" data-toggle="tooltip"> `,
-                        `       <i class="fas fa-eye"></i> ${l('View')}`,
+                        `       <i class="fas fa-info-circle"></i> ${l('Detail')}`,
                         '   </a>',
-
-                        `   <a type="button" class="dropdown-item bg-secondary view-order-mote" data-order-id="${row.id}" title="${l('Note')}" data-toggle="modal" data-target="#OrderNote" > ` +
+                        `   <a type="button" class="dropdown-item bg-warning view-order-mote" data-order-id="${row.id}" title="${l('Note')}" data-toggle="modal" data-target="#OrderNote" > ` +
                         `       <i class="fas fa-pencil-alt"></i> ${l('Note')}` +
-                        '   </a>',
-
-                        `   <a type="button" class="dropdown-item bg-secondary" data-order-id="${row.id}" href="/Orders/Edit/${row.id}" title="${l('Edit')}" data-toggle="tooltip"> ` +
-                        `       <i class="fas fa-pencil-alt"></i> ${l('Edit')}` +
-                        '   </a>',
-
-                        (row.orderStatus === 5 // Chỉ hiển thị nếu trạng thái là "Đang giao"
-                            ? `   <button type="button" class="dropdown-item bg-success mark-as-delivered" data-order-id="${row.id}" data-order-name="${row.waybillNumber}"  title="${l('MarkAsDelivered')}" data-toggle="tooltip">` +
-                            `       <i class="fas fa-truck"></i> ${l('MarkAsDelivered')}` +
-                            '   </button>'
-                            : '')
-                        ,
-
-                        (row.orderStatus === 6 // Chỉ hiển thị nếu trạng thái là "Đã giao"
-                            ? `   <button type="button" class="dropdown-item bg-success mark-as-completed" data-order-id="${row.id}" data-order-name="${row.waybillNumber}"  title="${l('MarkAsCompleted')}" data-toggle="tooltip">` +
-                            `       <i class="fas fa-check"></i> ${l('MarkAsCompleted')}` +
-                            '   </button>'
-                            : '')
-                        ,
-                        `   <button type="button" class="dropdown-item bg-danger delete-order" data-order-id="${row.id}" data-order-name="${row.waybillNumber}" title="${l('Delete')}" data-toggle="tooltip">` +
-                        `       <i class="fas fa-trash"></i> ${l('Delete')}` +
-                        '   </button>',
-
-                        `   <a target="_blank" type="button" class="dropdown-item bg-success btn-sync-order" data-id="${row.id}"  title="${l('Sync')}" data-toggle="tooltip"> `,
-                        `       <i class="fas fa-sync"></i> ${l('Sync')}`,
-                        '   </a>',
+                        `   </a>`,
+                        (canDelete ? `   <button type="button" class="dropdown-item bg-danger delete-order" data-order-id="${row.id}" data-order-name="${row.waybillNumber}" title="${l('Delete')}" data-toggle="tooltip">` +
+                            `       <i class="fas fa-trash"></i> ${l('Delete')}` +
+                            `   </button>` : ''),
                         `    </div>`,
                         `   </div>`
                     ].join('');
@@ -476,7 +455,7 @@
             }
         );
     }
- 
+
     $(document).on('click', '.view-package-list', function () {
         var orderId = $(this).data('order-id');
 
@@ -494,7 +473,7 @@
         });
     });
 
-  
+
     abp.event.on('order.edited', (data) => {
         _$ordersTable.ajax.reload();
     });
