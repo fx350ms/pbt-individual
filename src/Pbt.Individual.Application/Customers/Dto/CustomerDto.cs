@@ -1,6 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
 using System;
-using JetBrains.Annotations;
 
 namespace Pbt.Individual.Warehouses.Dto
 {

@@ -53,7 +53,7 @@
         "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.blockUI.js",
         "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.spin.js",
         "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.sweet-alert.js",
-        "node_modules/abp-web-resources/Abp/Framework/scripts/libs/abp.signalr-client.js",
+        
 
         "node_modules/jquery-validation/dist/jquery.validate.js",
         "node_modules/jquery-validation-unobtrusive/dist/jquery.validate.unobtrusive.js",
@@ -77,6 +77,10 @@
     {
       "output": "view-resources/Views/_Bundles/helpers.min.js",
       "input": ["wwwroot/Common/helpers.js"]
+    },
+    {
+      "output": "view-resources/Views/Orders/Index.min.js",
+      "input": ["wwwroot/view-resources/Views/Orders/Index.js"]
     }
   ],
   "styles": [
@@ -103,8 +107,13 @@
         "node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css",
         "node_modules/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css",
         "node_modules/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css",
-        "wwwroot/css/style.css",
         "wwwroot/view-resources/Views/Shared/_Layout.css"
+      ]
+    },
+    {
+      "output": "wwwroot/css/style.min.css",
+      "input": [
+        "wwwroot/css/style.css"
       ]
     }
   ],

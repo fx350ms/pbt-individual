@@ -1,18 +1,14 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using Abp.UI;
-using Abp.Linq.Extensions;
+﻿using System.Threading.Tasks;
 using System.Collections.Generic;
-using Abp;
 using Pbt.Individual.Warehouses.Dto;
 using Pbt.Individual.Core;
 using Microsoft.Data.SqlClient;
 using PBT.CacheService;
-using Pbt.Individual;
+using Abp.Application.Services;
 
-namespace pbt.Warehouses
+namespace Pbt.Individual.Warehouses
 {
-    public class WarehouseAppService : AbpServiceBase, IWarehouseAppService
+    public class WarehouseAppService : ApplicationService, IWarehouseAppService
     {
         private readonly IAppCacheService _appCacheService;
 

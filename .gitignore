@@ -416,3 +416,5 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+/src/Pbt.Individual.Web.Mvc/wwwroot/css/style.min.css
+/src/Pbt.Individual.Web.Mvc/wwwroot/css/style.min.css

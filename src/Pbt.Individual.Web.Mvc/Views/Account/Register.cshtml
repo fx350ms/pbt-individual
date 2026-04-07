@@ -69,9 +69,27 @@
             </div>
         </div>
     </div>
+
+        <div class="input-group mb-3">
+        <select name="CNWarehouseId" class="form-control" required>
+            <option value="">@L("SelectSourceWarehouse")</option>
+            @if (ViewBag.CNWarehouses != null)
+            {
+                foreach (var warehouse in ViewBag.CNWarehouses)
+                {
+                    <option value="@warehouse.Id">@warehouse.Name</option>
+                }
+            }
+        </select>
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-warehouse"></span>
+            </div>
+        </div>
+    </div>
     <div class="input-group mb-3">
         <select name="WarehouseId" class="form-control" required>
-            <option value="">@L("SelectWarehouse")</option>
+            <option value="">@L("SelectDestinationWarehouse")</option>
             @if (ViewBag.Warehouses != null)
             {
                 foreach (var warehouse in ViewBag.Warehouses)

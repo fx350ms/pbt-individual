@@ -10,7 +10,7 @@ using System;
 using System.Data;
 using System.Threading.Tasks;
 
-namespace pbt.Customers
+namespace Pbt.Individual.Customers
 {
     [AbpAuthorize]
     [Audited]

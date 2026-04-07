@@ -3,7 +3,7 @@ using Pbt.Individual.Warehouses.Dto;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace pbt.Warehouses
+namespace Pbt.Individual.Warehouses
 {
     public interface IWarehouseAppService : IApplicationService
     {

@@ -56,4 +56,6 @@ public class UserManager : AbpUserManager<Role, User>
           userLoginRepository)
     {
     }
+
+    
 }

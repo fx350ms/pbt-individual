@@ -37,6 +37,13 @@ public class RegisterViewModel : IValidatableObject
     /// Kho nhận hàng ở Việt Nam
     /// </summary>
     public int WarehouseId { get; set; }
+    
+    /// <summary>
+    /// Kho nhận hàng ở Trung Quốc
+    /// </summary>
+    public int CNWarehouseId { get; set; }
+
+    
 
     public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
     {

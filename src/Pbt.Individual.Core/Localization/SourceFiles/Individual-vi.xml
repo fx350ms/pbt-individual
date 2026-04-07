@@ -1,17 +1,22 @@
-﻿<?xml version="1.0" encoding="utf-8" ?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <localizationDictionary culture="vi">
 	<texts>
 		<text name="HomePage" value="Trang chủ" />
 		<text name="About" value="Giới thiệu" />
 		<text name="WelcomeMessage" value="Chào mừng bạn đến với GameXuaVN!" />
-		<text name="FormIsNotValidMessage" value="Biểu mẫu không hợp lệ. Vui lòng kiểm tra và sửa lỗi." />
+		<text name="FormIsNotValidMessage"
+			value="Biểu mẫu không hợp lệ. Vui lòng kiểm tra và sửa lỗi." />
 		<text name="TenantNameCanNotBeEmpty" value="Tên người thuê không được để trống" />
 		<text name="InvalidUserNameOrPassword" value="Tên người dùng hoặc mật khẩu không hợp lệ" />
-		<text name="ThereIsNoTenantDefinedWithName{0}" value="Không có người thuê nào được định nghĩa với tên {0}" />
+		<text name="ThereIsNoTenantDefinedWithName{0}"
+			value="Không có người thuê nào được định nghĩa với tên {0}" />
 		<text name="TenantIsNotActive" value="Người thuê {0} không hoạt động." />
-		<text name="UserIsNotActiveAndCanNotLogin" value="Người dùng {0} không hoạt động và không thể đăng nhập." />
-		<text name="UserEmailIsNotConfirmedAndCanNotLogin" value="Địa chỉ email của bạn chưa được xác nhận. Bạn không thể đăng nhập." />
-		<text name="UserLockedOutMessage" value="Tài khoản người dùng đã bị khóa. Vui lòng thử lại sau." />
+		<text name="UserIsNotActiveAndCanNotLogin"
+			value="Người dùng {0} không hoạt động và không thể đăng nhập." />
+		<text name="UserEmailIsNotConfirmedAndCanNotLogin"
+			value="Địa chỉ email của bạn chưa được xác nhận. Bạn không thể đăng nhập." />
+		<text name="UserLockedOutMessage"
+			value="Tài khoản người dùng đã bị khóa. Vui lòng thử lại sau." />
 		<text name="PleaseEnterLoginInformation" value="Vui lòng nhập thông tin đăng nhập" />
 		<text name="TenancyName" value="Tên người thuê" />
 		<text name="UserNameOrEmail" value="Tên người dùng hoặc email" />
@@ -33,16 +38,20 @@
 		<text name="AdminPassword" value="Mật khẩu quản trị" />
 		<text name="Save" value="Lưu" />
 		<text name="Cancel" value="Hủy" />
-		<text name="TenantName_Regex_Description" value="Tên người thuê phải có ít nhất 2 ký tự, bắt đầu bằng một chữ cái và tiếp theo là chữ cái, số, dấu gạch ngang hoặc gạch dưới." />
+		<text name="TenantName_Regex_Description"
+			value="Tên người thuê phải có ít nhất 2 ký tự, bắt đầu bằng một chữ cái và tiếp theo là chữ cái, số, dấu gạch ngang hoặc gạch dưới." />
 		<text name="DefaultPasswordIs" value="Mật khẩu mặc định là {0}" />
-		<text name="CanBeEmptyToLoginAsHost" value="Có thể để trống để đăng nhập như một quản trị viên." />
+		<text name="CanBeEmptyToLoginAsHost"
+			value="Có thể để trống để đăng nhập như một quản trị viên." />
 		<text name="Register" value="Đăng ký" />
 		<text name="OrLoginWith" value="Hoặc đăng nhập bằng" />
-		<text name="WaitingForActivationMessage" value="Tài khoản của bạn đang chờ được kích hoạt bởi quản trị hệ thống." />
+		<text name="WaitingForActivationMessage"
+			value="Tài khoản của bạn đang chờ được kích hoạt bởi quản trị hệ thống." />
 		<text name="TenantSelection" value="Lựa chọn người thuê" />
 		<text name="TenantSelection_Detail" value="Vui lòng chọn một trong các người thuê sau." />
 		<text name="Logout" value="Đăng xuất" />
-		<text name="RegisterFormUserNameInvalidMessage" value="Vui lòng không nhập địa chỉ email cho tên người dùng." />
+		<text name="RegisterFormUserNameInvalidMessage"
+			value="Vui lòng không nhập địa chỉ email cho tên người dùng." />
 		<text name="DatabaseConnectionString" value="Chuỗi kết nối cơ sở dữ liệu" />
 		<text name="Users" value="Người dùng" />
 		<text name="IsActive" value="Trạng thái hoạt động" />
@@ -68,7 +77,8 @@
 		<text name="CreateNewRole" value="Tạo vai trò mới" />
 		<text name="RoleName" value="Tên vai trò" />
 		<text name="Actions" value="Hành động" />
-		<text name="CouldNotCompleteLoginOperation" value="Không thể hoàn thành thao tác đăng nhập. Vui lòng thử lại sau." />
+		<text name="CouldNotCompleteLoginOperation"
+			value="Không thể hoàn thành thao tác đăng nhập. Vui lòng thử lại sau." />
 		<text name="CouldNotValidateExternalUser" value="Không thể xác thực người dùng bên ngoài" />
 		<text name="EditRole" value="Chỉnh sửa vai trò" />
 		<text name="EditTenant" value="Chỉnh sửa người thuê" />
@@ -101,9 +111,11 @@
 		<text name="NewPassword" value="Mật khẩu mới" />
 		<text name="ConfirmNewPassword" value="Xác nhận mật khẩu mới" />
 		<text name="PasswordsDoNotMatch" value="Mật khẩu không khớp" />
-		<text name="PasswordsMustBeAtLeast8CharactersContainLowercaseUppercaseNumber" value="Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ thường, chữ hoa và số" />
+		<text name="PasswordsMustBeAtLeast8CharactersContainLowercaseUppercaseNumber"
+			value="Mật khẩu phải có ít nhất 8 ký tự, bao gồm chữ thường, chữ hoa và số" />
 		<text name="UserDeleteWarningMessage" value="Người dùng {0} sẽ bị xóa." />
-		<text name="RoleDeleteWarningMessage" value="Vai trò {0} sẽ bị xóa và không còn được gán cho tất cả người dùng đã gán." />
+		<text name="RoleDeleteWarningMessage"
+			value="Vai trò {0} sẽ bị xóa và không còn được gán cho tất cả người dùng đã gán." />
 		<text name="TenantDeleteWarningMessage" value="Người thuê {0} sẽ bị xóa." />
 		<text name="SearchWithThreeDot" value="Tìm kiếm..." />
 		<text name="PleaseEnterAtLeastNCharacter" value="Vui lòng nhập ít nhất {0} ký tự" />
@@ -116,10 +128,12 @@
 		<text name="Search" value="Tìm kiếm" />
 		<text name="Clear" value="Xóa" />
 		<text name="ResetPasswordStepOneInfo" value="1. Nhập mật khẩu quản trị của bạn" />
-		<text name="ResetPasswordStepTwoInfo" value="2. Sao chép mật khẩu ngẫu nhiên này để gửi cho người dùng" />
+		<text name="ResetPasswordStepTwoInfo"
+			value="2. Sao chép mật khẩu ngẫu nhiên này để gửi cho người dùng" />
 		<text name="UsersActivation" value="Kích hoạt người dùng" />
 		<text name="403PageHeader" value="Cấm" />
-		<text name="403PageDescription" value="Bạn không có quyền truy cập vào tài nguyên này. Vui lòng liên hệ với quản trị viên của bạn." />
+		<text name="403PageDescription"
+			value="Bạn không có quyền truy cập vào tài nguyên này. Vui lòng liên hệ với quản trị viên của bạn." />
 		<text name="403PageButton" value="Quay lại bảng điều khiển" />
 
 		<text name="Category" value="Danh mục" />
@@ -471,7 +485,8 @@
 		<text name="WaybillCode" value="Mã vận đơn" />
 		<text name="ReceivedTime" value="Thời gian nhận" />
 		<text name="CreateNewWaybill" value="Tạo vận đơn mới" />
-		<text name="WaybillCodesCommaSeparated" value="Mã vận đơn (phân tách bằng dấu phẩy, dấu cách, xuống dòng)" />
+		<text name="WaybillCodesCommaSeparated"
+			value="Mã vận đơn (phân tách bằng dấu phẩy, dấu cách, xuống dòng)" />
 		<text name="CreateWaybill" value="Tạo mã vận đơn" />
 		<text name="Messages" value="Tin nhắn" />
 		<text name="DeviceName" value="Tên thiết bị" />
@@ -667,7 +682,7 @@
 		<text name="CurrentWarehouseStatus" value="Trạng thái kho hiện tại" />
 		<text name="InWarehouse" value="Trong kho" />
 		<text name="InWarehouseVN" value="Đã về kho VN" />
-		
+
 		<text name="Exported" value="Đã xuất" />
 		<text name="CreateDate" value="Ngày tạo" />
 		<text name="UpdateShippingPartner" value="Cập nhật đối tác vận chuyển" />
@@ -788,7 +803,7 @@
 		<text name="BagTypeEnum.InclusiveBag" value="Bao ghép" />
 
 		<text name="BagShippingStatus.Initiated" value="Mới" />
-		
+
 		<text name="BagShippingStatus.WaitingForShipping" value="Chờ vận chuyển" />
 		<text name="BagShippingStatus.GoToWarehouse" value="Tới đích" />
 		<text name="BagShippingStatus.InTransit" value="Đang VC QT" />
@@ -796,12 +811,12 @@
 		<text name="BagShippingStatus.WaitingForDelivery" value="Chờ giao" />
 		<text name="BagShippingStatus.Delivery" value="Đang giao" />
 		<text name="BagShippingStatus.Delivered" value="Đã giao" />
-		
+
 		<text name="BagShippingStatus.Archived" value="Đã vận chuyển" />
 		<text name="BagShippingStatus.WarehouseTransfer" value="Đang chuyển kho" />
 		<text name="BagShippingStatus.DeliveryRequest" value="Yêu cầu giao" />
 		<text name="WarehouseTransfer" value="Chuyển kho" />
-		
+
 		<text name="WaitingForDelivery" value="Chờ giao" />
 		<text name="ExportDate" value="Ngày xuất" />
 		<text name="ImportDate" value="Ngày nhập" />
@@ -829,7 +844,7 @@
 		<text name="C" value="C" />
 		<text name="Characteristic" value="Đặc điểm" />
 		<text name="ImportDateHN" value="Ngày nhập Hà Nội" />
-		
+
 		<text name="BagWithPartner" value="Bao - đối tác" />
 		<text name="Pages_BagWithPartner" value="Bao - đối tác" />
 		<text name="Pages_ImportExport" value="Xuất - nhập" />
@@ -878,7 +893,7 @@
 		<text name="ErrorMessages" value="Thông báo lỗi" />
 		<text name="Upload" value="Tải lên" />
 		<text name="InsurancePercentage" value="Phần trăm bảo hiểm" />
-		
+
 		<text name="ShipTQ" value="Phí ship TQ" />
 		<text name="SecuringCost" value="Phí gia cố" />
 		<text name="ShipVN" value="Phần trăm bảo hiểm" />
@@ -910,11 +925,11 @@
 		<text name="UploadImage" value="Upload hình ảnh" />
 		<text name="InputWaybillHereToSearch" value="Nhập mã vận đơn ở đây để tìm kiếm" />
 		<text name="BagCoverWeight" value="Cân nặng bì" />
-		
+
 		<text name="ShippingPartnerDomestic" value="Đối tác VC VN" />
 		<text name="ShippingFee" value="Phí VC" />
 		<text name="ShippingPartnerIntern" value="Đối tác VC QT" />
-		
+
 		<text name="Initiate" value="Mới" />
 		<text name="DeliveryInProgress" value="Đang giao" />
 		<text name="WarehouseScan" value="Kho quét" />
@@ -999,10 +1014,11 @@
 		<text name="Function_PackageViewAll" value="Xem tất cả kiện" />
 		<text name="Function_BagViewAll" value="Xem tất cả bao" />
 
-		<text name="AreYouSureWantToDeleteAllOfYourCode" value="Bạn có chắc chắn muốn xóa toàn bộ mã của bạn không?" />
+		<text name="AreYouSureWantToDeleteAllOfYourCode"
+			value="Bạn có chắc chắn muốn xóa toàn bộ mã của bạn không?" />
 		<text name="DeleteAll" value="Xóa tất cả" />
 		<text name="OnlyMyCode" value="Chỉ xem mã của tôi" />
-		
+
 		<text name="New" value="Tạo mới" />
 		<text name="WTShipping" value="Đang chuyển kho" />
 		<text name="SaveAndTransfer" value="Lưu và chuyển" />
@@ -1014,7 +1030,7 @@
 		<text name="WarehouseTransferStatusEnum.New" value="Mới" />
 		<text name="WarehouseTransferStatusEnum.InTransit" value="Đang chuyển" />
 		<text name="WarehouseTransferStatusEnum.Received" value="Đã chuyển" />
-		
+
 		<text name="ShippingService" value="Dịch vụ vận chuyển" />
 
 		<text name="OrderStatus.New" value="Mới tạo" />
@@ -1047,7 +1063,7 @@
 		<text name="ExportExcelWithFinance" value="Xuất excel tài chính kiện" />
 		<text name="PartnerDelivery" value="Đối tác giao hàng" />
 		<text name="CustomerPickup" value="Khách hàng tự lấy" />
-		
+
 		<text name="ExcludeCoverWeightTypeFilter.ExcludeCoverWeight" value="Không hiển thị kiện bì" />
 		<text name="ExcludeCoverWeightTypeFilter.CoverWeightOnly" value="Chỉ hiển thị kiện bì" />
 		<text name="ExcludeCoverWeightType" value="Hiển thị kiện bì" />
@@ -1070,7 +1086,7 @@
 		<text name="Function_PackageEdit" value="Sửa lại kiện" />
 		<text name="Function_Order_Rematch" value="Khớp lại đơn" />
 
-		
+
 		<text name="BagFilterPackage" value="Lọc bao có kiện" />
 		<text name="BagFilterPackageType" value="BagFilterPackageType" />
 		<text name="FilterPackageTypeEnum.HasPackage" value="Có kiện" />
@@ -1080,6 +1096,13 @@
 		<text name="EnterNote" value="Nhập ghi chú" />
 		<text name="EnterAddress" value="Nhập địa chỉ" />
 		<text name="SubmitRequest" value="Gửi yêu cầu" />
-		
+
+		<text name="Dashboard" value="Bảng điều khiển" />
+		<text name="MyOrders" value="Đơn hàng của tôi" />
+		<text name="OrdersList" value="Danh sách đơn hàng" />
+		<text name="OrdersCreate" value="Tạo đơn hàng" />
+		<text name="DeliveryRequests" value="Yêu cầu giao hàng" />
+		<text name="DeliveryRequestList" value="Danh sách yêu cầu giao hàng" />
+		<text name="PaymentsList" value="Danh sách thanh toán" />
 	</texts>
 </localizationDictionary>

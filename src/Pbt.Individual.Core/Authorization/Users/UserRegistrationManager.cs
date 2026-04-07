@@ -41,7 +41,7 @@ public class UserRegistrationManager : DomainService
         AbpSession = NullAbpSession.Instance;
     }
 
-    public async Task<User> RegisterAsync(string name, string phoneNumber, string emailAddress, string userName, string plainPassword, bool isEmailConfirmed)
+    public async Task<User> RegisterAsync(string name, string phoneNumber, string emailAddress, string userName, string plainPassword, bool isEmailConfirmed, int warehouseId, int cnWarehouseId    )
     {
         try
         {
@@ -92,6 +92,9 @@ public class UserRegistrationManager : DomainService
                     new SqlParameter("@EmailAddress", user.EmailAddress),
                     new SqlParameter("@UserName", user.UserName),
                     new SqlParameter("@Password", user.Password),
+                    new SqlParameter("@WarehouseId", warehouseId),
+                    new SqlParameter("@CNWarehouseId", cnWarehouseId),
+
                     userIdPr,
                     customerIdPr,
                     statusPr,

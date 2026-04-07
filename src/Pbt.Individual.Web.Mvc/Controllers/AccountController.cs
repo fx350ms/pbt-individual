@@ -29,10 +29,10 @@ using System.Diagnostics;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using pbt.Customers;
-using pbt.Warehouses;
 using Pbt.Individual.Authorization.Accounts.Dto;
 using Pbt.Individual.Authorization.Accounts;
+using Pbt.Individual.Warehouses;
+using Pbt.Individual.Customers;
 
 namespace Pbt.Individual.Web.Controllers;
 
@@ -157,6 +157,9 @@ public class AccountController : IndividualControllerBase
         ViewBag.IsMultiTenancyEnabled = _multiTenancyConfig.IsEnabled;
         var warehouses = await _warehouseAppService.GetByTypeAsync((int)WarehouseType.Destination); // Assuming 1 is the type for warehouses in Vietnam
         ViewBag.Warehouses = warehouses;
+        
+        var cnWarehouses = await _warehouseAppService.GetByTypeAsync((int)WarehouseType.Source); // Assuming 2 is the type for warehouses in China
+        ViewBag.CNWarehouses = cnWarehouses;
 
         return View("Register", model);
     }
@@ -203,7 +206,9 @@ public class AccountController : IndividualControllerBase
                 model.EmailAddress,
                 model.UserName,
                 model.Password,
-                true // Assumed email address is always confirmed. Change this if you want to implement email confirmation.
+                true, // Assumed email address is always confirmed. Change this if you want to implement email confirmation.
+                model.WarehouseId,
+                model.CNWarehouseId
             );
 
 
@@ -233,10 +238,6 @@ public class AccountController : IndividualControllerBase
 
             await _unitOfWorkManager.Current.SaveChangesAsync();
 
-            var customerId = await CreateCustomerForRegisteredUserAsync(user.Id, model);
-
-            // await _customerAppService.SynchronizeCustomerWithUserAsync(customerId, model.UserName);
-            await _accountAppService.UpdateCustomerIdForUserAsync(user.Id, customerId);
             Debug.Assert(user.TenantId != null);
 
             var tenant = await _tenantManager.GetByIdAsync(user.TenantId.Value);

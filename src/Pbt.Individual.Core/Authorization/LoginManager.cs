@@ -10,6 +10,7 @@ using Pbt.Individual.Authorization.Roles;
 using Pbt.Individual.Authorization.Users;
 using Pbt.Individual.MultiTenancy;
 using Microsoft.AspNetCore.Identity;
+using System.Threading.Tasks;
 
 namespace Pbt.Individual.Authorization;
 
@@ -41,4 +42,5 @@ public class LogInManager : AbpLogInManager<Tenant, Role, User>
               claimsPrincipalFactory)
     {
     }
+ 
 }

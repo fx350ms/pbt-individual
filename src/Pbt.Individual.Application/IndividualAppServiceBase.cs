@@ -6,6 +6,7 @@ using Pbt.Individual.Authorization.Users;
 using Pbt.Individual.MultiTenancy;
 using PBT.CacheService;
 using System;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Pbt.Individual;
@@ -28,7 +29,7 @@ public abstract class IndividualAppServiceBase : ApplicationService
     }
 
     protected virtual async Task<User> GetCurrentUserAsync()
-    { 
+    {
         var currentUserId = AbpSession.GetUserId();
         var cacheKey = $"user_{currentUserId}";
         if (_cacheService.TryGetCacheValue(cacheKey, out User cachedUser))
