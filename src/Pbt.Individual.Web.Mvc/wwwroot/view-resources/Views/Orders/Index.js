@@ -143,16 +143,18 @@
               
                 render: (data, type, row, meta) => {
 
-                    var woodenPackagingFee = row.woodenPackagingFee ? FormatNumberToDisplay(row.woodenPackagingFee, 0) : 0;
-                    var shockproofFee = row.shockproofFee ? FormatNumberToDisplay(row.shockproofFee, 0) : 0;
-                    var domesticShippingFee = row.domesticShippingFee ? FormatNumberToDisplay(row.domesticShippingFee, 0) : 0;
-                    var insuranceFee = row.insuranceFee ? FormatNumberToDisplay(row.insuranceFee, 0) : 0;
+                    var woodenPackagingFee = row.woodenPackagingFee ? formatNumberWithThousandsSeparator(row.woodenPackagingFee, 0) : 0;
+                    var shockproofFee = row.shockproofFee ? formatNumberWithThousandsSeparator(row.shockproofFee, 0) : 0;
+                    var domesticShippingFee = row.domesticShippingFee ? formatNumberWithThousandsSeparator(row.domesticShippingFee, 0) : 0;
+                    var insuranceFee = row.insuranceFee ? formatNumberWithThousandsSeparator(row.insuranceFee, 0) : 0;
+                    var shippingFee = row.totalFee ? formatNumberWithThousandsSeparator(row.totalFee, 0) : 0;
                     
                     return [
                        `${l('WoodenPackaging')}: <strong>${woodenPackagingFee}</strong><hr/>`,
                        `${l('Shockproof')}: <strong>${shockproofFee}</strong><hr/>`,
                        `${l('DomesticShipping')}: <strong>${domesticShippingFee}</strong><hr/>`,
-                       `${l('Insurance')}: <strong>${insuranceFee}</strong>`
+                       `${l('Insurance')}: <strong>${insuranceFee}</strong><hr/>`,
+                       `${l('ShippingFeeQT')}: <strong>${shippingFee}</strong>`
                     ].join('');         
                 }
             },
@@ -166,9 +168,7 @@
                 data: 'totalPrice',
                 width: 100,
                 render: (data, type, row, meta) => {
-                    // return data ? `<strong class="text-primary">${FormatNumberToDisplay(data, 0)}</strong>` : '-';
-                    return formatNumberWithThousandsSeparator(data);
-
+                    return data ? `<strong class="text-primary">${formatNumberWithThousandsSeparator(data, 0)}</strong>` : '-';
                 }
             },
 
@@ -224,6 +224,7 @@
                     const canCreateDeliveryRequest = row.orderStatus === 4; // Allow creating delivery request if status is 4
                     const canMakePayment = row.paymentStatus === 1; // Allow making payment if payment status is 'Chờ thanh toán'
                     const canDelete = row.orderStatus === 0; // Only allow delete if status is 0 (Thiếu thông tin)
+                    
                     return [
                         ` <div class="btn-group"> `,
                         `   <button type="button" class="btn btn-default dropdown-toggle dropdown-icon" data-toggle="dropdown" aria-expanded="false">`,
@@ -236,6 +237,10 @@
                         `   <a type="button" class="dropdown-item bg-warning view-order-mote" data-order-id="${row.id}" title="${l('Note')}" data-toggle="modal" data-target="#OrderNote" > ` +
                         `       <i class="fas fa-pencil-alt"></i> ${l('Note')}` +
                         `   </a>`,
+                        (canCreateDeliveryRequest ? `   <a type="button" class="dropdown-item bg-success create-delivery-request" data-order-id="${row.id}" title="${l('CreateDeliveryRequest')}" data-toggle="tooltip">` +
+                            `       <i class="fas fa-truck"></i> ${l('CreateDeliveryRequest')}` +
+                            `   </a>` : ''),
+
                         (canDelete ? `   <button type="button" class="dropdown-item bg-danger delete-order" data-order-id="${row.id}" data-order-name="${row.waybillNumber}" title="${l('Delete')}" data-toggle="tooltip">` +
                             `       <i class="fas fa-trash"></i> ${l('Delete')}` +
                             `   </button>` : ''),

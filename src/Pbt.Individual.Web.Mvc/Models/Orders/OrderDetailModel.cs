@@ -5,7 +5,7 @@ namespace pbt.Web.Models.Orders
 {
     public class OrderDetailModel
     {
-        public OrderDto Dto { get; set; }
+        public OrderDetailDto Dto { get; set; }
         
         public List<PackageOrderViewDto> Packages { get; set; }
     }

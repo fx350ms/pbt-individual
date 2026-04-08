@@ -48,17 +48,17 @@
                                         <label for="Keyword">@L("SelectLine")</label>
                                         <select class="form-control" name="ShippingLine" required>
                                             <option selected value="">-- @L("SelectLine") --</option>
-                                            <option value="@((int)ShippingLine.Consignment)">
-                                                @ShippingLine.Consignment.GetDescription()
+                                            <option value="@((int)ShippingLineEnum.Consignment)">
+                                                @ShippingLineEnum.Consignment.GetDescription()
                                             </option>
-                                            <option value="@((int)ShippingLine.Ecommerce)">
-                                                @ShippingLine.Ecommerce.GetDescription()
+                                            <option value="@((int)ShippingLineEnum.Ecommerce)">
+                                                @ShippingLineEnum.Ecommerce.GetDescription()
                                             </option>
-                                            <option value="@((int)ShippingLine.Official)">
-                                                @ShippingLine.Official.GetDescription()
+                                            <option value="@((int)ShippingLineEnum.Official)">
+                                                @ShippingLineEnum.Official.GetDescription()
                                             </option>
-                                            <option value="@((int)ShippingLine.Portable)">
-                                                @ShippingLine.Portable.GetDescription()
+                                            <option value="@((int)ShippingLineEnum.Portable)">
+                                                @ShippingLineEnum.Portable.GetDescription()
                                             </option>
                                         </select>
                                         <span asp-validation-for="Dto.ShippingLine" class="text-danger"></span>

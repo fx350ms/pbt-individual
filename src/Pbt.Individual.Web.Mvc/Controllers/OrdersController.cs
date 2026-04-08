@@ -48,5 +48,13 @@ namespace Pbt.Individual.Web.Controllers
             };
             return View(model);
         }
+
+        
+        [HttpGet]
+        public async Task<IActionResult> GetPackagesTrackingByOrder(long orderId)
+        {
+            var packages = await _packageAppService.GetPackagesByOrderId(orderId);
+            return PartialView("_OrderPackagesTracking", packages);
+        }
     }
 }

@@ -3,6 +3,7 @@
 @model pbt.Web.Models.Orders.OrderDetailModel
 @{
     ViewBag.Title = L("OrderDetail");
+    int orderStatus = (int)Model.Dto.OrderStatus;
 }
 
 @section styles {
@@ -22,9 +23,93 @@
         .dropdown-menu.show {
             left: -100px !important;
         }
+
+        .summary-card {
+            border: 1px solid #e9ecef;
+            border-radius: 0.5rem;
+            box-shadow: 0 0.125rem 0.25rem rgba(0, 0, 0, 0.05);
+            height: 100%;
+        }
+
+        .summary-card .card-header {
+            background-color: #f8f9fa;
+            border-bottom: 1px solid #e9ecef;
+            font-weight: 700;
+        }
+
+        .summary-list .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 0.75rem;
+            padding: 0.7rem 0;
+            border-bottom: 1px dashed #dee2e6;
+        }
+
+        .summary-list .summary-item:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .summary-key {
+            color: #6c757d;
+            font-weight: 600;
+            margin-bottom: 0;
+        }
+
+        .summary-value {
+            color: #212529;
+            font-weight: 600;
+            text-align: right;
+            margin-bottom: 0;
+            word-break: break-word;
+        }
+
+        .summary-highlight {
+            color: #dc3545;
+            font-weight: 700;
+        }
+
+        @@media (max-width: 767.98px) {
+            .summary-list .summary-item {
+                flex-direction: column;
+                gap: 0.25rem;
+            }
+
+            .summary-value {
+                text-align: left;
+            }
+        }
+
+        .card-body {
+            padding: 0.5rem;
+        }
     </style>
 }
+@{
 
+    var packageStatus = new Dictionary<int, (string text, string color)>
+        {
+            { 0, ("Thiếu thông tin", "danger") },
+            { 1, ("Tạo mới", "secondary") },
+            { 2, ("Đang vận chuyển", "info") },
+            { 3, ("Chờ vận chuyển", "warning") },
+            { 4, ("Đang VCQT", "primary") },
+            { 5, ("Đã về kho VN", "info") },
+            { 6, ("Chờ giao hàng", "warning") },
+            { 7, ("Yêu cầu giao hàng", "info") },
+            { 8, ("Đang giao hàng", "info") },
+            { 9, ("Đã giao", "success") },
+            { 10, ("Hoàn thành", "success") },
+            { 11, ("Chờ trả hàng", "warning") },
+            { 12, ("Đang trả hàng", "primary") },
+            { 13, ("Đã trả hàng", "success") },
+            { 14, ("Khách không nhận", "danger") },
+            { 15, ("Chờ thông quan", "warning") },
+            { 16, ("Đã thông quan", "success") }
+        };
+
+}
  
 @if (Model != null && Model.Dto != null)
 {
@@ -51,7 +136,111 @@
                             <div class="row">
                                 <!-- Timeline theo chiều ngang -->
                                 <div class="col-8 offset-1">
-                                    
+                                    <div class="steps">
+                                        <progress id="progress" value="0" max="100"></progress>
+                                        <div class="step-item">
+                                            <div class="step-title">
+                                                @* Đã kí gửi *@
+                                                @L("Entrusted")
+                                            </div>
+                                            <button class="step-button text-center done" type="button">
+                                                <i class="fa fa-check"></i>
+                                            </button>
+                                        </div>
+                                        <div class="step-item">
+                                            <div class="step-title">
+                                                @* Đã về kho TQ *@
+                                                @L("InTransitToChinaWarehouse")
+                                            </div>
+                                            <button class="step-button text-center collapsed" type="button">
+                                                <i class="fa fa-check"></i>
+                                            </button>
+                                        </div>
+                                        @if ((OrderShippingStatusEnum)orderStatus == OrderShippingStatusEnum.Cancelled)
+                                        {
+                                            <div class="step-item">
+                                                <div class="step-title">
+                                                    @L("Cancel")
+                                                </div>
+                                                <button class="step-button text-center done" type="button">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <div class="step-item">
+                                                <div class="step-title">
+                                                    @* Đang vận chuyển quốc tế *@
+                                                    @L("InInternationTransit")
+                                                </div>
+                                                <button class="step-button text-center done" type="button">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            </div>
+
+                                            <div class="step-item">
+                                                <div class="step-title">
+                                                    @* Đã về kho VN *@
+                                                    @L("DeliveringToVietnam")
+                                                </div>
+                                                <button class="step-button text-center collapsed" type="button">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            </div>
+                                            <div class="step-item">
+                                                <div class="step-title">
+                                                    @* Đang giao hàng *@
+                                                    @L("OutForDelivery")
+                                                </div>
+                                                <button class="step-button text-center collapsed" type="button">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            </div>
+
+                                            <div class="step-item">
+                                                <div class="step-title">
+                                                    @* Đã giao hàng *@
+                                                    @L("Delivered")
+                                                </div>
+                                                <button class="step-button text-center collapsed" type="button">
+                                                    <i class="fa fa-check"></i>
+                                                </button>
+                                            </div>
+                                            @if ((OrderShippingStatusEnum)orderStatus == OrderShippingStatusEnum.Complaint ||
+                                                                                (OrderShippingStatusEnum)orderStatus == OrderShippingStatusEnum.Refund)
+                                            {
+                                                <div class="step-item">
+                                                    <div class="step-title">
+                                                        @L("Complaint")
+                                                    </div>
+                                                    <button class="step-button text-center collapsed" type="button">
+                                                        <i class="fa fa-check"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="step-item">
+                                                    <div class="step-title">
+                                                        @L("Refund")
+                                                    </div>
+                                                    <button class="step-button text-center collapsed" type="button">
+                                                        <i class="fa fa-check"></i>
+                                                    </button>
+                                                </div>
+                                            }
+                                            else
+                                            {
+                                                <div class="step-item">
+                                                    <div class="step-title">
+                                                        @L("OrderCompleted")
+                                                    </div>
+                                                    <button class="step-button text-center collapsed" type="button">
+                                                        <i class="fa fa-check"></i>
+                                                    </button>
+                                                </div>
+                                            }
+                                        }
+
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -66,14 +255,13 @@
                                             <th>@L("Status")</th>
                                             <th>@L("Weight")</th>
                                             <th>@L("Volume")</th>
-                                            <th>@L("ShippingCost")</th>
-                                            <th>@L("PackingFee")</th>
-                                            <th>@L("ShockproofFee")</th>
-                                            <th>@L("DomesticShippingFee")</th>
+                                            <th>@L("WoodenPackaging")</th>
+                                            <th>@L("Shockproof")</th>
+                                            <th>@L("DomesticShipping")</th>
                                             <th>@L("Insurance")</th>
-                                            <th>@L("TotalCost")</th>
+                                            <th>@L("ShippingCost")</th>
+                                            <th>@L("TotalFee")</th>
                                             <th>@L("TimeLine")</th>
-                                           
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -93,19 +281,21 @@
                                                     <td>
                                                         @item.TrackingNumber
                                                     </td>
-                                                    
+
                                                     <td>
-                                                        @((PackageStatus) item.Status).GetDescription())
+                                                        @if (packageStatus.ContainsKey(item.ShippingStatus))
+                                                        {
+                                                            <span
+                                                            class="badge badge-@packageStatus[item.ShippingStatus].color">@packageStatus[item.ShippingStatus].text</span>
+                                                        }
                                                     </td>
                                                     <td>
                                                         @item.Weight
                                                     </td>
                                                     <td align="right">
-                                                        @item.Volume
+                                                        @(item.Volume.HasValue ? item.Volume.Value.ToString("0.00") : "-")
                                                     </td>
-                                                    <td align="right">
-                                                        @item.TotalFee.ToCustomNumberFormat()
-                                                    </td>
+                                                   
                                                     <td align="right">
                                                         @item.WoodenPackagingFee.ToCustomNumberFormat()
                                                     </td>
@@ -118,6 +308,9 @@
                                                     </td>
                                                     <td align="right">
                                                         @item.InsuranceFee.ToCustomNumberFormat()
+                                                    </td>
+                                                    <td align="right">
+                                                        @item.TotalFee.ToCustomNumberFormat()
                                                     </td>
                                                     <td align="right">
                                                         @item.TotalPrice.ToCustomNumberFormat()
@@ -155,63 +348,128 @@
                             </div>
 
                         </div>
-                        <div class="card-body" style="padding-top: 0px;">
-                            <h4><strong> THÔNG TIN ĐƠN HÀNG</strong></h4>
+                        <div class="card-body pt-0">
                             <div class="row">
-                                <div class="col-4">
-                                    <span>Người nhận</span>
-                                    <span class="d-block"><strong>@Model.Dto.CustomerName</strong></span>
-                                    <span>Kho gửi</span>
-                                    <span class="d-block"><strong>@Model.Dto.CNWarehouseName</strong></span>
-                                    <span>Kho nhận</span>
-                                    <span class="d-block"><strong>@Model.Dto.VNWarehouseName</strong></span>
-                                    <span>@L("ShippingLine")</span>
-                                    <span class="d-block"><strong>@Model.Dto.ShippingLine</strong></span>
-                                </div>
-                                <div class="col-8">
-                                    <div class="card-body">
-                                        <h5>PHÍ DỊCH VỤ</h5>
-                                        <table style="width:100%;" class="">
-                                            <tr>
-                                                <td>Phí bảo hiểm</td>
-                                                <td class="text-right">(@(Model.Dto.InsuranceValue.HasValue ?
-                                                                                                                                                Model.Dto.InsuranceValue : 0)%) -
-                                                    @Model.Dto.Insurance.ToCurrencyFormat()</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>Phí đóng gỗ</td>
-                                                    <td class="text-right">@Model.Dto.WoodenPackagingFee.ToCurrencyFormat()</td>
-                                                   
-                                                </tr>
-                                                <tr>
-                                                    <td>Phí quấn bọt khí</td>
-                                                    <td class="text-right">@Model.Dto.ShockproofFee.ToCurrencyFormat() </td>
-                                                     
-                                                </tr>
-                                                <tr>
-                                                    <td>Ship nội địa</td>
-                                                    <td class="text-right">@Model.Dto.DomesticShippingFeeRMB (RMB)
-                                                        @Model.Dto.DomesticShippingFee.ToCurrencyFormat() </td>
-                                                    </tr>
-                                                    <tr>
-                                                        <td>Phí bao bì</td>
-                                                        <td class="text-right">(@Model.Dto.WeightCover kg)
-                                                            @Model.Dto.WeightCoverFee.ToCurrencyFormat() </td>
-                                                           
-                                                        </tr>
-                                                    </table>
+                                <div class="col-lg-6 mb-3 mb-lg-0">
+                                    <div class="card summary-card">
+                                        <div class="card-header text-uppercase text-primary">Thông tin đơn hàng</div>
+                                        <div class="card-body summary-list">
+                                            <div class="summary-item">
+                                                <p class="summary-key">Người nhận</p>
+                                                <p class="summary-value text-primary"> @Model.Dto.CustomerName</p>
+                                            </div>
+                                            <div class="summary-item">
+                                                <p class="summary-key">Kho gửi</p>
+                                                <p class="summary-value text-primary">@Model.Dto.CNWarehouseName</p>
+                                            </div>
+                                            <div class="summary-item">
+                                                <p class="summary-key">Kho nhận</p>
+                                                <p class="summary-value text-primary">@Model.Dto.VNWarehouseName</p>
+                                            </div>
+                                            <div class="summary-item">
+                                                <p class="summary-key">@L("ShippingLine")</p>
+                                                <p class="summary-value text-primary">
+                                                    @(((ShippingLineEnum)Model.Dto.ShippingLine).GetDescription())</p>
                                                 </div>
                                             </div>
-                                 
                                         </div>
                                     </div>
-                                     
+                                    <div class="col-lg-6">
+                                        <div class="card summary-card">
+                                            <div class="card-header text-uppercase text-primary ">Phí dịch vụ</div>
+                                            <div class="card-body summary-list">
+                                                <div class="summary-item">
+                                                    <p class="summary-key">Phí bảo hiểm</p>
+                                                    <p class="summary-value"> <span
+                                                        class="text-secondary">(@(Model.Dto.InsuranceValue.HasValue ?
+                                                                                                                                                                                                                Model.Dto.InsuranceValue : 0)%)</span> - <span
+                                                        class="text-primary">@Model.Dto.Insurance.ToCurrencyFormat()</span>
+                                                    </p>
+                                                </div>
+                                                <div class="summary-item">
+                                                    <p class="summary-key">Phí đóng gỗ</p>
+                                                    <p class="summary-value"> <span
+                                                        class="text-primary">@Model.Dto.WoodenPackagingFee.ToCurrencyFormat()</span>
+                                                    </p>
+                                                </div>
+                                                <div class="summary-item">
+                                                    <p class="summary-key">Phí quấn bọt khí</p>
+                                                    <p class="summary-value"> <span
+                                                        class="text-primary">@Model.Dto.ShockproofFee.ToCurrencyFormat()</span>
+                                                    </p>
+                                                </div>
+                                                <div class="summary-item">
+                                                    <p class="summary-key">Ship nội địa</p>
+                                                    <p class="summary-value"> <span
+                                                        class="text-secondary">@Model.Dto.DomesticShippingFeeRMB
+                                                        (RMB)</span> = <span
+                                                        class="text-primary">@Model.Dto.DomesticShippingFee.ToCurrencyFormat()</span>
+                                                    </p>
+                                                </div>
+                                                <div class="summary-item">
+                                                    <p class="summary-key">Tổng cân nặng (kg)</p>
+                                                    <p class="summary-value">  <span
+                                                        class="text-primary">@Model.Dto.Weight</span>
+                                                    </p>
+                                                </div>
+                                                <div class="summary-item">
+                                                    <p class="summary-key">Phí vận chuyển </p>
+                                                    <p class="summary-value"><span
+                                                        class="text-primary">@Model.Dto.TotalFee.ToCurrencyFormat()</span>
+                                                    </p>
+                                                </div>
+                                                <div class="summary-item">
+                                                    <p class="summary-key">Tổng chi phí</p>
+                                                    <p class="summary-value">
+                                                        <span style="font-size:20px" class="text-danger">@Model.Dto.TotalPrice.ToCurrencyFormat() </span>
+                                                    </p>
+                                                </div>
+                                            
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
+                                    
                         </div>
                     </div>
-                </section>
+                </div>
+            </div>
+        </section>
    
+    }
+
+    @section scripts
+    {
+        <environment names="Development">
+            <script src="~/view-resources/Views/Orders/Detail.js" asp-append-version="true"></script>
+        </environment>
+
+        <environment names="Staging,Production">
+            <script src="~/view-resources/Views/Orders/Detail.min.js" asp-append-version="true"></script>
+        </environment>
+
+        <script>
+            (function ($) {
+            function setStep(index) {
+            const $stepButtons = $('.step-button');
+            const $progress = $('#progress');
+
+            // Cập nhật giá trị của progress
+            $progress.attr('value', index * 100 / ($stepButtons.length - 1));
+
+            // Cập nhật trạng thái class 'done' cho các nút
+            $stepButtons.each(function (secIndex) {
+            if (index >= secIndex) {
+            $(this).addClass('done');
+            } else if (index < secIndex) {
+            $(this).removeClass('done');
+            }
+            });
             }
 
- 
+            setStep(@(orderStatus - 1));
+            })(jQuery);
+
+        </script>
+    }

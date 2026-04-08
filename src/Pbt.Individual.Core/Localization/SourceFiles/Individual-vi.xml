@@ -189,7 +189,7 @@
 		<text name="BankName" value="Ngân hàng" />
 		<text name="Default" value="Mặc định" />
 
-		<text name="TrackingNumber" value="Mã vận đơn" />
+		<text name="TrackingNumber" value="Mã tra cứu" />
 		<text name="PackageCode" value="Mã Kiện" />
 		<text name="Weight" value="Cân nặng (kg)" />
 		<text name="Service" value="Dịch vụ" />
@@ -1107,5 +1107,7 @@
 		<text name="InputWaybillNumbers" value="Nhập danh sách vận đơn" />
 		<text name="Shockproof" value="Chống sốc" />
 		<text name="DomesticShipping" value="Ship nội địa" />
+		<text name="ShippingCost" value="Phí vận chuyển" />
+		
 	</texts>
 </localizationDictionary>
