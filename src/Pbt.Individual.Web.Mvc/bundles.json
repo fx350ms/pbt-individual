@@ -135,20 +135,7 @@
         "wwwroot/view-resources/Views/Account/_Layout.css"
       ]
     },
-    //{
-    //  "output": "view-resources/Views/_Bundles/shared-layout.min.css",
-    //  "input": [
-    //    "node_modules/@fortawesome/fontawesome-free/css/all.min.css",
-    //    "wwwroot/libs-ext/famfamfam-flags/dist/sprite/famfamfam-flags.min.css",
-    //    "node_modules/icheck-bootstrap/icheck-bootstrap.css",
-    //    "node_modules/toastr/build/toastr.css",
-    //    "node_modules/admin-lte/dist/css/adminlte.min.css",
-    //    "node_modules/datatables.net-bs4/css/dataTables.bootstrap4.min.css",
-    //    "node_modules/datatables.net-responsive-bs4/css/responsive.bootstrap4.min.css",
-    //    "node_modules/datatables.net-buttons-bs4/css/buttons.bootstrap4.min.css",
-    //    "wwwroot/view-resources/Views/Shared/_Layout.css"
-    //  ]
-    //},
+  
     {
       "outputFileName": "wwwroot/view-resources/Views/_Bundles/shared-layout.min.css",
       "inputFiles": [

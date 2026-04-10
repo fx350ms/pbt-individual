@@ -69,8 +69,6 @@ namespace pbt.Entities
         [DefaultValue(0)]
         public decimal? InsurancePercentage { get; set; }
         
-        // BagPrefix (max length 2)
-        [CanBeNull] 
         public string BagPrefix { get; set; }
 
     }

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pbt.Individual.Controllers;
+using Pbt.Individual.Packages;
 using Pbt.Individual.Web.Models.Orders;
 using Pbt.Individual.Orders.Dto;
 using pbt.Web.Models.Orders;
@@ -16,9 +17,13 @@ namespace Pbt.Individual.Web.Controllers
     public class OrdersController : IndividualControllerBase
     {
         private readonly IOrderAppService _orderAppService;
-        public OrdersController(IOrderAppService orderAppService)
+        private readonly IPackageAppService _packageAppService;
+        public OrdersController(IOrderAppService orderAppService,
+         IPackageAppService packageAppService
+        )
         {
             _orderAppService = orderAppService;
+            _packageAppService = packageAppService;
         }
 
         public ActionResult Index()
@@ -43,18 +48,18 @@ namespace Pbt.Individual.Web.Controllers
             var (orderDto, packages) = await _orderAppService.GetDetailWithPackagesAsync(id);
             var model = new OrderDetailModel
             {
-                Dto =  orderDto,
+                Dto = orderDto,
                 Packages = packages
             };
             return View(model);
         }
 
-        
+
         [HttpGet]
         public async Task<IActionResult> GetPackagesTrackingByOrder(long orderId)
         {
-            var packages = await _packageAppService.GetPackagesByOrderId(orderId);
-            return PartialView("_OrderPackagesTracking", packages);
+            var packages = await _packageAppService.GetByOrderIdAsync(orderId);
+            return PartialView("_PackageListDetailByOrder", packages);
         }
     }
 }

@@ -19,6 +19,17 @@ namespace Pbt.Individual.ApplicationUtils
 
     }
 
+
+
+
+    public enum CustomerType
+    {
+        [Description("Khách đại lý")]
+        Agent = 1,
+        [Description("Khách hàng lẻ")]
+        Individual = 2
+    }
+
     public enum ShippingLineEnum
     {
         [Description("Hàng lô")]

@@ -418,3 +418,12 @@ FodyWeavers.xsd
 *.msp
 /src/Pbt.Individual.Web.Mvc/wwwroot/css/style.min.css
 /src/Pbt.Individual.Web.Mvc/wwwroot/css/style.min.css
+src/PBT.CacheService/PBT.CacheService.csproj.lscache
+src/Pbt.Individual.Application/Pbt.Individual.Application.csproj.lscache
+test/Pbt.Individual.Web.Tests/Pbt.Individual.Web.Tests.csproj.lscache
+test/Pbt.Individual.Tests/Pbt.Individual.Tests.csproj.lscache
+src/Pbt.Individual.Web.Mvc/Pbt.Individual.Web.Mvc.csproj.lscache
+src/Pbt.Individual.Web.Host/Pbt.Individual.Web.Host.csproj.lscache
+src/Pbt.Individual.Web.Core/Pbt.Individual.Web.Core.csproj.lscache
+src/Pbt.Individual.EntityFrameworkCore/Pbt.Individual.EntityFrameworkCore.csproj.lscache
+src/Pbt.Individual.Core/Pbt.Individual.Core.csproj.lscache
