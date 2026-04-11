@@ -121,9 +121,6 @@ namespace Pbt.Individual.Orders
             }
 
             var orderIdPr = new SqlParameter("@OrderId", System.Data.SqlDbType.BigInt) { Value = id };
-//             SP_Packages_GetByOrderId
-// @OrderId BIGINT 
-
             List<PackageOrderViewDto> packages = await ConnectDb.GetListAsync<PackageOrderViewDto>("SP_Packages_GetByOrderId", System.Data.CommandType.StoredProcedure, new[] { orderIdPr });
             return (order, packages);
         }

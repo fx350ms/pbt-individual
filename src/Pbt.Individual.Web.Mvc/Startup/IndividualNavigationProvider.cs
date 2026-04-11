@@ -32,16 +32,14 @@ public class IndividualNavigationProvider : NavigationProvider
                             "OrdersCreate",
                             L("OrdersCreate"),
                             url: "/Orders/Create",
-                            icon: "fas fa-plus-circle",
-                            target: "_blank"
+                            icon: "fas fa-plus-circle" 
                         )
                     ).AddItem(
                         new MenuItemDefinition(
                             "OrdersList",
                             L("OrdersList"),
                             url: "/Orders",
-                            icon: "fas fa-list",
-                            target: "_blank"
+                            icon: "fas fa-list" 
                         )
                 )
             ).AddItem(
@@ -54,16 +52,14 @@ public class IndividualNavigationProvider : NavigationProvider
                             "CreateDeliveryRequest",
                             L("CreateDeliveryRequest"),
                             url: "/DeliveryRequests/Create",
-                            icon: "fas fa-plus-circle",
-                            target: "_blank"
+                            icon: "fas fa-plus-circle" 
                         )
                     ).AddItem(
                         new MenuItemDefinition(
                             "DeliveryRequestList",
                             L("DeliveryRequestList"),
                             url: "/DeliveryRequests",
-                            icon: "fas fa-list",
-                            target: "_blank"
+                            icon: "fas fa-list" 
                         )
                     )
                 ).AddItem(
@@ -76,8 +72,8 @@ public class IndividualNavigationProvider : NavigationProvider
                             "PaymentsList",
                             L("PaymentsList"),
                             url: "/Payments",
-                            icon: "fas fa-list",
-                            target: "_blank"
+                            icon: "fas fa-list"
+                             
                         )
                     )
                 );

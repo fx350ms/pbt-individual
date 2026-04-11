@@ -21,4 +21,7 @@
     <ProjectReference Include="..\PBT.CacheService\PBT.CacheService.csproj" />
     <ProjectReference Include="..\Pbt.Individual.Core\Pbt.Individual.Core.csproj" />
   </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="Telegram.Bot" Version="22.9.6" />
+  </ItemGroup>
 </Project>

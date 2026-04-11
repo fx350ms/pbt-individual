@@ -2,8 +2,6 @@ using System.ComponentModel;
 
 namespace Pbt.Individual.ApplicationUtils
 {
-
-
     public enum WarehouseType
     {
         /// <summary>
@@ -11,15 +9,11 @@ namespace Pbt.Individual.ApplicationUtils
         /// </summary>
         Source = 1,
 
-
         /// <summary>
         /// Kho đích nhận (Việt Nam) 
         /// </summary>
         Destination = 2
-
     }
-
-
 
 
     public enum CustomerType
@@ -42,6 +36,15 @@ namespace Pbt.Individual.ApplicationUtils
         [Description("Xách tay")]
         Portable = 4
     }
+    
+    public enum DeliveryNoteItemType
+    {
+        [Description("Kiện hàng")]
+        Package = 1,
+        [Description("Bao hàng")]
+        Bag = 2
+    }
+
 
 
     public enum OrderShippingStatusEnum
@@ -116,8 +119,6 @@ namespace Pbt.Individual.ApplicationUtils
         WarehouseTransfer = 13 // Chuyển kho
     }
 
-
-
     public enum PackageShippingStatusEnum
     {
         [Description("Thiếu thông tin")] MissingInfo = 0,
@@ -163,4 +164,94 @@ namespace Pbt.Individual.ApplicationUtils
         WarehouseTransfer = 13 // Chuyển kho
 
     }
+
+    public enum DeliveryRequestStatus
+    {
+        /// <summary>
+        /// Yêu cầu mới
+        /// </summary>
+        [Description("Tạo mới")]
+        New = 1,
+
+        /// <summary>
+        /// Đang xử lý
+        /// </summary>s 
+        [Description("Đã gửi")]
+        Submited = 2,
+
+        /// <summary>
+        /// Hoàn thành đơn
+        /// </summary>
+        [Description("Đang xử lý")]
+        Process = 3,
+
+        /// <summary>
+        /// Hủy
+        /// </summary>
+        [Description("Hoàn thành")]
+        Success = 4,
+
+
+        [Description("Hủy")]
+        Cancelled = 5
+    }
+
+    public enum BagShippingStatus
+    {
+        /// <summary>
+        /// Mới tạo
+        /// </summary>
+        [Description("Mới tạo")]
+        Initiated = 1, // Mới tạo
+
+        /// <summary>
+        /// Chờ vận chuyển QT
+        /// </summary>
+        [Description("Chờ vận chuyển")]
+        WaitingForShipping = 2, // Chờ vận chuyển
+
+        /// <summary>
+        /// Đang vận chuyển
+        /// </summary>
+        [Description("Đang vận chuyển")]
+        InTransit = 3, // Đang vận chuyển
+
+        /// <summary>
+        /// Tới đích
+        /// </summary>
+
+        [Description("Tới đích")]
+        GoToWarehouse = 4, // 
+
+        ///// <summary>
+        ///// Chờ giao hàng ở VN
+        ///// </summary>
+        [Description("Chờ giao")]
+        WaitingForDelivery = 5, //Chờ giao
+
+        ///// <summary>
+        ///// Đang giao
+        ///// </summary>
+        [Description("Đang giao")]
+        Delivery = 6, //đang giao
+
+        ///// <summary>
+        ///// Đã giao
+        ///// </summary>
+        [Description("Đã giao")]
+        Delivered = 7, //Đã giao
+
+
+        /// <summary>
+        /// Khiếu nại đã được giải quyết
+        /// </summary>
+        [Description("Đã xử lý khiếu nại")]
+        ComplaintResolved = 8, // Khiếu nại đã được giải quyết
+
+        [Description("Yêu cầu giao")] DeliveryRequest = 12,
+
+        [Description("Trung chuyển")]
+        WarehouseTransfer = 13 // Chuyển kho
+    }
+
 }
