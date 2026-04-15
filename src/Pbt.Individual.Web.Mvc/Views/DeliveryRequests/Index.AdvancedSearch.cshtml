@@ -1,0 +1,153 @@
+﻿@using Pbt.Individual.ApplicationUtils
+
+<div class="abp-advanced-search">
+    <!-- Nút mở rộng/thu gọn -->
+    <button class="btn btn-outline-primary mb-2" type="button" data-toggle="collapse" data-target="#OrderFilterCollapse">
+        <i class="fas fa-filter"></i> Bộ lọc nâng cao
+    </button>
+ 
+    <div class="collapse" id="OrderFilterCollapse">
+        <form id="OrderSearchForm" class="form-horizontal" onsubmit="return false;">
+            <div class="form-row">
+                <div class="col-md-3">
+                    <label for="Keyword">@L("Keyword")</label>
+                    <div class="input-group">
+                        <input type="text" name="Keyword" class="form-control txt-search" placeholder="@L("Search")" id="txt-keyword">
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-flat btn-clear-value" target="Keyword">
+                                <i class="fas fa-times-circle text-danger"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+
+                <div class="col-md-3">
+                    <label for="Status">@L("Status")</label>
+                    <div class="input-group">
+                        <select name="Status" class="form-control">
+                            <option value="-1">-- @L("All") --</option>
+                          
+                            
+                        </select>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-flat btn-clear-value" target="Status" target-value="-1">
+                                <i class="fas fa-times-circle text-danger"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="Keyword">@L("ShippingLine")</label>
+                    <div class="input-group input-group">
+                        <select class="form-control" id="ShippingLine" name="ShippingLine">
+                            <option value="-1">-- @L("All") --</option>
+                             <option value="@((int)ShippingLineEnum.Consignment)">
+                                                @ShippingLineEnum.Consignment.GetDescription()
+                                            </option>
+                                            <option value="@((int)ShippingLineEnum.Ecommerce)">
+                                                @ShippingLineEnum.Ecommerce.GetDescription()
+                                            </option>
+                                            <option value="@((int)ShippingLineEnum.Official)">
+                                                @ShippingLineEnum.Official.GetDescription()
+                                            </option>
+                                            <option value="@((int)ShippingLineEnum.Portable)">
+                                                @ShippingLineEnum.Portable.GetDescription()
+                                            </option>
+                        </select>
+                        <span class="input-group-append">
+                            <button type="button" class="btn btn-flat btn-clear-value" target="ShippingLine" target-value="-1">
+                                <i class="fas fa-times-circle text-danger"></i>
+                            </button>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="col-md-3">
+                    <label for="CreateDate">@L("CreateDate")</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control date-range" name="CreateDate" id="CreateDate" target="create-date">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-danger btn-clear-value" target="CreateDate" target-date="create-date" style="border: none;">
+                                <i class="fa fa-times-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" class="form-control float-right start-date create-date" name="CreateStartDateStr" id="start-create-date">
+                    <input type="hidden" class="form-control float-right end-date create-date" name="CreateEndDateStr" id="end-create-date">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="ImportDateCN">@L("ImportDateCN")</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control date-range" name="ImportDateCN" id="ImportDateCN" target="import-date-cn">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-danger btn-clear-value" target="ImportDateCN" target-date="import-date-cn" style="border: none;">
+                                <i class="fa fa-times-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" class="form-control float-right start-date create-date" name="ImportStartDateCNStr" id="start-import-date">
+                    <input type="hidden" class="form-control float-right end-date create-date" name="ImportEndDateCNStr" id="end-import-date">
+                </div>
+                <div class="col-md-3">
+                    <label for="ExportDateCN">@L("ExportDateCN")</label>
+
+                    <div class="input-group">
+                        <input type="text" class="form-control date-range" name="ExportDateCN" id="ExportDateCN" target="export-date">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-danger btn-clear-value" target="ExportDateCN" target-date="export-date" style="border: none;">
+                                <i class="fa fa-times-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" class="form-control float-right start-date export-date" name="ExportStartDateStr" id="start-export-date">
+                    <input type="hidden" class="form-control float-right end-date export-date" name="ExportEndDateStr" id="end-export-date">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="ImportDate">@L("ImportDateVN")</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control date-range" name="ImportDate" id="ImportDate" target="import-date">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-danger btn-clear-value" target="ImportDate" target-date="import-date" style="border: none;">
+                                <i class="fa fa-times-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" class="form-control float-right start-date import-date" name="ImportStartDateStr" id="start-import-date">
+                    <input type="hidden" class="form-control float-right end-date import-date" name="ImportEndDateStr" id="end-import-date">
+                </div>
+
+                <div class="col-md-3">
+                    <label for="DeliveryDate">@L("DeliveryDate")</label>
+                    <div class="input-group">
+                        <input type="text" class="form-control date-range" name="DeliveryDate" id="DeliveryDate" target="delivery-date">
+                        <div class="input-group-append">
+                            <button type="button" class="btn btn-outline-danger btn-clear-value" target="DeliveryDate" target-date="delivery-date" style="border: none;">
+                                <i class="fa fa-times-circle"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <input type="hidden" class="form-control float-right start-date delivery-date" name="DeliveryStartDateStr" id="start-delivery-date">
+                    <input type="hidden" class="form-control float-right end-date delivery-date" name="DeliveryEndDateStr" id="end-delivery-date">
+                </div>
+
+  
+            </div>
+
+            <!-- Căn phải nút tìm kiếm -->
+            <div class="form-row mt-3">
+                <div class="col-md-12 d-flex justify-content-end">
+
+                    <button type="submit" class="btn btn-primary mr-2 btn-search">
+                        <i class="fas fa-search"></i>
+                        @L("Search")
+                    </button>
+
+                </div>
+            </div>
+        </form>
+    </div>
+</div>

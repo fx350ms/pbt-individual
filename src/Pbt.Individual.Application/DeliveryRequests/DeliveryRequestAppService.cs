@@ -39,7 +39,8 @@ namespace pbt.DeliveryRequests
             _botClient = new TelegramBotClient(teleToken);
         }
 
-        public async Task<DeliveryRequestDto> GetDetailAsync(int id)
+        [HttpGet]
+        public async Task<DeliveryRequestDto> GetByIdAsync(int id)
         {
             var prs = new[]
             {
@@ -58,8 +59,8 @@ namespace pbt.DeliveryRequests
         }
     
 
-
-        public async Task<DeliveryRequestDto> CreateDeliveryRequestAsync()
+        [HttpPost]
+        public async Task<DeliveryRequestDto> CreateAsync()
         {
             try
             {
@@ -74,7 +75,8 @@ namespace pbt.DeliveryRequests
 
 
 
-        public async Task<PagedResultDto<DeliveryRequestDto>> GetDeliveryRequestFilter(
+        [HttpGet]
+        public async Task<PagedResultDto<DeliveryRequestDto>> GetPagedAsync(
             PagedDeliveryRequestsResultRequestDto input)
         {
             var currentUser = await GetCurrentUserAsync();
@@ -122,7 +124,8 @@ namespace pbt.DeliveryRequests
             };
         }
 
-        public async Task<JsonResult> AddItemToDeliveryRequestAsync(DeliveryRequestItemDto item)
+        [HttpPost]
+        public async Task<JsonResult> AddItemAsync(DeliveryRequestItemDto item)
         {
 
             var statusCodeOutputParam = new SqlParameter
@@ -158,7 +161,8 @@ namespace pbt.DeliveryRequests
             return new JsonResult(new { success = true, message = "Thêm vật phẩm vào yêu cầu giao hàng thành công." });
         }
 
-        public async Task<JsonResult> RemoveItemFromDeliveryRequestAsync(int deliveryRequestItemId)
+        [HttpDelete]
+        public async Task<JsonResult> DeleteItemAsync(int deliveryRequestItemId)
         {
             await ConnectDb.ExecuteNonQueryAsync("SP_DeliveryRequests_RemoveItem", System.Data.CommandType.StoredProcedure,
                 new[]{
@@ -169,7 +173,8 @@ namespace pbt.DeliveryRequests
             return new JsonResult(new { success = true, message = "Đã xóa khỏi yêu cầu giao" });
         }
 
-        public async Task<JsonResult> SubmitDeliveryRequest(SubmitDeliveryRequestDto input)
+        [HttpPost]
+        public async Task<JsonResult> SubmitAsync(SubmitDeliveryRequestDto input)
         {
             var statusCodeOutputParam = new SqlParameter
             {
@@ -207,18 +212,19 @@ namespace pbt.DeliveryRequests
                 return new JsonResult(new { success = false, message = message });
             }
 
-            /// SEND NOTIFY TO GROUP 
+            // Send notify to Telegram channel
 
-            SendNotifyToRequestDelivery(input.Id);
+            await SendDeliveryRequestNotificationAsync(input.Id);
             return new JsonResult(new { success = true, message = "Gửi yêu cầu giao hàng thành công." });
         }
 
 
-        public async Task<List<DeliveryRequestItemDto>> GetDeliveryRequestItemsAsync(int deliveryRequest)
+        [HttpGet]
+        public async Task<List<DeliveryRequestItemDto>> GetItemsByRequestIdAsync(int deliveryRequestId)
         {
             var pr = new[]
                 {
-                    new SqlParameter(){ ParameterName = "@RequestId", Value = deliveryRequest, SqlDbType = SqlDbType.Int }
+                    new SqlParameter(){ ParameterName = "@RequestId", Value = deliveryRequestId, SqlDbType = SqlDbType.Int }
                 };
 
             return await ConnectDb.GetListAsync<DeliveryRequestItemDto>(
@@ -229,9 +235,9 @@ namespace pbt.DeliveryRequests
         }
 
 
-        private async Task SendNotifyToRequestDelivery(int id)
+        private async Task SendDeliveryRequestNotificationAsync(int id)
         {
-            var items = await GetDeliveryRequestItemsAsync(id);
+            var items = await GetItemsByRequestIdAsync(id);
             var title = $"Yêu cầu giao hàng mới với mã yêu cầu {id} vừa được tạo. ";
 
             var checkListMessage = new List<string>();
@@ -255,6 +261,7 @@ namespace pbt.DeliveryRequests
                 }
                 catch (Exception ex)
                 {
+                    Logger.Warn("Failed to send delivery request notification to Telegram.", ex);
                 }
             }
         }

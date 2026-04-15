@@ -257,7 +257,6 @@
 		<text name="Pages_RequestDelivery" value="Yêu cầu giao" />
 		<text name="Pages_RequestRefund" value="Yêu rút tiền" />
 
-
 		<text name="Pages_VCQTCostPrice" value="Giá vốn VCQT" />
 		<text name="Pages_VCQTPartner" value="Đối tác VCQT" />
 		<text name="Pages_VNCDCostPrice" value="Giá vốn VNCD" />
@@ -265,7 +264,6 @@
 		<text name="Pages_Warehouses" value="Kho hàng" />
 		<text name="Pages.Warehouses" value="Kho hàng" />
 		<text name="Pages_Weight" value="Trọng lượng" />
-
 
 		<text name="Pages_Customer" value="Khách hàng" />
 		<text name="Pages_Package" value="Đóng gói" />
@@ -282,7 +280,8 @@
 		<text name="Pages_ReceiptVoucher" value="Phiếu thu" />
 		<text name="Pages_CustomerTransactions" value="Lịch sử giao dịch khách hàng" />
 		<text name="Pages_Sale" value="Kinh doanh" />
-
+		<text name="Pages_DeliveryRequests" value="Yêu cầu giao hàng" />
+		
 		<text name="Role_Sale" value="Vai trò bán hàng" />
 
 		<text name="AddressReceiver" value="Địa chỉ giao hàng" />
@@ -1108,6 +1107,7 @@
 		<text name="Shockproof" value="Chống sốc" />
 		<text name="DomesticShipping" value="Ship nội địa" />
 		<text name="ShippingCost" value="Phí vận chuyển" />
-		
+		<text name="ShippingFeeQT" value="Phí vận chuyển " />
+		<text name="Payments" value="Thanh toán" />
 	</texts>
 </localizationDictionary>
