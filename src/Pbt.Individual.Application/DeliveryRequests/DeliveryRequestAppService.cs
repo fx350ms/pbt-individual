@@ -47,8 +47,6 @@ namespace pbt.DeliveryRequests
                 new SqlParameter("@Id", id)
             };
 
-            //SP_DeliveryRequests_GetDetailById 
-
             var data = await ConnectDb.GetItemAsync<DeliveryRequestDto>(
                 "SP_DeliveryRequests_GetDetailById",
                 System.Data.CommandType.StoredProcedure,
@@ -57,14 +55,79 @@ namespace pbt.DeliveryRequests
 
             return data;
         }
-    
+
 
         [HttpPost]
-        public async Task<DeliveryRequestDto> CreateAsync()
+        public async Task<DeliveryRequestDto> CreateAsync(CreateDeliveryRequestDto input)
         {
             try
             {
-                return null;
+                var currentUser = await GetCurrentUserAsync();
+                if (currentUser is null || !currentUser.CustomerId.HasValue)
+                {
+                    throw new AbpAuthorizationException("You are not authorized to create delivery requests.");
+                }
+
+                var deliveryRequestIdOutputParam = new SqlParameter
+                {
+                    ParameterName = "@DeliveryRequestId",
+                    SqlDbType = System.Data.SqlDbType.Int,
+                    Direction = System.Data.ParameterDirection.Output
+                };
+                var requestCodeOutputParam = new SqlParameter
+                {
+                    ParameterName = "@RequestCode",
+                    SqlDbType = System.Data.SqlDbType.NVarChar,
+                    Size = 50,
+                    Direction = System.Data.ParameterDirection.Output
+                };
+                var statusCodeOutputParam = new SqlParameter
+                {
+                    ParameterName = "@StatusCode",
+                    SqlDbType = System.Data.SqlDbType.Int,
+                    Direction = System.Data.ParameterDirection.Output
+                };
+
+                var messageOutputParam = new SqlParameter
+                {
+                    ParameterName = "@Message",
+                    SqlDbType = System.Data.SqlDbType.NVarChar,
+                    Size = -1,
+                    Direction = System.Data.ParameterDirection.Output
+                };
+
+
+                var prs = new[]
+                {
+                    new SqlParameter("@CustomerId", currentUser.CustomerId.Value),
+                    new SqlParameter("@WarehouseId", input.WarehouseId),
+                    deliveryRequestIdOutputParam,
+                    requestCodeOutputParam,
+                    statusCodeOutputParam,
+                    messageOutputParam
+                };
+
+                await ConnectDb.ExecuteNonQueryAsync(
+                    "SP_DeliveryRequests_GetOrCreateDraft",
+                    System.Data.CommandType.StoredProcedure,
+                    prs
+                );
+
+                var statusCode = (int)statusCodeOutputParam.Value;
+                if (statusCode <= 0)
+                {
+                    throw new Exception("Failed to create delivery request. Please try again.");
+                }
+                var deliveryRequestId = (int)deliveryRequestIdOutputParam.Value;
+                var requestCode = requestCodeOutputParam.Value.ToString();
+                return new DeliveryRequestDto
+                {
+                    Id = deliveryRequestId,
+                    RequestCode = requestCode,
+                    CustomerId = currentUser.CustomerId.Value,
+                    WarehouseId = input.WarehouseId
+                };
+
             }
             catch (Exception ex)
             {
@@ -81,10 +144,10 @@ namespace pbt.DeliveryRequests
         {
             var currentUser = await GetCurrentUserAsync();
 
-            if(currentUser is null || !currentUser.CustomerId.HasValue)
+            if (currentUser is null || !currentUser.CustomerId.HasValue)
             {
                 throw new AbpAuthorizationException("You are not authorized to access delivery requests.");
-            }   
+            }
 
             var customerIdsString = currentUser.CustomerId.Value.ToString();
 
@@ -266,6 +329,98 @@ namespace pbt.DeliveryRequests
             }
         }
 
+
+        public async Task<PagedResultDto<CreateDeliveryRequestItemDto>> GetDeliveryRequestItemsForCreateRequestAsync(CreateDeliveryRequestDto input)
+        {
+            try
+            {
+                var currentUser = await GetCurrentUserAsync();
+                if (currentUser is null || !currentUser.CustomerId.HasValue)
+                {
+                    throw new InvalidOperationException("User is not properly authenticated.");
+                }
+
+                var parameters = new[]
+                {
+                    new SqlParameter("@CustomerId", currentUser.CustomerId),
+                    new SqlParameter("@BagStatus", (int) BagShippingStatus.GoToWarehouse),
+                    new SqlParameter("@PackageStatus",  (int) PackageShippingStatusEnum.InWarehouseVN),
+                    new SqlParameter("@WarehouseDestination", input.WarehouseId )
+                };
+
+                var result = await ConnectDb.GetListAsync<CreateDeliveryRequestItemDto>(
+                    "SP_BagsPackages_GetItemsForCreateRequest",
+                    CommandType.StoredProcedure,
+                    parameters
+                );
+                return new PagedResultDto<CreateDeliveryRequestItemDto>()
+                {
+                    Items = result,
+                    TotalCount = result.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("GetListByCustomerAndWarehouseAsync", ex);
+                throw ex;
+            }
+
+        }
+
+
+        public async Task<PagedResultDto<DeliveryRequestItemDto>> GetDeliveryRequestItemsByRequestId(GetDeliveryRequestItemsByRequestInputRequestDto input)
+        {
+            var data = await ConnectDb.GetListAsync<DeliveryRequestItemDto>(
+                "SP_DeliveryRequestItems_GetByRequestId",
+                System.Data.CommandType.StoredProcedure,
+                new[]
+                {
+                    new SqlParameter(){ ParameterName = "@RequestId", Value = input.DeliveryRequestId, SqlDbType = SqlDbType.Int },
+                }
+            );
+            return new PagedResultDto<DeliveryRequestItemDto>()
+            {
+                Items = data,
+                TotalCount = data.Count()
+            };
+        }
+
+
+        public async Task<JsonResult> AddItemToDeliveryRequestAsync(DeliveryRequestItemDto item)
+        {
+
+            var statusCodeOutputParam = new SqlParameter
+            {
+                ParameterName = "@StatusCode",
+                SqlDbType = System.Data.SqlDbType.Int,
+                Direction = System.Data.ParameterDirection.Output
+            };
+            var messageOutputParam = new SqlParameter
+            {
+                ParameterName = "@Message",
+                SqlDbType = System.Data.SqlDbType.NVarChar,
+                Size = -1,
+                Direction = System.Data.ParameterDirection.Output
+            };
+            await ConnectDb.ExecuteNonQueryAsync("SP_DeliveryRequests_AddItem", System.Data.CommandType.StoredProcedure,
+                new[]{
+                    new SqlParameter(){ ParameterName = "@DeliveryRequestId", Value = item.DeliveryRequestId , SqlDbType = SqlDbType.Int },
+                    new SqlParameter(){ ParameterName = "@ItemId", Value = item.ItemId , SqlDbType = SqlDbType.Int },
+                    new SqlParameter(){ ParameterName = "@ItemType", Value = item.ItemType , SqlDbType = SqlDbType.Int },
+                    new SqlParameter(){ ParameterName = "@CreatorUserId", Value = AbpSession.UserId ?? (object)DBNull.Value , SqlDbType = SqlDbType.BigInt },
+                    statusCodeOutputParam,
+                    messageOutputParam
+                }
+            );
+
+            var statusCode = (int)statusCodeOutputParam.Value;
+            var message = messageOutputParam.Value.ToString();
+            if (statusCode <= 0)
+            {
+                return new JsonResult(new { success = false, message = message });
+            }
+            return new JsonResult(new { success = true, message = "Thêm vật phẩm vào yêu cầu giao hàng thành công." });
+        }
 
     }
 }

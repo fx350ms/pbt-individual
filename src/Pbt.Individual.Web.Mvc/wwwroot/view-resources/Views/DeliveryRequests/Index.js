@@ -1,26 +1,26 @@
 (function ($) {
-    var _bagService = abp.services.app.bag,
-        _packageService = abp.services.app.package,
+    var _deliveryRequestService = abp.services.app.deliveryRequest,
         l = abp.localization.getSource('Individual'),
         _$modal = $('#OrderCreateModal'),
         _$form = _$modal.find('form'),
-        _$pendingTableID = $('#PendingTable');
+        _$deliveryRequestTableID = $('#DeliveryRequestTable');
+       
 
-    var _$pendingTable = _$pendingTableID.DataTable({
+    var _$deliveryRequestTable = _$deliveryRequestTableID.DataTable({
         paging: true,
         serverSide: true,
         sortable: false,
-        // listAction: {
-        //     ajaxFunction: _orderService.getCustomerOrders,
-        //     inputFilter: function () {
-        //         return $('#OrderSearchForm').serializeFormToObject(true);
-        //     }
-        // },
+         listAction: {
+             ajaxFunction: _deliveryRequestService.getPaged,
+             inputFilter: function () {
+                 return $('#OrderSearchForm').serializeFormToObject(true);
+             }
+         },
         buttons: [
             {
                 name: 'refresh',
                 text: '<i class="fas fa-redo-alt"></i>',
-                action: () => _$pendingTable.draw(false)
+                action: () => _$deliveryRequestTable.draw(false)
             }
         ],
         language: {

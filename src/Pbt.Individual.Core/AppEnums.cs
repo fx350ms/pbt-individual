@@ -36,7 +36,7 @@ namespace Pbt.Individual.ApplicationUtils
         [Description("Xách tay")]
         Portable = 4
     }
-    
+
     public enum DeliveryNoteItemType
     {
         [Description("Kiện hàng")]
@@ -175,7 +175,7 @@ namespace Pbt.Individual.ApplicationUtils
 
         /// <summary>
         /// Đang xử lý
-        /// </summary>s 
+        /// </summary>
         [Description("Đã gửi")]
         Submited = 2,
 
@@ -254,4 +254,12 @@ namespace Pbt.Individual.ApplicationUtils
         WarehouseTransfer = 13 // Chuyển kho
     }
 
+
+    public enum ShippingMethod
+    {
+        [Description("Giao hàng")]
+        Delivery = 1,
+        [Description("Nhận tại kho")]
+        Warehouse = 2,
+    }
 }
