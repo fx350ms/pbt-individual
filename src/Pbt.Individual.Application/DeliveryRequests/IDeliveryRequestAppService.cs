@@ -17,6 +17,7 @@ namespace pbt.DeliveryRequests
         Task<JsonResult> DeleteItemAsync(int deliveryRequestItemId);
         Task<JsonResult> SubmitAsync(SubmitDeliveryRequestDto input);
         Task<List<DeliveryRequestItemDto>> GetItemsByRequestIdAsync(int deliveryRequestId);
+        Task<JsonResult> RemoveItemFromDeliveryRequestAsync(int deliveryRequestItemId);
     }
 }
 

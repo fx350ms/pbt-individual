@@ -5,6 +5,9 @@ using System.Collections.Generic;
 using Microsoft.Data.SqlClient;
 using PBT.CacheService;
 using Pbt.Individual.Packages.Dto;
+using Pbt.Individual.Web.ViewModels.DeliveryRequests;
+using System.Data;
+using System;
 
 namespace Pbt.Individual.Packages
 {
@@ -21,9 +24,29 @@ namespace Pbt.Individual.Packages
                 new SqlParameter { ParameterName = "OrderId", Value = orderId }
             };
 
-             var packages = await ConnectDb.GetListAsync<PackageOrderViewDto>("SP_Packages_GetByOrderId", System.Data.CommandType.StoredProcedure, pr);
+            var packages = await ConnectDb.GetListAsync<PackageOrderViewDto>("SP_Packages_GetByOrderId", System.Data.CommandType.StoredProcedure, pr);
             return packages;
         }
-        
+
+        public async Task<List<PackageViewByBagDto>> GetAllPackagesListByBagIdAsync(int bagId)
+        {
+            try
+            {
+                var data = await ConnectDb.GetListAsync<PackageViewByBagDto>(
+                 "SP_Packages_GetByBagId_ForBagDetail",
+                 CommandType.StoredProcedure,
+                new[] {
+                    new SqlParameter("@BagId", SqlDbType.Int) { Value = bagId }
+                 }
+             );
+                return data;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"[GetAllPackagesListByBagId] Exception: {ex}");
+                return new List<PackageViewByBagDto>();
+            }
+        }
+
     }
 }

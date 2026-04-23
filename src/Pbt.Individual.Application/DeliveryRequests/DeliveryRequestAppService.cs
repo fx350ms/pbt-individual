@@ -10,6 +10,7 @@ using Pbt.Individual.ApplicationUtils;
 using Pbt.Individual.Authorization;
 using Pbt.Individual.Core;
 using Pbt.Individual.DeliveryRequests.Dto;
+using Pbt.Individual.Web.ViewModels.DeliveryRequests;
 using PBT.CacheService;
 using System;
 using System.Collections.Generic;
@@ -385,10 +386,8 @@ namespace pbt.DeliveryRequests
             };
         }
 
-
         public async Task<JsonResult> AddItemToDeliveryRequestAsync(DeliveryRequestItemDto item)
         {
-
             var statusCodeOutputParam = new SqlParameter
             {
                 ParameterName = "@StatusCode",
@@ -422,5 +421,107 @@ namespace pbt.DeliveryRequests
             return new JsonResult(new { success = true, message = "Thêm vật phẩm vào yêu cầu giao hàng thành công." });
         }
 
+        private async Task<List<PackageViewByBagDto>> GetPackagesByBagIdAsync(int bagId)
+        {
+            var data = await ConnectDb.GetListAsync<PackageViewByBagDto>("SP_Packages_GetByBagId", CommandType.StoredProcedure, new[]
+            {
+                new SqlParameter("@BagId", SqlDbType.Int) { Value = bagId }
+            });
+            return data;
+        }
+
+        public async Task<JsonResult> RemoveItemFromDeliveryRequestAsync(int deliveryRequestItemId)
+        {
+            await ConnectDb.ExecuteNonQueryAsync("SP_DeliveryRequests_RemoveItem", System.Data.CommandType.StoredProcedure,
+                new[]{
+                    new SqlParameter(){ ParameterName = "@DeliveryRequestItemId", Value = deliveryRequestItemId , SqlDbType = SqlDbType.Int }
+                }
+            );
+
+            return new JsonResult(new { success = true, message = "Đã xóa khỏi yêu cầu giao" });
+        }
+
+        public async Task<JsonResult> SubmitDeliveryRequest(SubmitDeliveryRequestDto input)
+        {
+            var statusCodeOutputParam = new SqlParameter
+            {
+                ParameterName = "@StatusCode",
+                SqlDbType = System.Data.SqlDbType.Int,
+                Direction = System.Data.ParameterDirection.Output
+            };
+            var messageOutputParam = new SqlParameter
+            {
+                ParameterName = "@Message",
+                SqlDbType = System.Data.SqlDbType.NVarChar,
+                Size = -1,
+                Direction = System.Data.ParameterDirection.Output
+            };
+
+            await ConnectDb.ExecuteNonQueryAsync("SP_DeliveryRequests_SubmitRequest", System.Data.CommandType.StoredProcedure,
+                new[]{
+                    new SqlParameter(){ ParameterName = "@Id", Value = input.Id , SqlDbType = SqlDbType.Int },
+                    new SqlParameter(){ ParameterName = "@ShippingMethod", Value = input.ShippingMethod , SqlDbType = SqlDbType.Int },
+                    new SqlParameter(){ ParameterName = "@Address", Value = input.Address , SqlDbType = SqlDbType.NVarChar },
+                    new SqlParameter(){ ParameterName = "@Note", Value = input.Note ?? (object)DBNull.Value , SqlDbType = SqlDbType.NVarChar },
+                    new SqlParameter(){ ParameterName = "@SubmitUserId", Value = AbpSession.UserId ?? (object)DBNull.Value , SqlDbType = SqlDbType.BigInt },
+                    new SqlParameter(){ ParameterName = "@Status", Value = DeliveryRequestStatus.Submited , SqlDbType = SqlDbType.Int },
+                    new SqlParameter(){ ParameterName = "@BagStatus", Value = (int) BagShippingStatus.DeliveryRequest , SqlDbType = SqlDbType.Int },
+                    new SqlParameter(){ ParameterName = "@PackageStatus", Value = (int) PackageDeliveryStatusEnum.DeliveryRequest , SqlDbType = SqlDbType.Int },
+                    statusCodeOutputParam,
+                    messageOutputParam
+                }
+            );
+
+            var statusCode = (int)statusCodeOutputParam.Value;
+            var message = messageOutputParam.Value.ToString();
+            if (statusCode <= 0)
+            {
+                return new JsonResult(new { success = false, message = message });
+            }
+
+            /// SEND NOTIFY TO GROUP 
+            SendNotifyToRequestDelivery(input.Id);
+            return new JsonResult(new { success = true, message = "Gửi yêu cầu giao hàng thành công." });
+        }
+
+        public async Task<List<DeliveryRequestItemDto>> GetDeliveryRequestItemsAsync(int deliveryRequest)
+        {
+            var pr = new[]
+                {
+                    new SqlParameter(){ ParameterName = "@RequestId", Value = deliveryRequest, SqlDbType = SqlDbType.Int }
+                };
+
+            return await ConnectDb.GetListAsync<DeliveryRequestItemDto>(
+                "SP_DeliveryRequestItems_GetByRequestId",
+                System.Data.CommandType.StoredProcedure,
+               pr
+            );
+        }
+
+        private async Task SendNotifyToRequestDelivery(int id)
+        {
+            var items = await GetDeliveryRequestItemsAsync(id);
+            var title = $"Yêu cầu giao hàng mới với mã yêu cầu {id} vừa được tạo. ";
+            var checkListMessage = new List<string>();
+            foreach (var item in items)
+            {
+                checkListMessage.Add($"- {((DeliveryNoteItemType)item.ItemType).GetDescription()}: {(item.ItemType == (int)DeliveryNoteItemType.Package ? item.PackageCode : item.BagNumber)}");
+            }
+            var msg = "\nChi tiết:\n" + string.Join("\n", checkListMessage);
+            if (!string.IsNullOrEmpty(_telegramChannelId))
+            {
+                try
+                {
+                    await _botClient.SendHtml(
+                        chatId: _telegramChannelId, // Hoặc ID số nếu là kênh riêng tư
+                        html: $"<b style='font-size:20px;color:red;'>{title}</b>\n {msg}"
+                    );
+                    await Task.CompletedTask;
+                }
+                catch (Exception ex)
+                {
+                }
+            }
+        }
     }
 }

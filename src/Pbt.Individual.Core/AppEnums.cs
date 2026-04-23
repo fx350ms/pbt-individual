@@ -262,4 +262,51 @@ namespace Pbt.Individual.ApplicationUtils
         [Description("Nhận tại kho")]
         Warehouse = 2,
     }
+
+    public enum PackageDeliveryStatusEnum
+    {
+        [Description("Thiếu thông tin")] MissingInfo = 0,
+        /// <summary>
+        /// Khởi tạo, đã kí gửi
+        /// </summary>
+        [Description("Khởi tạo")] Initiate = 1,
+        /// <summary>
+        /// Đang ở kho QT, chờ vc về VN
+        /// </summary>
+        [Description("Chờ vận chuyển")] WaitingForShipping = 3,
+        /// <summary>
+        /// Đang vận chuyển về VN
+        /// </summary>
+        [Description("Đang vận chuyển")] Shipping = 4,
+        /// <summary>
+        /// 
+        /// </summary>
+        [Description("Đã về kho VN")] InWarehouseVN = 5,
+        /// <summary>
+        /// Chờ giao ở VN
+        /// </summary>
+        [Description("Chờ giao")] WaitingForDelivery = 6,
+
+        /// <summary>
+        /// Yêu cầu giao
+        /// </summary>
+        [Description("Yêu cầu giao")] DeliveryRequest = 7,
+
+        /// <summary>
+        /// Đang giao
+        /// </summary>
+        [Description("Đang giao")] DeliveryInProgress = 8,
+
+        /// <summary>
+        /// Đã giao
+        /// </summary>
+        [Description("Đã giao")] Delivered = 9,
+        [Description("Hoàn thành")] Completed = 10, // Hoàn thành
+        [Description("Khiếu nại")] Complaint = 11, // Khiếu nại
+
+        [Description("Trung chuyển")]
+        WarehouseTransfer = 13 // Chuyển kho
+
+    }
+
 }

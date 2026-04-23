@@ -2,7 +2,6 @@
     const _deliveryRequestServices = abp.services.app.deliveryRequest,
         l = abp.localization.getSource('pbt'),
         _$form = $("#form-dr");
-
     var _$bagPackageTable = $('#bag-package-listTable'),
         _$drItemTable = $('#deliveryRequestItemTable');
 
@@ -12,11 +11,15 @@
             debugger;
             $('#hiddenDeliveryRequestId').val(res.id);
             $('#deliveryRequestNumber').text(('#' +res.requestCode));
+            setTimeout(() => {
+                 deliveryRequestItemTable.ajax.reload();
+                 $('#btn-submit-dr').removeClass('d-none');
+            }, 100);
+           
         });
         bagPackageTable.ajax.reload();
-        deliveryRequestItemTable.ajax.reload();
+   
     });
-
 
     var bagPackageTable = _$bagPackageTable.DataTable({
         paging: false,
@@ -105,7 +108,7 @@
             ajaxFunction: _deliveryRequestServices.getDeliveryRequestItemsByRequestId,
             inputFilter: function () {
                 var drId = $('#hiddenDeliveryRequestId').val();
-                return drId;
+                return { deliveryRequestId: drId };
             }
         },
         buttons: [
@@ -172,7 +175,7 @@
         var bagId = d.id;
         var rowContent = '';
         $.ajax({
-            url: '/DeliveryRequest/GetPackagesByBagId?bagId=' + bagId,
+            url: '/DeliveryRequests/GetPackagesByBagId?bagId=' + bagId,
             type: "GET",
             async: false,
             dataType: "html",
@@ -203,7 +206,7 @@
 
     deliveryRequestItemTable.on('click', 'tbody td.dt-control', function (e) {
         let tr = e.target.closest('tr');
-        let row = bagPackageTable.row(tr);
+        let row = deliveryRequestItemTable.row(tr);
 
         if (row.child.isShown()) {
             // This row is already open - close it
@@ -258,7 +261,7 @@
             .done(function (result) {
                 if (result.success) {
                     abp.message.success('Yêu cầu giao hàng đã được gửi thành công.');
-                    window.location.href = '/DeliveryRequest'; // Chuyển hướng sau khi thành công
+                    window.location.href = '/DeliveryRequests'; // Chuyển hướng sau khi thành công
                 } else {
                     abp.message.error(result.message || 'Có lỗi xảy ra khi gửi yêu cầu giao hàng.');
                 }
