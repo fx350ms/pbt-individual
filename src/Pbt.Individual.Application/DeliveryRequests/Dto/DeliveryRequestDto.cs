@@ -19,20 +19,11 @@ namespace Pbt.Individual.DeliveryRequests.Dto
         public int PaymentStatus { get; set; }
         public int PaymentMethod { get; set; }
         public int PackageCount { get; set; }
-        
+
         public string Address { get; set; }
 
         public decimal TotalWeight { get; set; }
 
         public DateTime? RequestTime { get; set; }
-
     }
-
-       public class SubmitDeliveryRequestDto
-   {
-       public int Id { get; set; }
-       public string Note { get; set; }
-       public int ShippingMethod { get; set; }
-       public string Address { get; set; }
-   }
 }
