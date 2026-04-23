@@ -1097,6 +1097,7 @@
 		<text name="SubmitRequest" value="Gửi yêu cầu" />
 
 		<text name="Dashboard" value="Bảng điều khiển" />
+		<text name="Support" value="Hỗ trợ" />
 		<text name="MyOrders" value="Đơn hàng của tôi" />
 		<text name="OrdersList" value="Danh sách đơn hàng" />
 		<text name="OrdersCreate" value="Tạo đơn hàng" />

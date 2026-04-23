@@ -1,0 +1,36 @@
+@using Pbt.Individual.Web.Startup
+@{
+    ViewBag.Title = L("Hỗ trợ");
+}
+
+@section scripts
+{
+    <environment names="Development">
+        <script src="~/view-resources/Views/Support/Index.js" asp-append-version="true"></script>
+    </environment>
+
+    <environment names="Staging,Production">
+        <script src="~/view-resources/Views/Support/Index.min.js" asp-append-version="true"></script>
+    </environment>
+
+}
+
+@section styles
+{
+    <style>
+        hr {
+            margin-top: 0px;
+            margin-bottom: 0px;
+        }
+    </style>
+}
+
+
+<link href="https://cdn.jsdelivr.net/npm/@@n8n/chat/dist/style.css" rel="stylesheet" />
+<script type="module">
+	import { createChat } from 'https://cdn.jsdelivr.net/npm/@@n8n/chat/dist/chat.bundle.es.js';
+	createChat({
+		webhookUrl: 'https://192.168.1.69:5678/webhook/8fb0d517-3704-455a-8e2f-859a635fab46/chat'
+	});
+</script>
+

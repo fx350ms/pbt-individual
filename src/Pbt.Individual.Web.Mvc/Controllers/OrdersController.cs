@@ -1,4 +1,5 @@
-﻿using Abp.AspNetCore.Mvc.Authorization;
+﻿using System;
+using Abp.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Pbt.Individual.Controllers;
@@ -60,6 +61,27 @@ namespace Pbt.Individual.Web.Controllers
         {
             var packages = await _packageAppService.GetByOrderIdAsync(orderId);
             return PartialView("_PackageListDetailByOrder", packages);
+        }
+        
+        [HttpPost]
+        [AllowAnonymous]
+        public async Task<IActionResult> N8nCreateQuickOrder([FromBody] CreateQuickOrderDto input)
+        {
+            // 1. Kiểm tra API Key cố định
+            var apiKey = Request.Headers["X-API-KEY"].ToString();
+            if (apiKey != "MA_BI_MAT_CUA_BAN")
+            {
+                return Unauthorized("Không có quyền truy cập");
+            }
+            try
+            {
+                var orderId = await _orderAppService.CreateQuickOrderAsync(input);
+                return Json(new { success = true, orderId = orderId, message = "Order created successfully" });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
     }
 }

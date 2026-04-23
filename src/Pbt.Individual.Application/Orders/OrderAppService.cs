@@ -1,4 +1,4 @@
-﻿using Abp.Application.Services.Dto;
+using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Data.SqlClient;
@@ -45,7 +45,6 @@ namespace Pbt.Individual.Orders
             Logger.Info($"Creating waybills for customer ID: {currentUser.CustomerId.Value}, data: {input}");
             try
             {
-
                 var statusCodePr = new SqlParameter("@StatusCode", System.Data.SqlDbType.Int) { Direction = System.Data.ParameterDirection.Output };
                 var messagePr = new SqlParameter("@Message", System.Data.SqlDbType.NVarChar, -1) { Direction = System.Data.ParameterDirection.Output };
                 var successCountPr = new SqlParameter("@SuccessCount", System.Data.SqlDbType.Int) { Direction = System.Data.ParameterDirection.Output };
@@ -84,7 +83,48 @@ namespace Pbt.Individual.Orders
                 throw;
             }
         }
+        
+        [AllowAnonymous]
+        public async Task<long> CreateQuickOrderAsync(CreateQuickOrderDto input)
+        {
+            // Validate thông tin đầu vào
+            if (string.IsNullOrWhiteSpace(input.WaybillNumber))
+            {
+                throw new ArgumentException("Waybill number cannot be empty.");
+            }
 
+            var currentUser = await GetCurrentUserAsync();
+            if (currentUser == null)
+            {
+                throw new InvalidOperationException("Current user cannot be null.");
+            }
+
+            Logger.Info($"Creating quick order for user ID: {currentUser.Id}, waybill: {input.WaybillNumber}");
+        
+            try
+            {
+                var waybillNumberPr = new SqlParameter("@WaybillNumber", System.Data.SqlDbType.NVarChar, -1) { Value = input.WaybillNumber };
+                var creatorUserIdPr = new SqlParameter("@CreatorUserId", System.Data.SqlDbType.BigInt) { Value = currentUser.Id };
+                var newOrderIdPr = new SqlParameter("@NewOrderId", System.Data.SqlDbType.BigInt) { Direction = System.Data.ParameterDirection.Output };
+        
+                var prs = new[]
+                {
+                    waybillNumberPr,
+                    creatorUserIdPr,
+                    newOrderIdPr
+                };
+        
+                await ConnectDb.ExecuteQueryAsync("SP_Orders_CreateQuicklyOrder", System.Data.CommandType.StoredProcedure, prs);
+        
+                return (long)newOrderIdPr.Value;
+            }
+            catch (Exception ex)
+            {
+                Logger.Error("Error occurred while creating quick order.", ex);
+                throw;
+            }
+        }
+        
         public async Task<OrderDto> GetAsync(long id)
         {
             var idPr = new SqlParameter("@Id", System.Data.SqlDbType.BigInt) { Value = id };
@@ -110,7 +150,6 @@ namespace Pbt.Individual.Orders
             }
             return data;
         }
-
 
         public async Task<(OrderDetailDto, List<PackageOrderViewDto>)> GetDetailWithPackagesAsync(long id)
         {

@@ -1,4 +1,4 @@
-﻿using Abp.Application.Navigation;
+using Abp.Application.Navigation;
 using Abp.Authorization;
 using Abp.Localization;
 using Pbt.Individual.Authorization;
@@ -19,6 +19,15 @@ public class IndividualNavigationProvider : NavigationProvider
                     L("Dashboard"),
                     url: "",
                     icon: "fas fa-home",
+                    requiresAuthentication: true
+                )
+            )
+            .AddItem(
+                new MenuItemDefinition(
+                    "Support",
+                    L("Support"),
+                    url: "Support",
+                    icon: "fas fa-life-ring",
                     requiresAuthentication: true
                 )
             )

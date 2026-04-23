@@ -24,6 +24,12 @@ namespace Pbt.Individual.Orders
     Task<OrderDetailDto> GetDetailAsync(long id);
 
     Task<(OrderDetailDto, List<PackageOrderViewDto>)> GetDetailWithPackagesAsync(long id);
+    /// <summary>
+    /// Tạo đơn hàng nhanh
+    /// </summary>
+    /// <param name="input"></param>
+    /// <returns></returns>
+    Task<long> CreateQuickOrderAsync(CreateQuickOrderDto input);
   }
 
 }
