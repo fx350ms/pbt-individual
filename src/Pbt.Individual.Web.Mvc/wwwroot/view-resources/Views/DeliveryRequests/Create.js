@@ -8,23 +8,23 @@
     $('#select-warehouse').on('change', function () {
         var warehouseId = $('#select-warehouse').val();
         _deliveryRequestServices.create({ warehouseId: warehouseId }).done(function (res) {
-            debugger;
             $('#hiddenDeliveryRequestId').val(res.id);
-            $('#deliveryRequestNumber').text(('#' +res.requestCode));
+            $('#deliveryRequestNumber').text(('#' + res.requestCode));
             setTimeout(() => {
-                 deliveryRequestItemTable.ajax.reload();
-                 $('#btn-submit-dr').removeClass('d-none');
+                deliveryRequestItemTable.ajax.reload();
+                $('#btn-submit-dr').removeClass('d-none');
             }, 100);
-           
+
         });
         bagPackageTable.ajax.reload();
-   
+
     });
 
     var bagPackageTable = _$bagPackageTable.DataTable({
         paging: false,
         serverSide: true,
         processing: false,
+        ordering: false,
         deferLoading: 0,
         listAction: {
             ajaxFunction: _deliveryRequestServices.getDeliveryRequestItemsForCreateRequest,
@@ -47,7 +47,8 @@
             "info": l('Display') + " _START_ - _END_ | " + l('Total') + " _TOTAL_ " + l('Record'),
             "lengthMenu": l('Display') + " _MENU_ " + l('Record'),
             "emptyTable": l('EmptyTable'),
-            "zeroRecords": l('zeroRecords')
+            "zeroRecords": l('zeroRecords'),
+            "emptyTable": "Chưa có hàng trong kho chờ giao",
         },
 
         columnDefs: [
@@ -55,9 +56,11 @@
                 targets: 0,
                 data: 'bagNumber',
                 className: 'dt-control',
+                orderable: false,
+                width: '12%',
                 render: function (data, type, row, meta) {
                     if (row && row.bagNumber) {
-                        return `<a href="javascript:void(0)"  > ${row.bagNumber} </a>`;
+                        return `<a style="width: 100px" href="javascript:void(0)"> ${row.bagNumber} </a>`;
                     }
                     else
                         return '';
@@ -65,8 +68,14 @@
             },
             {
                 targets: 1,
-                data: 'packageCode',
-
+                data: 'packageNumber',
+                className: 'dt-control',
+                render: function (data, type, row, meta) {
+                    if (data === null || data === '') {
+                        return `<a href="javascript:void(0)" class="view-packages-link" data-bag-id="${row.id}">Xem kiện</a>`;
+                    }
+                    return data;
+                }
             },
             {
                 targets: 2,
@@ -93,7 +102,7 @@
                 data: 'id',
                 width: 20,
                 render: function (data, type, row, meta) {
-                    return `<a href="javascript:void(0)" data-id="${row.id}" data-type="${row.itemType}" class="btn btn-sm btn-info btn-add-item-2-delivery-request" title="Thêm vào phiếu yêu cầu giao"> <i class="fas fa-caret-right"></i> </a>`;
+                    return `<a href="javascript:void(0)" data-id="${row.id}" data-type="${row.itemType}" class="btn-add-item-2-delivery-request" title="Thêm vào phiếu yêu cầu giao"> Chọn </a>`;
                 }
             }
         ]
@@ -104,6 +113,7 @@
         serverSide: true,
         processing: false,
         deferLoading: 0,
+        ordering: false,
         listAction: {
             ajaxFunction: _deliveryRequestServices.getDeliveryRequestItemsByRequestId,
             inputFilter: function () {
@@ -123,7 +133,8 @@
             "info": l('Display') + " _START_ - _END_ | " + l('Total') + " _TOTAL_ " + l('Record'),
             "lengthMenu": l('Display') + " _MENU_ " + l('Record'),
             "emptyTable": l('EmptyTable'),
-            "zeroRecords": l('zeroRecords')
+            "zeroRecords": l('zeroRecords'),
+            "emptyTable": "Danh sách giao hiện đang trống",
         },
 
         columnDefs: [
@@ -131,9 +142,10 @@
             {
                 targets: 0,
                 data: 'itemId',
-                width: 20,
+                width: 70,
+                sortable: false,
                 render: function (data, type, row, meta) {
-                    return `<a href="javascript:void(0)" data-id="${row.id}" data-type="${row.itemType}" class="btn btn-sm btn-info btn-remove-item" title="Thêm vào phiếu yêu cầu giao"> <i class="fas fa-caret-left"></i> </a>`;
+                    return `<a href="javascript:void(0)" data-id="${row.id}" data-type="${row.itemType}" class="btn btn-sm btn-link btn-remove-item" title="Xóa khỏi phiếu yêu cầu giao">Bỏ chọn</a>`;
                 }
             },
             {
@@ -151,17 +163,20 @@
             {
                 targets: 2,
                 data: 'packageCode'
-
             },
             {
                 targets: 3,
+                data: 'waybillNumber'
+            },
+            {
+                targets: 4,
                 data: 'weight',
                 render: function (data) {
                     return data ? `${data.toFixed(2)} kg` : '-';
                 }
             },
             {
-                targets: 4,
+                targets: 5,
                 data: 'totalPackages',
                 render: function (data, type, row, meta) {
                     if (row.itemType == 1) return 1;
@@ -218,7 +233,6 @@
         }
     });
 
-
     $(document).on('click', '.btn-add-item-2-delivery-request', function () {
         var itemId = $(this).data('id');
         var itemType = $(this).data('type');
@@ -250,8 +264,6 @@
         });
     });
 
-
-
     $('.btn-submit').on('click', function () {
         const data = _$form.serializeFormToObject();
         data.id = $('#hiddenDeliveryRequestId').val();
@@ -273,4 +285,5 @@
                 abp.ui.clearBusy(); // Ẩn trạng thái đang xử lý
             });
     });
+    $("#select-warehouse").removeAttr("disabled");
 })(jQuery);

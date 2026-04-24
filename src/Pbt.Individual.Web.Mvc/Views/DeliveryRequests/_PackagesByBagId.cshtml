@@ -1,4 +1,4 @@
-﻿@using pbt.Web.Mvc.Models.DeliveryRequests
+@using pbt.Web.Mvc.Models.DeliveryRequests
 @model DeliveryRequestPackagesByBagIdModel
 
 @{
@@ -18,7 +18,7 @@
         {
             foreach (var item in Model.packageViewByBagDtos)
             {
-                <tr>
+                <tr @(item.IsRepresentForWeightCover ? "class=weight-cover-row" : "")>
                     <td>@item.PackageNumber</td>
                     <td>
                         @item.Weight
