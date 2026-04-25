@@ -63,9 +63,9 @@
             tfoot.html(`
                 <tr>
                     <td colspan="7" style="text-align: right; font-weight: bold;">
-                        Tổng kiện: <span style="color: #007bff;">${totalItems}</span> | 
-                        Tổng bao: <span style="color: #007bff;">${totalBags}</span> | 
-                        Tổng cân nặng: <span style="color: #dc3545;">${totalWeight.toFixed(2)} kg</span>
+                        Hàng chờ giao: ${totalItems} kiện: <span style="color: #007bff;"></span> | 
+                        ${totalBags} bao: <span style="color: #007bff;"></span> | 
+                        Cân nặng: <span style="color: #dc3545;">${totalWeight.toFixed(2)} kg</span>
                     </td>
                 </tr>
             `);
@@ -171,9 +171,9 @@
             tfoot.html(`
                 <tr>
                     <td colspan="7" style="text-align: right; font-weight: bold;">
-                        Tổng kiện: <span style="color: #007bff;">${totalItems}</span> | 
-                        Tổng bao: <span style="color: #007bff;">${totalBags}</span> | 
-                        Tổng cân nặng: <span style="color: #dc3545;">${totalWeight.toFixed(2)} kg</span>
+                        Kiện: ${totalItems} <span style="color: #007bff;"></span> | 
+                        Bao: ${totalBags} <span style="color: #007bff;"></span> | 
+                        Cân nặng: <span style="color: #dc3545;">${totalWeight.toFixed(2)} kg</span>
                     </td>
                 </tr>
             `);
