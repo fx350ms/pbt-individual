@@ -14,7 +14,6 @@
                 deliveryRequestItemTable.ajax.reload();
                 $('#btn-submit-dr').removeClass('d-none');
             }, 100);
-
         });
         bagPackageTable.ajax.reload();
 
@@ -36,19 +35,40 @@
             }
         },
         buttons: [
-            {
-                name: 'refresh',
-                text: '<i class="fas fa-redo-alt"></i>',
-                action: function () { bagPackageTable.draw(false); }
-            }
+ 
         ],
-
+        dom: 'Brt',
         language: {
-            "info": l('Display') + " _START_ - _END_ | " + l('Total') + " _TOTAL_ " + l('Record'),
-            "lengthMenu": l('Display') + " _MENU_ " + l('Record'),
-            "emptyTable": l('EmptyTable'),
-            "zeroRecords": l('zeroRecords'),
             "emptyTable": "Chưa có hàng trong kho chờ giao",
+            "zeroRecords": "Chưa có hàng trong kho chờ giao",
+        },
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var pageData = api.rows({ search: 'applied' }).data();
+            
+            var totalItems = 0; // Kiện (itemType = 1)
+            var totalBags = 0;  // Bao (itemType = 2)
+            var totalWeight = 0;
+            
+            pageData.each(function (row) {
+                if (row.itemType === 1) {
+                    totalItems++;
+                } else if (row.itemType === 2) {
+                    totalBags++;
+                }
+                totalWeight += parseFloat(row.weight) || 0;
+            });
+            
+            var tfoot = $(_$bagPackageTable).find('tfoot');
+            tfoot.html(`
+                <tr>
+                    <td colspan="7" style="text-align: right; font-weight: bold;">
+                        Tổng kiện: <span style="color: #007bff;">${totalItems}</span> | 
+                        Bao: <span style="color: #007bff;">${totalBags}</span> | 
+                        ân nặng: <span style="color: #dc3545;">${totalWeight.toFixed(2)} kg</span>
+                    </td>
+                </tr>
+            `);
         },
 
         columnDefs: [
@@ -60,7 +80,7 @@
                 width: '12%',
                 render: function (data, type, row, meta) {
                     if (row && row.bagNumber) {
-                        return `<a style="width: 100px" href="javascript:void(0)"> ${row.bagNumber} </a>`;
+                        return `<a class="view-packages-link badge badge-info" href="javascript:void(0)" style="font-size:0.95em;">${row.bagNumber}</a>`;
                     }
                     else
                         return '';
@@ -68,20 +88,12 @@
             },
             {
                 targets: 1,
-                data: 'packageNumber',
-                className: 'dt-control',
-                render: function (data, type, row, meta) {
-                    if (data === null || data === '') {
-                        return `<a href="javascript:void(0)" class="view-packages-link" data-bag-id="${row.id}">Xem kiện</a>`;
-                    }
-                    return data;
-                }
+                data: 'packageNumber'
             },
             {
                 targets: 2,
                 data: 'waybillNumber',
             },
-
             {
                 targets: 3,
                 data: 'weight',
@@ -89,7 +101,6 @@
                     return data ? `${data.toFixed(2)} kg` : '-';
                 }
             },
-
             {
                 targets: 4,
                 data: 'importDate',
@@ -99,12 +110,22 @@
             },
             {
                 targets: 5,
+                data: 'packageNumber',
+                render: function (data, type, row, meta) {
+                    if (data === null || data === '') {
+                        return `<a href="javascript:void(0)" class="view-packages-link badge badge-primary" data-bag-id="${row.id}" title="Nhấn để xem danh sách kiện">Xem kiện</a>`;
+                    }
+                    return '';
+                }
+            },
+            {
+                targets: 6,
                 data: 'id',
                 width: 20,
                 render: function (data, type, row, meta) {
-                    return `<a href="javascript:void(0)" data-id="${row.id}" data-type="${row.itemType}" class="btn-add-item-2-delivery-request" title="Thêm vào phiếu yêu cầu giao"> Chọn </a>`;
+                    return `<a href="javascript:void(0)" data-id="${row.id}" data-type="${row.itemType}" class="btn btn-sm btn-outline-success btn-add-item-2-delivery-request" title="Nhấn chọn để chuyển vào yêu cầu giao">Chọn</a>`;
                 }
-            }
+            },
         ]
     });
 
@@ -122,19 +143,40 @@
             }
         },
         buttons: [
-            {
-                name: 'refresh',
-                text: '<i class="fas fa-redo-alt"></i>',
-                action: function () { deliveryRequestItemTable.draw(false); }
-            }
-        ],
 
+        ],
+        dom: 'Brt',
         language: {
-            "info": l('Display') + " _START_ - _END_ | " + l('Total') + " _TOTAL_ " + l('Record'),
-            "lengthMenu": l('Display') + " _MENU_ " + l('Record'),
-            "emptyTable": l('EmptyTable'),
-            "zeroRecords": l('zeroRecords'),
             "emptyTable": "Danh sách giao hiện đang trống",
+            "zeroRecords": "Danh sách giao hiện đang trống",
+        },
+        footerCallback: function (row, data, start, end, display) {
+            var api = this.api();
+            var pageData = api.rows({ search: 'applied' }).data();
+            
+            var totalItems = 0; // Kiện (itemType = 1)
+            var totalBags = 0;  // Bao (itemType = 2)
+            var totalWeight = 0;
+            
+            pageData.each(function (row) {
+                if (row.itemType === 1) {
+                    totalItems++;
+                } else if (row.itemType === 2) {
+                    totalBags++;
+                }
+                totalWeight += parseFloat(row.weight) || 0;
+            });
+            
+            var tfoot = $(_$drItemTable).find('tfoot');
+            tfoot.html(`
+                <tr>
+                    <td colspan="7" style="text-align: right; font-weight: bold;">
+                        Tổng kiện: <span style="color: #007bff;">${totalItems}</span> | 
+                        Bao: <span style="color: #007bff;">${totalBags}</span> | 
+                        Cân nặng: <span style="color: #dc3545;">${totalWeight.toFixed(2)} kg</span>
+                    </td>
+                </tr>
+            `);
         },
 
         columnDefs: [
@@ -145,7 +187,7 @@
                 width: 70,
                 sortable: false,
                 render: function (data, type, row, meta) {
-                    return `<a href="javascript:void(0)" data-id="${row.id}" data-type="${row.itemType}" class="btn btn-sm btn-link btn-remove-item" title="Xóa khỏi phiếu yêu cầu giao">Bỏ chọn</a>`;
+                    return `<a href="javascript:void(0)" data-id="${row.id}" data-type="${row.itemType}" class="btn btn-sm btn-outline-danger btn-remove-item" title="Nhấn để loại bỏ khỏi yêu cầu giao">Bỏ chọn</a>`;
                 }
             },
             {
@@ -154,7 +196,7 @@
                 className: 'dt-control',
                 render: function (data, type, row, meta) {
                     if (row && row.bagNumber) {
-                        return `<a href="javascript:void(0)"  > ${row.bagNumber} </a>`;
+                        return `<a href="javascript:void(0)" class="view-packages-link badge badge-info" style="font-size:0.95em;">${row.bagNumber}</a>`;
                     }
                     else
                         return '';
@@ -182,12 +224,21 @@
                     if (row.itemType == 1) return 1;
                     return row.totalPackages;
                 }
+            },
+            {
+                targets: 6,
+                data: 'packageCode',
+                render: function (data, type, row, meta) {
+                    if (data === null || data === '') {
+                        return `<a href="javascript:void(0)" class="view-packages-link badge badge-primary" data-bag-id="${row.id}" title="Nhấn để xem danh sách kiện">Xem kiện</a>`;
+                    }
+                    return '';
+                }
             }
         ]
     });
 
-    function getRow(d) {
-        var bagId = d.id;
+    function getRow(bagId) {
         var rowContent = '';
         $.ajax({
             url: '/DeliveryRequests/GetPackagesByBagId?bagId=' + bagId,
@@ -205,7 +256,7 @@
         return rowContent;
     }
 
-    bagPackageTable.on('click', 'tbody td.dt-control', function (e) {
+    bagPackageTable.on('click', '.view-packages-link', function (e) {
         let tr = e.target.closest('tr');
         let row = bagPackageTable.row(tr);
 
@@ -215,11 +266,11 @@
         }
         else {
             // Open this row
-            row.child(getRow(row.data())).show();
+            row.child(getRow(row.data().id)).show();
         }
     });
 
-    deliveryRequestItemTable.on('click', 'tbody td.dt-control', function (e) {
+    deliveryRequestItemTable.on('click', '.view-packages-link', function (e) {
         let tr = e.target.closest('tr');
         let row = deliveryRequestItemTable.row(tr);
 
@@ -229,7 +280,7 @@
         }
         else {
             // Open this row
-            row.child(getRow(row.data())).show();
+            row.child(getRow(row.data().itemId)).show();
         }
     });
 

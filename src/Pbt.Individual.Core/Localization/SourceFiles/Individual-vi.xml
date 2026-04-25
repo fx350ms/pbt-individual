@@ -1110,5 +1110,7 @@
 		<text name="ShippingCost" value="Phí vận chuyển" />
 		<text name="ShippingFeeQT" value="Phí vận chuyển " />
 		<text name="Payments" value="Thanh toán" />
+		
+		<text name="EntryDate" value="Ngày nhập" />
 	</texts>
 </localizationDictionary>
