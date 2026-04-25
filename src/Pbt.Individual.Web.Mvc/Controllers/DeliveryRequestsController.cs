@@ -46,6 +46,17 @@ namespace Pbt.Individual.Web.Controllers
             return View(model);
         }
 
+        public async Task<IActionResult> Detail(int id)
+        {
+            var deliveryRequest = await _deliveryRequestAppService.GetByIdAsync(id);
+            var model = new DetailDeliveryRequestModel
+            {
+                DeliveryRequestId = id,
+                deliveryRequestDto = deliveryRequest
+            };
+            return View(model);
+        }
+
         [HttpGet]
         public async Task<IActionResult> GetPackagesByBagId(int bagId)
         {

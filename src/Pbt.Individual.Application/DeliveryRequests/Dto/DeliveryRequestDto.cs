@@ -1,4 +1,5 @@
 ﻿using Abp.Application.Services.Dto;
+using Pbt.Individual.ApplicationUtils;
 using System;
 
 namespace Pbt.Individual.DeliveryRequests.Dto
@@ -19,11 +20,9 @@ namespace Pbt.Individual.DeliveryRequests.Dto
         public int PaymentStatus { get; set; }
         public int PaymentMethod { get; set; }
         public int PackageCount { get; set; }
-
         public string Address { get; set; }
-
         public decimal TotalWeight { get; set; }
-
         public DateTime? RequestTime { get; set; }
+        public ShippingMethod ShippingMethodEnum => (ShippingMethod)ShippingMethod;
     }
 }
