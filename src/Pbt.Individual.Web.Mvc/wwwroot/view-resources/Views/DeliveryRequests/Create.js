@@ -64,8 +64,8 @@
                 <tr>
                     <td colspan="7" style="text-align: right; font-weight: bold;">
                         Tổng kiện: <span style="color: #007bff;">${totalItems}</span> | 
-                        Bao: <span style="color: #007bff;">${totalBags}</span> | 
-                        ân nặng: <span style="color: #dc3545;">${totalWeight.toFixed(2)} kg</span>
+                        Tổng bao: <span style="color: #007bff;">${totalBags}</span> | 
+                        Tổng cân nặng: <span style="color: #dc3545;">${totalWeight.toFixed(2)} kg</span>
                     </td>
                 </tr>
             `);
@@ -172,8 +172,8 @@
                 <tr>
                     <td colspan="7" style="text-align: right; font-weight: bold;">
                         Tổng kiện: <span style="color: #007bff;">${totalItems}</span> | 
-                        Bao: <span style="color: #007bff;">${totalBags}</span> | 
-                        Cân nặng: <span style="color: #dc3545;">${totalWeight.toFixed(2)} kg</span>
+                        Tổng bao: <span style="color: #007bff;">${totalBags}</span> | 
+                        Tổng cân nặng: <span style="color: #dc3545;">${totalWeight.toFixed(2)} kg</span>
                     </td>
                 </tr>
             `);
@@ -298,6 +298,9 @@
         _deliveryRequestServices.addItemToDeliveryRequest(item).done(function () {
             deliveryRequestItemTable.ajax.reload();
             bagPackageTable.ajax.reload();
+            // Hide table error after adding item
+            $('#deliveryRequestItemTable').removeClass('border-danger');
+            $('#deliveryRequestItemTable').prev('.validation-error').remove();
         }).always(function () {
             abp.ui.clearBusy(_$drItemTable);
         });
@@ -316,6 +319,34 @@
     });
 
     $('.btn-submit').on('click', function () {
+        // Validation
+        var hasItems = deliveryRequestItemTable.rows().count() > 0;
+        var address = $('#txtAddress').val().trim();
+        var hasAddress = address !== '';
+
+        // Clear previous errors
+        $('#deliveryRequestItemTable').removeClass('border-danger');
+        $('#txtAddress').removeClass('is-invalid');
+        $('.validation-error').remove();
+
+        var errors = [];
+
+        if (!hasItems) {
+            errors.push('Danh sách đã chọn phải có ít nhất một kiện/bao.');
+            $('#deliveryRequestItemTable').addClass('border-danger');
+            $('#deliveryRequestItemTable').before('<div class="alert alert-danger validation-error">Danh sách đã chọn phải có ít nhất một kiện/bao.</div>');
+        }
+
+        if (!hasAddress) {
+            errors.push('Địa chỉ giao hàng là bắt buộc.');
+            $('#txtAddress').addClass('is-invalid');
+            $('#txtAddress').before('<div class="alert alert-danger validation-error">Địa chỉ giao hàng là bắt buộc.</div>');
+        }
+
+        if (errors.length > 0) {
+            return;
+        }
+
         const data = _$form.serializeFormToObject();
         data.id = $('#hiddenDeliveryRequestId').val();
         // Gọi API submitDeliveryRequest
@@ -335,6 +366,14 @@
             .always(function () {
                 abp.ui.clearBusy(); // Ẩn trạng thái đang xử lý
             });
+    });
+
+    // Hide address error when typing
+    $('#txtAddress').on('input', function () {
+        if ($(this).hasClass('is-invalid')) {
+            $(this).removeClass('is-invalid');
+            $(this).prev('.validation-error').remove();
+        }
     });
     $("#select-warehouse").removeAttr("disabled");
 })(jQuery);
