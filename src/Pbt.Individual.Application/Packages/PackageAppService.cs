@@ -8,6 +8,8 @@ using Pbt.Individual.Packages.Dto;
 using Pbt.Individual.Web.ViewModels.DeliveryRequests;
 using System.Data;
 using System;
+using Abp.Authorization;
+using Pbt.Individual.ApplicationUtils;
 
 namespace Pbt.Individual.Packages
 {
@@ -45,6 +47,46 @@ namespace Pbt.Individual.Packages
             {
                 Logger.Error($"[GetAllPackagesListByBagId] Exception: {ex}");
                 return new List<PackageViewByBagDto>();
+            }
+        }
+
+
+        public async Task<PagedResultDto<PackageItemForCreateNewDeliveryRequestDto>> GetAllPackagesForCreateNewDeliveryRequestAsync()
+        {
+            try
+            {
+                var currentUser = await GetCurrentUserAsync();
+                if (currentUser is null || !currentUser.CustomerId.HasValue)
+                {
+                    throw new AbpAuthorizationException("You are not authorized to access delivery requests.");
+                }
+                var prs = new[]
+                    {
+                    new SqlParameter("@CustomerId",   currentUser.CustomerId.Value),
+                    new SqlParameter("@WarehouseId",  -1),
+                    new SqlParameter("@Status", (int) PackageShippingStatusEnum.InWarehouseVN) 
+                };
+
+
+                var data = await ConnectDb.GetListAsync<PackageItemForCreateNewDeliveryRequestDto>(
+                 "SP_Packages_GetByBagId_ForBagDetail",
+                 CommandType.StoredProcedure,
+               prs
+             );
+                return new PagedResultDto<PackageItemForCreateNewDeliveryRequestDto>
+                {
+                    Items = data,
+                    TotalCount = data.Count
+                };
+            }
+            catch (Exception ex)
+            {
+                Logger.Error($"[GetAllPackagesListByBagId] Exception: {ex}");
+                return new PagedResultDto<PackageItemForCreateNewDeliveryRequestDto>
+                {
+                    Items = new List<PackageItemForCreateNewDeliveryRequestDto>(),
+                    TotalCount = 0
+                };
             }
         }
 

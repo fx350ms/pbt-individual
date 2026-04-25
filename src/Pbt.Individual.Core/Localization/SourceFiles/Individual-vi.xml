@@ -1112,5 +1112,6 @@
 		<text name="Payments" value="Thanh toán" />
 		
 		<text name="EntryDate" value="Ngày nhập" />
+		<text name="RequestNumber" value="Mã yêu cầu" />
 	</texts>
 </localizationDictionary>
