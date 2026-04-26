@@ -5,13 +5,7 @@
 }
 @section scripts
 {
-    <environment names="Development">
-        <script src="~/view-resources/Views/Account/Register.js" asp-append-version="true"></script>
-    </environment>
-
-    <environment names="Staging,Production">
-        <script src="~/view-resources/Views/Account/Register.min.js" asp-append-version="true"></script>
-    </environment>
+       <script src="~/view-resources/Views/Account/Register.js" asp-append-version="true"></script>
 }
 <h4 class="text-center">@L("Register")</h4>
 <form id="RegisterForm" asp-action="Register" method="post">
