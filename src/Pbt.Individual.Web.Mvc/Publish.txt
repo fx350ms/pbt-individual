@@ -1,0 +1,10 @@
+﻿$env:ASPNETCORE_ENVIRONMENT="Production"
+dotnet publish -c Release /p:EnvironmentName=Production -o  D:/Publish/PBT.Individual/Production.260426
+
+
+$env:ASPNETCORE_ENVIRONMENT="Testing"
+
+
+dotnet publish -c Release /p:EnvironmentName=Testing -o D:/publish/PBT.Individual/Testing.260414
+
+ 
