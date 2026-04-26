@@ -32,7 +32,11 @@
                 <h1>@L("Pages_DeliveryRequests")</h1>
             </div>
             <div class="col-sm-6 text-right">
-               
+                <a class="btn btn-primary "
+                        id="btnCreateDeliveryRequest"
+                        href="@Url.Action("Create", "DeliveryRequests")"  >
+                    @L("CreateNewDeliveryRequest")
+                </a>
             </div>
         </div>
     </div>
@@ -84,18 +88,14 @@
                                     <th></th>
                                     <th>#</th>
                                     <th>@L("PackageNumber")</th>
-                                          <th>@L("WaybillNumber")</th>
+                                    <th>@L("WaybillNumber")</th>
+                                    <th>@L("WarehouseName")</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
                     </div>
-
-                    <div class="card-footer">
-                        <!-- Footer content (if needed) -->
-                        <button class="btn btn-primary btn-block" disabled
-                                id="btnCreateDeliveryRequest">@L("CreateNewDeliveryRequest")</button>
-                    </div>
+                   
                 </div>
             </div>
         </div>

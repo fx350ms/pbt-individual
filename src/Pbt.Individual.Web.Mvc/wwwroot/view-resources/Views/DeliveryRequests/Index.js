@@ -1,5 +1,6 @@
 (function ($) {
     var _deliveryRequestService = abp.services.app.deliveryRequest,
+     _packageService = abp.services.app.package,
         l = abp.localization.getSource('Individual'),
         _$modal = $('#DeliveryRequestCreateModal'),
         _$form = _$modal.find('form'),
@@ -20,7 +21,6 @@
         serverSide: true,
         sortable: false,
         listAction: {
-
             ajaxFunction: _deliveryRequestService.getPaged,
             inputFilter: function () {
                 return $('#DeliveryRequestSearchForm').serializeFormToObject(true);
@@ -131,7 +131,10 @@
         serverSide: true,
         sortable: false,
         listAction: {
-            ajaxFunction: _deliveryRequestService.getAllPackagesForCreateNewDeliveryRequest
+            ajaxFunction: _packageService.getAllPackagesForCreateNewDeliveryRequest,
+            inputFilter: function () {
+                return $('#DeliveryRequestSearchForm').serializeFormToObject(true);
+            }
         },
         buttons: [
             {
@@ -141,7 +144,7 @@
             }
         ],
         language: {
-            "info": l('Display') + " _START_ - _END_ | " + l('Total') + " _TOTAL_ " + l('Record'),
+            "info":   "_TOTAL_ " + l('Package'),
             "lengthMenu": l('Display') + " _MENU_ " + l('Record'),
             "emptyTable": l('EmptyTable'),
             "zeroRecords": l('ZeroRecords')
@@ -167,12 +170,12 @@
                 }
             },
             {
-                targets: 2,
-                sortable: false,
-                className: 'text-center',
-                render: function (data, type, row, meta) {
-                    return row.packageNumber;
-                }
+            targets: 2,
+            sortable: false,
+            className: 'text-center',
+            render: function (data, type, row, meta) {
+                return row.packageNumber;
+            }
             },
 
             {
@@ -182,9 +185,18 @@
                 render: function (data, type, row, meta) {
                     return row.waybillNumber;
                 }
+            },
+                {
+                targets: 4,
+                sortable: false,
+                className: 'text-center',
+                    render: function (data, type, row, meta) {
+                        return row.warehouseName;
+                }
             }
 
         ]
     });
+ 
 
 })(jQuery);

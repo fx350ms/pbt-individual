@@ -69,7 +69,7 @@ namespace Pbt.Individual.Packages
 
 
                 var data = await ConnectDb.GetListAsync<PackageItemForCreateNewDeliveryRequestDto>(
-                 "SP_Packages_GetByBagId_ForBagDetail",
+                 "SP_Packages_GetForCreateNewDeliveryRequest",
                  CommandType.StoredProcedure,
                prs
              );
