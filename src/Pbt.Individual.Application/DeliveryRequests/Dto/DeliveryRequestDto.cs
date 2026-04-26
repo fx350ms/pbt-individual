@@ -10,6 +10,8 @@ namespace Pbt.Individual.DeliveryRequests.Dto
         public long CustomerId { get; set; }
         public string CustomerName { get; set; }
         public int WarehouseId { get; set; }
+
+        public string WarehouseName { get; set; }
         public int Status { get; set; }
         public int ShippingMethod { get; set; }
         public long AddressId { get; set; }

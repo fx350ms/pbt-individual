@@ -32,7 +32,11 @@
                 <h1>@L("Pages_DeliveryRequests")</h1>
             </div>
             <div class="col-sm-6 text-right">
-               
+                <a class="btn btn-primary "
+                        id="btnCreateDeliveryRequest"
+                        href="@Url.Action("Create", "DeliveryRequests")"  >
+                    @L("CreateNewDeliveryRequest")
+                </a>
             </div>
         </div>
     </div>
@@ -55,12 +59,14 @@
                             <table id="DeliveryRequestsTable" class="table table-striped table-bordered table-parent">
                                 <thead>
                                     <tr>
+                                        <th></th>
                                         <th>#</th>
                                         <th>@L("RequestNumber")</th>
                                         <th>@L("Status")</th>
                                         <th>@L("Warehouse")</th>
-                                        <th>@L("TotalItems")</th>
-                                        <th>@L("TimeLine")</th>
+                                        <th>@L("TotalPackage")</th>
+                                        <th>@L("TotalWeight")</th>
+                                        <th>@L("CreationTime")</th>
                                         <th></th>
                                     </tr>
                                 </thead>
@@ -81,22 +87,15 @@
                                 <tr>
                                     <th></th>
                                     <th>#</th>
-                                    <th>@L("Item")</th>
-                                    <th>@L("Waybill")</th>
-                                    <th>@L("Warehouse")</th>
-                                    <th>@L("TotalItems")</th>
-                                    <th>@L("TotalWeight")</th>
+                                    <th>@L("PackageNumber")</th>
+                                    <th>@L("WaybillNumber")</th>
+                                    <th>@L("WarehouseName")</th>
                                 </tr>
                             </thead>
                             <tbody></tbody>
                         </table>
                     </div>
-
-                    <div class="card-footer">
-                        <!-- Footer content (if needed) -->
-                        <button class="btn btn-primary btn-block" disabled
-                                id="btnCreateDeliveryRequest">@L("CreateNewDeliveryRequest")</button>
-                    </div>
+                   
                 </div>
             </div>
         </div>
