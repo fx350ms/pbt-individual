@@ -158,4 +158,13 @@ namespace Pbt.Individual.Packages.Dto
         public string CustomerName { get; set; }
 
     }
+
+    public class PackageViewByCustomerDto : FullAuditedEntityDto<int>
+    {
+        public string WaybillNumber { get; set; }
+
+        public string PackageNumber { get; set; }
+        public int ShippingStatus { get; set; }
+        public string WarehouseName { get; set; }
+    }
 }
