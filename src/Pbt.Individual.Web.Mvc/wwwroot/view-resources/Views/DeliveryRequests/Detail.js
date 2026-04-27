@@ -141,5 +141,14 @@
             row.child(getRow(row.data().itemId)).show();
         }
     });
-    deliveryRequestItemTable.ajax.reload();
+    deliveryRequestItemTable.ajax.reload(function() {
+        // Tự động mở tất cả các bao để hiển thị danh sách kiện
+        deliveryRequestItemTable.rows().every(function() {
+            var row = this;
+            var data = row.data();
+            if (data && !data.packageCode) { // Nếu là bao (không có packageCode)
+                row.child(getRow(data.itemId)).show();
+            }
+        });
+    });
 })(jQuery);
