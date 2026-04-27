@@ -3,6 +3,7 @@ using Pbt.Individual.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Pbt.Individual.Packages;
 using Pbt.Individual.Web.Mvc.Models.Home;
+using System;
 
 namespace Pbt.Individual.Web.Controllers;
 
@@ -24,5 +25,12 @@ public class HomeController : IndividualControllerBase
             PackageSummary = packageSummary
         };
         return View(model);
+    }
+
+    public ActionResult Env()
+    {
+        // get environment variables
+        var envVars = Environment.GetEnvironmentVariables();
+        return Json(envVars);
     }
 }

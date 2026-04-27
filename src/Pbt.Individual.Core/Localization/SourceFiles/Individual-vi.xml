@@ -1114,6 +1114,9 @@
 		<text name="EntryDate" value="Ngày nhập" />
 		<text name="RequestNumber" value="Mã yêu cầu" />
 		<text name="CreateNewDeliveryRequest" value="Tạo yêu cầu giao" />
-
+		<text name="SelectSourceWarehouse" value="Chọn kho gửi" />
+		<text name="SelectDestinationWarehouse" value="Chọn kho đích" />
+		
+		
 	</texts>
 </localizationDictionary>
