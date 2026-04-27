@@ -201,6 +201,24 @@ public class AccountController : IndividualControllerBase
                 }
             }
 
+            if (!model.UserName.IsNullOrEmpty())
+            {
+                var existingUserByUserName = await _userManager.FindByNameAsync(model.UserName);
+                if (existingUserByUserName != null)
+                {
+                    throw new UserFriendlyException("Tên đăng nhập đã tồn tại. Vui lòng chọn tên đăng nhập khác.");
+                }
+            }
+
+            if (!model.EmailAddress.IsNullOrEmpty())
+            {
+                var existingUserByEmail = await _userManager.FindByEmailAsync(model.EmailAddress);
+                if (existingUserByEmail != null)
+                {
+                    throw new UserFriendlyException("Email đã tồn tại. Vui lòng sử dụng email khác.");
+                }
+            }
+
             var user = await _userRegistrationManager.RegisterAsync(
                 model.Name,
                 model.PhoneNumber,
@@ -279,6 +297,12 @@ public class AccountController : IndividualControllerBase
         catch (UserFriendlyException ex)
         {
             ViewBag.ErrorMessage = ex.Message;
+            ViewBag.IsMultiTenancyEnabled = _multiTenancyConfig.IsEnabled;
+            var warehouses = await _warehouseAppService.GetByTypeAsync((int)WarehouseType.Destination); // Assuming 1 is the type for warehouses in Vietnam
+            ViewBag.Warehouses = warehouses;
+            
+            var cnWarehouses = await _warehouseAppService.GetByTypeAsync((int)WarehouseType.Source); // Assuming 2 is the type for warehouses in China
+            ViewBag.CNWarehouses = cnWarehouses;
 
             return View("Register", model);
         }
@@ -426,7 +450,7 @@ public class AccountController : IndividualControllerBase
 
     public string GetAppHomeUrl()
     {
-        return Url.Action("Index", "About");
+        return Url.Action("Index", "Home");
     }
 
     #endregion

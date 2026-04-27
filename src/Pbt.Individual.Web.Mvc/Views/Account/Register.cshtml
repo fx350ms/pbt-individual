@@ -1,11 +1,11 @@
-﻿@using Abp.Authorization.Users
+@using Abp.Authorization.Users
 @model Pbt.Individual.Web.Models.Account.RegisterViewModel
 @{
     ViewBag.Title = L("Register");
 }
 @section scripts
 {
-       <script src="~/view-resources/Views/Account/Register.js" asp-append-version="true"></script>
+    <script src="~/view-resources/Views/Account/Register.js" asp-append-version="true"></script>
 }
 <h4 class="text-center">@L("Register")</h4>
 <form id="RegisterForm" asp-action="Register" method="post">
@@ -64,14 +64,21 @@
         </div>
     </div>
 
-        <div class="input-group mb-3">
+    <div class="input-group mb-3">
         <select name="CNWarehouseId" class="form-control" required>
             <option value="">@L("SelectSourceWarehouse")</option>
             @if (ViewBag.CNWarehouses != null)
             {
                 foreach (var warehouse in ViewBag.CNWarehouses)
                 {
-                    <option value="@warehouse.Id">@warehouse.Name</option>
+                    @if (Model.CNWarehouseId == warehouse.Id)
+                    {
+                        <option value="@warehouse.Id" selected>@warehouse.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@warehouse.Id">@warehouse.Name</option>
+                    }
                 }
             }
         </select>
@@ -83,13 +90,21 @@
     </div>
     <div class="input-group mb-3">
         <select name="WarehouseId" class="form-control" required>
-            <option value="">@L("SelectDestinationWarehouse")</option>
+            <option value="@Model.WarehouseId">@L("SelectDestinationWarehouse")</option>
             @if (ViewBag.Warehouses != null)
             {
                 foreach (var warehouse in ViewBag.Warehouses)
                 {
-                    <option value="@warehouse.Id">@warehouse.Name</option>
+                    @if (warehouse.Id != Model.WarehouseId)
+                    {
+                        <option value="@warehouse.Id">@warehouse.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@warehouse.Id" selected>@warehouse.Name</option>
+                    }
                 }
+      
             }
         </select>
         <div class="input-group-append">
