@@ -12,5 +12,7 @@ namespace Pbt.Individual.Packages
     {
         Task<List<PackageOrderViewDto>>  GetByOrderIdAsync(long orderId);
         Task<List<PackageViewByBagDto>> GetAllPackagesListByBagIdAsync(int bagId);
+
+        Task<PackageSummaryByStatusDto> GetPackageSummaryByStatusAsync();
     }
 }

@@ -174,7 +174,7 @@ namespace pbt.DeliveryRequests
                 totalCountPr
             };
 
-            var data = await ConnectDb.GetListAsync<DeliveryRequestDto>(
+            List<DeliveryRequestDto> data = await ConnectDb.GetListAsync<DeliveryRequestDto>(
                 "SP_DeliveryRequests_GetPaged",
                 System.Data.CommandType.StoredProcedure,
                 prs
@@ -187,6 +187,40 @@ namespace pbt.DeliveryRequests
                 TotalCount = totalCount,
             };
         }
+
+        // [HttpGet]
+        // public async Task<List<DeliveryRequestItemDto>> GetPendingItemsAsync(
+        //     PagedDeliveryRequestsResultRequestDto input)
+        // {
+        //     var currentUser = await GetCurrentUserAsync();
+
+        //     if (currentUser is null || !currentUser.CustomerId.HasValue)
+        //     {
+        //         throw new AbpAuthorizationException("You are not authorized to access delivery requests.");
+        //     }
+ 
+        //     var prs = new[]
+        //     {
+        //         new SqlParameter("@CustomerId",   currentUser.CustomerId.Value),
+        //         new SqlParameter("@WarehouseId",  -1),
+        //         new SqlParameter("@BagStatus", (int)BagShippingStatus.GoToWarehouse),
+        //         new SqlParameter("@PackageStatus", (int) PackageShippingStatusEnum.InWarehouseVN) )
+        //     };
+
+        //     List<DeliveryRequestItemDto> data = await ConnectDb.GetListAsync<DeliveryRequestItemDto>(
+        //         "SP_DeliveryRequests_GetPendingItemForCreate",
+        //         System.Data.CommandType.StoredProcedure,
+        //         prs
+        //     );
+         
+
+        //     return new PagedResultDto<DeliveryRequestDto>()
+        //     {
+        //         Items = data,
+        //         TotalCount = totalCount,
+        //     };
+        // }
+
 
         [HttpPost]
         public async Task<JsonResult> AddItemAsync(DeliveryRequestItemDto item)

@@ -281,7 +281,7 @@
 		<text name="Pages_CustomerTransactions" value="Lịch sử giao dịch khách hàng" />
 		<text name="Pages_Sale" value="Kinh doanh" />
 		<text name="Pages_DeliveryRequests" value="Yêu cầu giao hàng" />
-		
+
 		<text name="Role_Sale" value="Vai trò bán hàng" />
 
 		<text name="AddressReceiver" value="Địa chỉ giao hàng" />
@@ -1111,7 +1111,13 @@
 		<text name="ShippingCost" value="Phí vận chuyển" />
 		<text name="ShippingFeeQT" value="Phí vận chuyển " />
 		<text name="Payments" value="Thanh toán" />
-		
+
 		<text name="EntryDate" value="Ngày nhập" />
+		<text name="RequestNumber" value="Mã yêu cầu" />
+		<text name="CreateNewDeliveryRequest" value="Tạo yêu cầu giao" />
+		<text name="SelectSourceWarehouse" value="Chọn kho gửi" />
+		<text name="SelectDestinationWarehouse" value="Chọn kho đích" />
+		
+		
 	</texts>
 </localizationDictionary>

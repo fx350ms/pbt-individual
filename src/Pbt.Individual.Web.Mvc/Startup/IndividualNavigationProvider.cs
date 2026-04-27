@@ -22,15 +22,15 @@ public class IndividualNavigationProvider : NavigationProvider
                     requiresAuthentication: true
                 )
             )
-            .AddItem(
-                new MenuItemDefinition(
-                    "Support",
-                    L("Support"),
-                    url: "Support",
-                    icon: "fas fa-life-ring",
-                    requiresAuthentication: true
-                )
-            )
+            //.AddItem(
+            //    new MenuItemDefinition(
+            //        "Support",
+            //        L("Support"),
+            //        url: "Support",
+            //        icon: "fas fa-life-ring",
+            //        requiresAuthentication: true
+            //    )
+            //)
             .AddItem( // Menu items below is just for demonstration!
                 new MenuItemDefinition(
                     "Orders",
@@ -71,21 +71,23 @@ public class IndividualNavigationProvider : NavigationProvider
                             icon: "fas fa-list" 
                         )
                     )
-                ).AddItem(
-                    new MenuItemDefinition(
-                        "Payments",
-                        L("Payments"),
-                        icon: "fas fa-file-invoice-dollar"
-                    ) .AddItem(
-                        new MenuItemDefinition(
-                            "PaymentsList",
-                            L("PaymentsList"),
-                            url: "/Payments",
-                            icon: "fas fa-list"
+                )
+            //.AddItem(
+            //        new MenuItemDefinition(
+            //            "Payments",
+            //            L("Payments"),
+            //            icon: "fas fa-file-invoice-dollar"
+            //        ) .AddItem(
+            //            new MenuItemDefinition(
+            //                "PaymentsList",
+            //                L("PaymentsList"),
+            //                url: "/Payments",
+            //                icon: "fas fa-list"
                              
-                        )
-                    )
-                );
+            //            )
+            //        )
+              //  )
+            ;
     }
 
     private static ILocalizableString L(string name)
