@@ -406,6 +406,7 @@
 
 		<text name="LastModificationTime" value="Lần cập nhật cuối" />
 		<text name="CreateDeliveryRequest" value="Tạo yêu cầu giao" />
+		<text name="DetailDeliveryRequest" value="Chi tiết yêu cầu giao" />
 		<text name="Pages_DeliveryRequest" value="Yêu cầu giao" />
 		<text name="AreYouSureWantToCancel" value="Bạn có chắc chắn muốn hủy" />
 		<text name="Pages_Export" value="Xuất kho" />
