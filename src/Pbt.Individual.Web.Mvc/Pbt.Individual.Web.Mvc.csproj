@@ -17,7 +17,6 @@
   <ItemGroup>
     <Compile Remove="Controllers\RolesController.cs" />
     <Compile Remove="Controllers\TenantsController.cs" />
-    <Compile Remove="Controllers\UsersController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="eslint.config.mjs" />

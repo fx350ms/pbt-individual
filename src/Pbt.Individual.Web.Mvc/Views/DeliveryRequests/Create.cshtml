@@ -15,7 +15,10 @@
 @section styles {
     <style>
       .weight-cover-row{
-        background-color: #FFE5B4 !important;
+        background-color: #e9ecef !important;
+        opacity: 0.6 !important;
+        color: #6c757d !important;
+        filter: grayscale(100%) !important;
       }
       .section-title {
         font-weight: bold;
@@ -33,6 +36,42 @@
       }
       .table.border-danger {
         border-color: #dc3545;
+      }
+
+      /* Table styling according to project specifications */
+
+      /* Header styling for all tables */
+      .table th {
+        background-color: #e9ecef;
+      }
+
+      /* Hover effect for tables with table-hover class */
+      .table-hover tbody tr:hover {
+        background-color: #d1ecff;
+      }
+
+      /* Specific child table styling */
+      .table-child {
+        background-color: #f8f9fa;
+        box-shadow: 0 2px 4px rgba(0,0,0,.1);
+        border-collapse: separate;
+        border-spacing: 0;
+        overflow: hidden;
+      }
+
+      .table-child th {
+        background-color: #e9ecef;
+        font-weight: 600;
+      }
+
+      .table-child td, .table-child th {
+        border: 1px solid #dee2e6;
+        padding: 6px !important;
+      }
+
+      /* Hover effect for child tables */
+      .table-child tbody tr:hover {
+        background-color: #d1ecff;
       }
     </style>
 }
@@ -85,7 +124,7 @@
                                 hoặc nhấn <strong>"Xem kiện"</strong> để xem chi tiết kiện hàng
                             </p>
                             <div class="table-responsive">
-                                <table id="bag-package-listTable" class="table table-striped table-bordered table-sm table-hover">
+                                <table id="bag-package-listTable" class="table table-bordered table-sm table-hover">
                                     <thead>
                                         <tr>
                                             <th>@L("BagCode")</th>
@@ -128,7 +167,7 @@
                                     </p>
                                     <div class="table-responsive">
                                         <table id="deliveryRequestItemTable"
-                                               class="table table-striped table-bordered table-sm table-hover">
+                                               class="table table-bordered table-sm table-hover">
                                             <thead>
                                                 <tr>
                                                     <th></th>

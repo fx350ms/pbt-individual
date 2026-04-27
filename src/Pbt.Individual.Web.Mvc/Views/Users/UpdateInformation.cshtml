@@ -1,0 +1,128 @@
+@using Abp.Authorization.Users
+@model Pbt.Individual.Web.Models.Account.RegisterViewModel
+@{
+    ViewBag.Title = L("Register");
+}
+@section scripts
+{
+    <script src="~/view-resources/Views/Account/Register.js" asp-append-version="true"></script>
+}
+<h4 class="text-center">@L("Register")</h4>
+<form id="RegisterForm" asp-action="Register" method="post">
+    @if (ViewBag.ErrorMessage != null)
+    {
+        <div class="alert alert-danger">
+            <i class="fas fa-warning"></i> @ViewBag.ErrorMessage
+        </div>
+    }
+    <input type="hidden" name="IsExternalLogin" value="@Model.IsExternalLogin.ToString()" />
+    <input type="hidden" name="ExternalLoginAuthSchema" value="@Model.ExternalLoginAuthSchema" />
+    <div class="input-group mb-3">
+        <input type="text" name="UserName" class="form-control" placeholder="@L("UserName")" value="@Model.UserName"
+               required maxlength="@AbpUserBase.MaxUserNameLength">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-user"></span>
+            </div>
+        </div>
+    </div>
+    <div class="input-group mb-3">
+        <input type="text" name="Name" class="form-control" placeholder="@L("FullName")" value="@Model.Name" required
+               maxlength="@AbpUserBase.MaxNameLength">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-arrow-left"></span>
+            </div>
+        </div>
+    </div>
+    <div class="input-group mb-3">
+        <input type="text" name="PhoneNumber" class="form-control" placeholder="@L("PhoneNumber")"
+               value="@Model.PhoneNumber" required maxlength="@AbpUserBase.MaxPhoneNumberLength">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-phone"></span>
+            </div>
+        </div>
+    </div>
+    <div class="input-group mb-3">
+        <input type="email" name="EmailAddress" class="form-control" placeholder="@L("EmailAddress")"
+               value="@Model.EmailAddress" required maxlength="@AbpUserBase.MaxEmailAddressLength">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-envelope"></span>
+            </div>
+        </div>
+    </div>
+   
+    <div class="input-group mb-3">
+        <input type="password" name="Password" class="form-control" placeholder="@L("Password")" required
+               maxlength="@AbpUserBase.MaxPlainPasswordLength">
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-lock"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="input-group mb-3">
+        <select name="CNWarehouseId" class="form-control" required>
+            <option value="">@L("SelectSourceWarehouse")</option>
+            @if (ViewBag.CNWarehouses != null)
+            {
+                foreach (var warehouse in ViewBag.CNWarehouses)
+                {
+                    @if (Model.CNWarehouseId == warehouse.Id)
+                    {
+                        <option value="@warehouse.Id" selected>@warehouse.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@warehouse.Id">@warehouse.Name</option>
+                    }
+                }
+            }
+        </select>
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-warehouse"></span>
+            </div>
+        </div>
+    </div>
+    <div class="input-group mb-3">
+        <select name="WarehouseId" class="form-control" required>
+            <option value="@Model.WarehouseId">@L("SelectDestinationWarehouse")</option>
+            @if (ViewBag.Warehouses != null)
+            {
+                foreach (var warehouse in ViewBag.Warehouses)
+                {
+                    @if (warehouse.Id != Model.WarehouseId)
+                    {
+                        <option value="@warehouse.Id">@warehouse.Name</option>
+                    }
+                    else
+                    {
+                        <option value="@warehouse.Id" selected>@warehouse.Name</option>
+                    }
+                }
+      
+            }
+        </select>
+        <div class="input-group-append">
+            <div class="input-group-text">
+                <span class="fas fa-warehouse"></span>
+            </div>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-8">
+            <a asp-action="Login" class="btn btn-default btn-flat"><i class="fa fa-arrow-circle-left"></i>
+                @L("Back")</a>
+            </div>
+            <div class="col-4">
+                <button type="submit" id="RegisterButton"
+                        class="btn btn-primary btn-flat float-right">@L("Register")</button>
+            </div>
+        </div>
+    </form>
+ 
