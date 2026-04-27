@@ -1117,6 +1117,8 @@
 		<text name="CreateNewDeliveryRequest" value="Tạo yêu cầu giao" />
 		<text name="SelectSourceWarehouse" value="Chọn kho gửi" />
 		<text name="SelectDestinationWarehouse" value="Chọn kho đích" />
+
+		<text name="UpdateInformation" value="Cập nhật thông tin" />
 		
 		
 	</texts>
