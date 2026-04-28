@@ -1,11 +1,15 @@
-﻿using Abp.AspNetCore.Mvc.Authorization;
+﻿using Abp.Application.Services.Dto;
+using Abp.AspNetCore.Mvc.Authorization;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using pbt.DeliveryRequests;
 using pbt.Web.Mvc.Models.DeliveryRequests;
 using Pbt.Individual.ApplicationUtils;
 using Pbt.Individual.Controllers;
+using Pbt.Individual.Customers;
+using Pbt.Individual.DeliveryRequests.Dto;
 using Pbt.Individual.Packages;
+using Pbt.Individual.Users;
 using Pbt.Individual.Warehouses;
 using Pbt.Individual.Web.Models.DeliveryRequests;
 using System.Threading.Tasks;
@@ -19,15 +23,21 @@ namespace Pbt.Individual.Web.Controllers
         private readonly IDeliveryRequestAppService _deliveryRequestAppService;
         private readonly IWarehouseAppService _warehouseAppService;
         private readonly IPackageAppService _packageAppService;
+        private readonly ICustomerAppService _customerAppService;
+        private readonly IUserAppService _userAppService;
         public DeliveryRequestsController(
             IDeliveryRequestAppService deliveryRequestAppService,
             IWarehouseAppService warehouseAppService,
-            IPackageAppService packageAppService
+            IPackageAppService packageAppService,
+            ICustomerAppService customerAppService,
+            IUserAppService userAppService
             )
         {
             _deliveryRequestAppService = deliveryRequestAppService;
             _warehouseAppService = warehouseAppService;
             _packageAppService = packageAppService;
+            _customerAppService = customerAppService;
+            _userAppService = userAppService;
         }
 
         public ActionResult Index()
@@ -35,13 +45,20 @@ namespace Pbt.Individual.Web.Controllers
             return View();
         }
 
-        public async Task<IActionResult> Create()
+        public async Task<IActionResult> Create(int deliveryRequestId = 0)
         {
+            var deliveryRequest = await _deliveryRequestAppService.GetByIdAsync(deliveryRequestId);
+            var user = await _userAppService.GetAsync(new EntityDto<long>((long)AbpSession.UserId));
+            var customer = await _customerAppService.GetAsync(user.CustomerId.Value);
+             if (deliveryRequest != null && deliveryRequest.CustomerId  != customer.Id)
+            {
+                return NotFound();
+            }
             var warehouses = await _warehouseAppService.GetByTypeAsync((int)WarehouseType.Destination);
-            // Kiểm tra xem có yêu cầu giao nào đang chờ xử lý không, nếu có thì lấy ycg đó lên để hiển thị thông tin
             var model = new CreateUpdateDeliveryRequestModel
             {
-                Warehouses = warehouses
+                Warehouses = warehouses,
+                WarehouseId = deliveryRequestId == 0 ? 0 : deliveryRequest.WarehouseId,
             };
             return View(model);
         }

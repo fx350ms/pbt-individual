@@ -118,9 +118,10 @@
                 sortable: false,
                 className: 'text-center',
                 render: function (data, type, row, meta) {
-                    // trả về link xem chi tiết
-                    var html = `<a href="/DeliveryRequests/Detail/${row.id}"><i class="fas fa-eye"></i></a>`;
-                    return html;
+                    if (row.status === 1) {
+                        return `<a href="/DeliveryRequests/Create?deliveryRequestId=${row.id}"><i class="fas fa-edit"></i></a>`;
+                    }
+                    return `<a href="/DeliveryRequests/Detail/${row.id}"><i class="fas fa-eye"></i></a>`;
                 }
             }
         ]

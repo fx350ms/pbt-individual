@@ -106,9 +106,18 @@
                                                     <option value="-1" selected>Chọn kho</option>
                                                     foreach (var warehouse in Model.Warehouses)
                                                     {
+                                                        if (warehouse.Id == Model.WarehouseId)
+                                                        {
+                                                            <option value="@warehouse.Id" data-name="@warehouse.Name" selected>
+                                                                @warehouse.Name
+                                                            </option>
+                                                        }
+                                                        else
+                                                        {
                                                         <option value="@warehouse.Id" data-name="@warehouse.Name">
                                                             @warehouse.Name
                                                         </option>
+                                                        }
                                                     }
                                                 }
                                             </select>

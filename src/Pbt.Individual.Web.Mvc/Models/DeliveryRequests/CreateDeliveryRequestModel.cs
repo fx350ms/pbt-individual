@@ -7,5 +7,6 @@ public class CreateUpdateDeliveryRequestModel
 {
     public long CustomerId { get; set; }
     public string CustomerName { get; set; }
+    public int? WarehouseId { get; set; }
     public List<WarehouseDto> Warehouses { get; set; }
 }

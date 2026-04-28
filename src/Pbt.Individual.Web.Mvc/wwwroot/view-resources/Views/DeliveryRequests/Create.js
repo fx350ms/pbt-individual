@@ -7,6 +7,7 @@
 
     $('#select-warehouse').on('change', function () {
         var warehouseId = $('#select-warehouse').val();
+        if(!warehouseId || warehouseId == -1 || warehouseId == 0) return;
         _deliveryRequestServices.create({ warehouseId: warehouseId }).done(function (res) {
             $('#hiddenDeliveryRequestId').val(res.id);
             $('#deliveryRequestNumber').text(('#' + res.requestCode));
@@ -16,8 +17,7 @@
             }, 100);
         });
         bagPackageTable.ajax.reload();
-
-    });
+    }); 
 
     var bagPackageTable = _$bagPackageTable.DataTable({
         paging: false,
@@ -376,4 +376,5 @@
         }
     });
     $("#select-warehouse").removeAttr("disabled");
+    $('#select-warehouse').trigger('change'); 
 })(jQuery);
