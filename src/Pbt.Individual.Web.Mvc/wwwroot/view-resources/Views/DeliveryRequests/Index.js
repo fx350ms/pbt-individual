@@ -93,7 +93,7 @@
                 sortable: false,
                 className: 'text-center',
                 render: function (data, type, row, meta) {
-                    return row.packageCount;
+                    return row.totalPackage;
                 }
             },
             {
