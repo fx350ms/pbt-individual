@@ -1119,6 +1119,8 @@
 		<text name="SelectDestinationWarehouse" value="Chọn kho đích" />
 
 		<text name="UpdateInformation" value="Cập nhật thông tin" />
+		<text name="UpdateSuccess" value="Cập nhật thành công" />
+		<text name="Update" value="Cập nhật" />
 		
 		
 	</texts>

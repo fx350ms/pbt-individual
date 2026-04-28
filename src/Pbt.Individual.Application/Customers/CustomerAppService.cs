@@ -1,4 +1,5 @@
 ﻿using Abp;
+using Abp.Application.Services.Dto;
 using Abp.Auditing;
 using Abp.Authorization;
 using Abp.UI;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Data.SqlClient;
 using Pbt.Individual.Authorization.Accounts.Dto;
 using Pbt.Individual.Core;
+using Pbt.Individual.Warehouses.Dto;
 using System;
 using System.Data;
 using System.Threading.Tasks;
@@ -68,16 +70,23 @@ namespace Pbt.Individual.Customers
 
         public async Task SynchronizeCustomerWithUserAsync(long customerId, string username)
         {
-
             var prs = new[]
             {
-                    new SqlParameter("@CustomerId", customerId),
+                    new SqlParameter("@CustomerId", customerId), 
                     new SqlParameter("@Username", username )
             };
-
             await ConnectDb.ExecuteNonQueryAsync("SP_Customers_LinkToAccount", CommandType.StoredProcedure, prs);
         }
 
-         
+        public async Task<CustomerDto> GetAsync(long id)
+        {
+            var idPr = new SqlParameter("@Id", System.Data.SqlDbType.BigInt) { Value = id };
+            var data = await ConnectDb.GetItemAsync<CustomerDto>("SP_Customers_GetBId", System.Data.CommandType.StoredProcedure, new[] { idPr });
+            return data;
+        }
+    }
+
+    public class async<T>
+    {
     }
 }

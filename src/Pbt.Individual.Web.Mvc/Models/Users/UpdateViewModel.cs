@@ -2,9 +2,9 @@ using Abp.Authorization.Users;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
-namespace Pbt.Individual.Web.Models.Account;
+namespace Pbt.Individual.Web.Models.Users;
 
-public class UpdateViewModel : IValidatableObject
+public class UpdateViewModel
 {
     [Required]
     [StringLength(AbpUserBase.MaxNameLength)]
@@ -19,16 +19,7 @@ public class UpdateViewModel : IValidatableObject
     [StringLength(AbpUserBase.MaxEmailAddressLength)]
     public string EmailAddress { get; set; }
 
-    public bool IsExternalLogin { get; set; }
-
-    public string ExternalLoginAuthSchema { get; set; }
-
     public int WarehouseId { get; set; }
-    
-    public int CNWarehouseId { get; set; }
 
-    public IEnumerable<ValidationResult> Validate(ValidationContext validationContext)
-    {
-        throw new System.NotImplementedException();
-    }
+    public int CNWarehouseId { get; set; }
 }

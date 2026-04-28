@@ -3,6 +3,7 @@ using Abp.Application.Services.Dto;
 using Abp.Authorization;
 using Abp.Domain.Entities;
 using Abp.Domain.Repositories;
+using Abp.EntityFrameworkCore;
 using Abp.Extensions;
 using Abp.IdentityFramework;
 using Abp.Linq.Extensions;
@@ -18,9 +19,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Linq.Dynamic.Core;
 using System.Threading.Tasks;
+using Pbt.Individual.Core;
+using Microsoft.Data.SqlClient;
 
 namespace Pbt.Individual.Users;
 
@@ -41,8 +45,7 @@ public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedUser
         IRepository<Role> roleRepository,
         IPasswordHasher<User> passwordHasher,
         IAbpSession abpSession,
-        LogInManager logInManager)
-        : base(repository)
+        LogInManager logInManager) : base(repository)
     {
         _userManager = userManager;
         _roleManager = roleManager;
@@ -244,6 +247,49 @@ public class UserAppService : AsyncCrudAppService<User, UserDto, long, PagedUser
         }
 
         return true;
+    }
+
+    public async Task<bool> UpdateUserInfoAsync(long userId, string name, string phoneNumber, string emailAddress, int? warehouseId, int? cnWarehouseId)
+    {
+        var statusParam = new SqlParameter("@Status", SqlDbType.Int)
+        {
+            Direction = ParameterDirection.Output
+        };
+
+        var msgParam = new SqlParameter("@Msg", SqlDbType.NVarChar, -1)
+        {
+            Direction = ParameterDirection.Output
+        };
+
+        var parameters = new[]
+        {
+            new SqlParameter("@UserId", userId),
+            new SqlParameter("@Name", name ?? (object)DBNull.Value),
+            new SqlParameter("@PhoneNumber", phoneNumber ?? (object)DBNull.Value),
+            new SqlParameter("@EmailAddress", emailAddress ?? (object)DBNull.Value),
+            new SqlParameter("@WarehouseId", warehouseId ?? (object)DBNull.Value),
+            new SqlParameter("@CNWarehouseId", cnWarehouseId ?? (object)DBNull.Value),
+            statusParam,
+            msgParam
+        };
+
+        await ConnectDb.ExecuteNonQueryAsync("SP_AbpUsers_Update", CommandType.StoredProcedure, parameters);
+
+        var status = (int?)statusParam.Value ?? 0;
+        var message = msgParam.Value?.ToString() ?? "Unknown error";
+
+        if (status != 1)
+        {
+            throw new UserFriendlyException(message);
+        }
+
+        return true;
+    }
+
+    public async Task<UserDto> GetUserInfoAsync(long userId)
+    {
+        var user = await GetEntityByIdAsync(userId);
+        return MapToEntityDto(user);
     }
 }
 

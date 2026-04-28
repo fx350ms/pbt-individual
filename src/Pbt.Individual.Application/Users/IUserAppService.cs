@@ -12,6 +12,6 @@ public interface IUserAppService : IAsyncCrudAppService<UserDto, long, PagedUser
     Task Activate(EntityDto<long> user);
     Task<ListResultDto<RoleDto>> GetRoles();
     Task ChangeLanguage(ChangeUserLanguageDto input);
-
     Task<bool> ChangePassword(ChangePasswordDto input);
+    Task<bool> UpdateUserInfoAsync(long userId, string name, string phoneNumber, string emailAddress, int? warehouseId, int? cnWarehouseId);
 }

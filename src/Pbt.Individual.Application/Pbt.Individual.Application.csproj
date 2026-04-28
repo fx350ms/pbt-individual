@@ -14,8 +14,6 @@
   <ItemGroup>
     <Compile Remove="Roles\IRoleAppService.cs" />
     <Compile Remove="Roles\RoleAppService.cs" />
-    <Compile Remove="Users\IUserAppService.cs" />
-    <Compile Remove="Users\UserAppService.cs" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\PBT.CacheService\PBT.CacheService.csproj" />

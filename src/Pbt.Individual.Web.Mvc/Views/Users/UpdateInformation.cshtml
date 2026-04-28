@@ -1,31 +1,31 @@
 @using Abp.Authorization.Users
-@model Pbt.Individual.Web.Models.Account.RegisterViewModel
+@model Pbt.Individual.Web.Models.Users.UpdateViewModel;
 @{
-    ViewBag.Title = L("Register");
+    ViewBag.Title = L("UpdateInformation");
 }
 @section scripts
 {
     <script src="~/view-resources/Views/Account/Register.js" asp-append-version="true"></script>
 }
-<h4 class="text-center">@L("Register")</h4>
-<form id="RegisterForm" asp-action="Register" method="post">
+<h4 class="text-center">@L("UpdateInformation")</h4>
+<div class="login-box" style="width: 500px; margin: 0 auto;"> 
+    <div class="card">
+<div class="card-body"> 
+        <form id="RegisterForm" asp-action="UpdateInformation" method="post">
     @if (ViewBag.ErrorMessage != null)
     {
         <div class="alert alert-danger">
             <i class="fas fa-warning"></i> @ViewBag.ErrorMessage
         </div>
     }
-    <input type="hidden" name="IsExternalLogin" value="@Model.IsExternalLogin.ToString()" />
-    <input type="hidden" name="ExternalLoginAuthSchema" value="@Model.ExternalLoginAuthSchema" />
-    <div class="input-group mb-3">
-        <input type="text" name="UserName" class="form-control" placeholder="@L("UserName")" value="@Model.UserName"
-               required maxlength="@AbpUserBase.MaxUserNameLength">
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-user"></span>
-            </div>
+
+    @if (TempData["Alerts"] != null)
+    {
+        <div class="alert alert-info">
+            @TempData["Alerts"]
         </div>
-    </div>
+    }
+
     <div class="input-group mb-3">
         <input type="text" name="Name" class="form-control" placeholder="@L("FullName")" value="@Model.Name" required
                maxlength="@AbpUserBase.MaxNameLength">
@@ -50,16 +50,6 @@
         <div class="input-group-append">
             <div class="input-group-text">
                 <span class="fas fa-envelope"></span>
-            </div>
-        </div>
-    </div>
-   
-    <div class="input-group mb-3">
-        <input type="password" name="Password" class="form-control" placeholder="@L("Password")" required
-               maxlength="@AbpUserBase.MaxPlainPasswordLength">
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-lock"></span>
             </div>
         </div>
     </div>
@@ -104,7 +94,6 @@
                         <option value="@warehouse.Id" selected>@warehouse.Name</option>
                     }
                 }
-      
             }
         </select>
         <div class="input-group-append">
@@ -116,13 +105,18 @@
 
     <div class="row">
         <div class="col-8">
-            <a asp-action="Login" class="btn btn-default btn-flat"><i class="fa fa-arrow-circle-left"></i>
+            <a href="/home" class="btn btn-default btn-flat"><i class="fa fa-arrow-circle-left"></i>
                 @L("Back")</a>
             </div>
             <div class="col-4">
                 <button type="submit" id="RegisterButton"
-                        class="btn btn-primary btn-flat float-right">@L("Register")</button>
+                        class="btn btn-primary btn-flat float-right">@L("Update")</button>
             </div>
         </div>
     </form>
+    </div>
+    </div>
+    
+</div>
+
  

@@ -1,9 +1,12 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Abp.Application.Services.Dto;
+using Abp.Configuration.Startup;
 using Abp.Runtime.Security;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Pbt.Individual.ApplicationUtils;
 using Pbt.Individual.Controllers;
 using Pbt.Individual.Customers;
 using Pbt.Individual.Users;
@@ -15,11 +18,13 @@ namespace Pbt.Individual.Web.Mvc.Controllers
     public class UsersController : IndividualControllerBase
     {
         private readonly IUserAppService _userAppService;
-                private readonly ICustomerAppService _customerAppService;
-        private readonly IWarehouseAppService _warehouseAppService;
+        private readonly ICustomerAppService _customerAppService;
 
         private readonly string[] _roles;
         private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IMultiTenancyConfig _multiTenancyConfig;
+        private readonly IWarehouseAppService _warehouseAppService;
+
         public UsersController(IUserAppService userAppService,
             ICustomerAppService customerAppService,
             IWarehouseAppService warehouseAppService,
@@ -71,17 +76,71 @@ namespace Pbt.Individual.Web.Mvc.Controllers
         {
             return View();
         }
-        public ActionResult UpdateInformation()
+        
+        public async Task<ActionResult> UpdateInformation()
         {
-            
-            return View();
+            var model = new UpdateViewModel();
+            var warehouses = await _warehouseAppService.GetByTypeAsync((int)WarehouseType.Destination); // Assuming 1 is the type for warehouses in Vietnam
+            ViewBag.Warehouses = warehouses;
+            var cnWarehouses = await _warehouseAppService.GetByTypeAsync((int)WarehouseType.Source); // Assuming 2 is the type for warehouses in China
+            ViewBag.CNWarehouses = cnWarehouses;
+            var userId = User.Identity.GetUserId().Value; // Get current user ID
+            var user = await _userAppService.GetAsync(new EntityDto<long>(userId));
+            model.Name = user.Name;
+            model.PhoneNumber = user.PhoneNumber;
+            model.EmailAddress = user.EmailAddress;
+            model.CNWarehouseId = user.WarehouseId;
+            var customer = await _customerAppService.GetAsync(user.CustomerId ?? 0);
+            model.WarehouseId = (int)customer.WarehouseId;
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<ActionResult> UpdateInformation(UpdateViewModel model)
+        {
+            try
+            {
+                if (!ModelState.IsValid)
+                {
+                    var warehouses = await _warehouseAppService.GetByTypeAsync((int)WarehouseType.Destination);
+                    ViewBag.Warehouses = warehouses;
+                    var cnWarehouses = await _warehouseAppService.GetByTypeAsync((int)WarehouseType.Source);
+                    ViewBag.CNWarehouses = cnWarehouses;
+                    return View(model);
+                }
+
+                var userId = User.Identity.GetUserId().Value;
+                var result = await _userAppService.UpdateUserInfoAsync(
+                    userId,
+                    model.Name,
+                    model.PhoneNumber,
+                    model.EmailAddress,
+                    model.WarehouseId,
+                    model.CNWarehouseId
+                );
+                if (result)
+                {
+                    TempData["Alerts"] = L("UpdateSuccess");
+                    return RedirectToAction("UpdateInformation");
+                }
+            }
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", ex.Message);
+            }
+
+            var warehousesError = await _warehouseAppService.GetByTypeAsync((int)WarehouseType.Destination);
+            ViewBag.Warehouses = warehousesError;
+            var cnWarehousesError = await _warehouseAppService.GetByTypeAsync((int)WarehouseType.Source);
+            ViewBag.CNWarehouses = cnWarehousesError;
+            return View(model);
         }
 
         // public ActionResult ResetPassword(long userId)
         // {
         //     return PartialView("_ResetPassword", new ResetUserPasswordDto() { UserId = userId });
         // }
-        
+
         // public async Task<IActionResult> Information()
         // {
         //     var userId = User.Identity.GetUserId().Value; //
@@ -95,7 +154,7 @@ namespace Pbt.Individual.Web.Mvc.Controllers
         //     };
         //     return View(model);
         // }
-        
+
 
     }
 }
