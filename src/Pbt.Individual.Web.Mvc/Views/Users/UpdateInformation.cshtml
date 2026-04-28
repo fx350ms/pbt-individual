@@ -7,116 +7,132 @@
 {
     <script src="~/view-resources/Views/Account/Register.js" asp-append-version="true"></script>
 }
-<h4 class="text-center">@L("UpdateInformation")</h4>
-<div class="login-box" style="width: 500px; margin: 0 auto;"> 
-    <div class="card">
-<div class="card-body"> 
+<section class="content-header">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-sm-6">
+                <h1><i class="fas fa-user-edit"></i> @L("UpdateInformation")</h1>
+            </div>
+        </div>
+    </div>
+</section>
+<section class="content">
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card card-outline shadow-sm">
+                    <div class="card-header text-center bg-light">
+                        <img src="~/img/change_user_info.png" alt="User Update Icon" class="img-fluid" style="max-width: 80px; opacity: 0.8;">
+                    </div>
+                    <div class="card-body">
+                        
         <form id="RegisterForm" asp-action="UpdateInformation" method="post">
     @if (ViewBag.ErrorMessage != null)
     {
         <div class="alert alert-danger">
-            <i class="fas fa-warning"></i> @ViewBag.ErrorMessage
+            <i class="fas fa-exclamation-triangle"></i> @ViewBag.ErrorMessage
         </div>
     }
 
     @if (TempData["Alerts"] != null)
     {
-        <div class="alert alert-info">
-            @TempData["Alerts"]
+        <div class="alert alert-success">
+            <i class="fas fa-check-circle"></i> @TempData["Alerts"]
         </div>
     }
 
-    <div class="input-group mb-3">
-        <input type="text" name="Name" class="form-control" placeholder="@L("FullName")" value="@Model.Name" required
-               maxlength="@AbpUserBase.MaxNameLength">
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-arrow-left"></span>
+    <div class="form-group mb-3">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-user"></i></span>
             </div>
+            <input type="text" name="Name" class="form-control form-control-sm" placeholder="@L("FullName")" value="@Model.Name" required
+                   maxlength="@AbpUserBase.MaxNameLength">
         </div>
     </div>
-    <div class="input-group mb-3">
-        <input type="text" name="PhoneNumber" class="form-control" placeholder="@L("PhoneNumber")"
-               value="@Model.PhoneNumber" required maxlength="@AbpUserBase.MaxPhoneNumberLength">
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-phone"></span>
+    <div class="form-group mb-3">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-phone"></i></span>
             </div>
+            <input type="text" name="PhoneNumber" class="form-control form-control-sm" placeholder="@L("PhoneNumber")"
+                   value="@Model.PhoneNumber" required maxlength="@AbpUserBase.MaxPhoneNumberLength">
         </div>
     </div>
-    <div class="input-group mb-3">
-        <input type="email" name="EmailAddress" class="form-control" placeholder="@L("EmailAddress")"
-               value="@Model.EmailAddress" required maxlength="@AbpUserBase.MaxEmailAddressLength">
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-envelope"></span>
+    <div class="form-group mb-3">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
             </div>
+            <input type="email" name="EmailAddress" class="form-control form-control-sm" placeholder="@L("EmailAddress")"
+                   value="@Model.EmailAddress" required maxlength="@AbpUserBase.MaxEmailAddressLength">
         </div>
     </div>
 
-    <div class="input-group mb-3">
-        <select name="CNWarehouseId" class="form-control" required>
-            <option value="">@L("SelectSourceWarehouse")</option>
-            @if (ViewBag.CNWarehouses != null)
-            {
-                foreach (var warehouse in ViewBag.CNWarehouses)
+    <div class="form-group mb-3">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-warehouse"></i></span>
+            </div>
+            <select name="CNWarehouseId" class="form-control form-control-sm" required>
+                <option value="">@L("SelectSourceWarehouse")</option>
+                @if (ViewBag.CNWarehouses != null)
                 {
-                    @if (Model.CNWarehouseId == warehouse.Id)
+                    foreach (var warehouse in ViewBag.CNWarehouses)
                     {
-                        <option value="@warehouse.Id" selected>@warehouse.Name</option>
-                    }
-                    else
-                    {
-                        <option value="@warehouse.Id">@warehouse.Name</option>
+                        @if (Model.CNWarehouseId == warehouse.Id)
+                        {
+                            <option value="@warehouse.Id" selected>@warehouse.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@warehouse.Id">@warehouse.Name</option>
+                        }
                     }
                 }
-            }
-        </select>
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-warehouse"></span>
-            </div>
+            </select>
         </div>
     </div>
-    <div class="input-group mb-3">
-        <select name="WarehouseId" class="form-control" required>
-            <option value="@Model.WarehouseId">@L("SelectDestinationWarehouse")</option>
-            @if (ViewBag.Warehouses != null)
-            {
-                foreach (var warehouse in ViewBag.Warehouses)
+    <div class="form-group mb-4">
+        <div class="input-group">
+            <div class="input-group-prepend">
+                <span class="input-group-text"><i class="fas fa-warehouse"></i></span>
+            </div>
+            <select name="WarehouseId" class="form-control form-control-sm" required>
+                <option value="@Model.WarehouseId">@L("SelectDestinationWarehouse")</option>
+                @if (ViewBag.Warehouses != null)
                 {
-                    @if (warehouse.Id != Model.WarehouseId)
+                    foreach (var warehouse in ViewBag.Warehouses)
                     {
-                        <option value="@warehouse.Id">@warehouse.Name</option>
-                    }
-                    else
-                    {
-                        <option value="@warehouse.Id" selected>@warehouse.Name</option>
+                        @if (warehouse.Id != Model.WarehouseId)
+                        {
+                            <option value="@warehouse.Id">@warehouse.Name</option>
+                        }
+                        else
+                        {
+                            <option value="@warehouse.Id" selected>@warehouse.Name</option>
+                        }
                     }
                 }
-            }
-        </select>
-        <div class="input-group-append">
-            <div class="input-group-text">
-                <span class="fas fa-warehouse"></span>
-            </div>
+            </select>
         </div>
     </div>
 
     <div class="row">
-        <div class="col-8">
-            <a href="/home" class="btn btn-default btn-flat"><i class="fa fa-arrow-circle-left"></i>
-                @L("Back")</a>
-            </div>
-            <div class="col-4">
-                <button type="submit" id="RegisterButton"
-                        class="btn btn-primary btn-flat float-right">@L("Update")</button>
+        <div class="col-6 text-left">
+            <a href="/home" class="btn btn-secondary px-4 py-2">
+                <i class="fas fa-arrow-left mr-2"></i>@L("Back")
+            </a>
+        </div>
+        <div class="col-6 text-right">
+            <button type="submit" id="RegisterButton"
+                    class="btn btn-primary px-4 py-2">@L("Update") <i class="fas fa-save ml-2"></i></button>
+        </div>
+    </div>
+    </form>
+                    </div>
+                </div>
             </div>
         </div>
-    </form>
     </div>
-    </div>
-    
-</div>
-
- 
+</section>
