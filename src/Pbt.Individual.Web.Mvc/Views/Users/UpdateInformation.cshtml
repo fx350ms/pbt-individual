@@ -22,117 +22,148 @@
             <div class="col-md-6 col-lg-5">
                 <div class="card card-outline shadow-sm">
                     <div class="card-header text-center bg-light">
-                        <img src="~/img/change_user_info.png" alt="User Update Icon" class="img-fluid" style="max-width: 80px; opacity: 0.8;">
-                    </div>
-                    <div class="card-body">
+                        <img src="~/img/change_user_info.png" alt="User Update Icon" class="img-fluid"
+                             style="max-width: 80px; opacity: 0.8;">
+                        </div>
+                        <div class="card-body">
                         
-        <form id="RegisterForm" asp-action="UpdateInformation" method="post">
-    @if (ViewBag.ErrorMessage != null)
-    {
-        <div class="alert alert-danger">
-            <i class="fas fa-exclamation-triangle"></i> @ViewBag.ErrorMessage
-        </div>
-    }
+                            <form id="RegisterForm" asp-action="UpdateInformation" method="post">
+                                @if (ViewBag.ErrorMessage != null)
+                                {
+                                    <div class="alert alert-danger">
+                                        <i class="fas fa-exclamation-triangle"></i> @ViewBag.ErrorMessage
+                                    </div>
+                                }
 
-    @if (TempData["Alerts"] != null)
-    {
-        <div class="alert alert-success">
-            <i class="fas fa-check-circle"></i> @TempData["Alerts"]
-        </div>
-    }
+                                @if (TempData["Alerts"] != null)
+                                {
+                                    <div class="alert alert-success">
+                                        <i class="fas fa-check-circle"></i> @TempData["Alerts"]
+                                    </div>
+                                }
 
-    <div class="form-group mb-3">
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fas fa-user"></i></span>
-            </div>
-            <input type="text" name="Name" class="form-control form-control-sm" placeholder="@L("FullName")" value="@Model.Name" required
-                   maxlength="@AbpUserBase.MaxNameLength">
-        </div>
-    </div>
-    <div class="form-group mb-3">
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fas fa-phone"></i></span>
-            </div>
-            <input type="text" name="PhoneNumber" class="form-control form-control-sm" placeholder="@L("PhoneNumber")"
-                   value="@Model.PhoneNumber" required maxlength="@AbpUserBase.MaxPhoneNumberLength">
-        </div>
-    </div>
-    <div class="form-group mb-3">
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
-            </div>
-            <input type="email" name="EmailAddress" class="form-control form-control-sm" placeholder="@L("EmailAddress")"
-                   value="@Model.EmailAddress" required maxlength="@AbpUserBase.MaxEmailAddressLength">
-        </div>
-    </div>
+                                <div class="form-group row mb-3">
+                                    <div class="col-3 text-left align-self-center">
+                                        <label class="col-form-label font-weight-bold">@L("FullName")</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                            </div>
+                                            <input type="text" name="Name" class="form-control form-control-sm"
+                                                   placeholder="@L("FullName")" value="@Model.Name" required
+                                                   maxlength="@AbpUserBase.MaxNameLength">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-3">
+                                    <div class="col-3 text-left align-self-center">
+                                        <label class="col-form-label font-weight-bold">@L("PhoneNumber")</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-phone"></i></span>
+                                            </div>
+                                            <input type="text" name="PhoneNumber" class="form-control form-control-sm"
+                                                   placeholder="@L("PhoneNumber")" value="@Model.PhoneNumber" required
+                                                   maxlength="@AbpUserBase.MaxPhoneNumberLength">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-3">
+                                    <div class="col-3 text-left align-self-center">
+                                        <label class="col-form-label font-weight-bold">@L("EmailAddress")</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                            </div>
+                                            <input type="email" name="EmailAddress" class="form-control form-control-sm"
+                                                   placeholder="@L("EmailAddress")" value="@Model.EmailAddress" required
+                                                   maxlength="@AbpUserBase.MaxEmailAddressLength">
+                                        </div>
+                                    </div>
+                                </div>
 
-    <div class="form-group mb-3">
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fas fa-warehouse"></i></span>
-            </div>
-            <select name="CNWarehouseId" class="form-control form-control-sm" required>
-                <option value="">@L("SelectSourceWarehouse")</option>
-                @if (ViewBag.CNWarehouses != null)
-                {
-                    foreach (var warehouse in ViewBag.CNWarehouses)
-                    {
-                        @if (Model.CNWarehouseId == warehouse.Id)
-                        {
-                            <option value="@warehouse.Id" selected>@warehouse.Name</option>
-                        }
-                        else
-                        {
-                            <option value="@warehouse.Id">@warehouse.Name</option>
-                        }
-                    }
-                }
-            </select>
-        </div>
-    </div>
-    <div class="form-group mb-4">
-        <div class="input-group">
-            <div class="input-group-prepend">
-                <span class="input-group-text"><i class="fas fa-warehouse"></i></span>
-            </div>
-            <select name="WarehouseId" class="form-control form-control-sm" required>
-                <option value="@Model.WarehouseId">@L("SelectDestinationWarehouse")</option>
-                @if (ViewBag.Warehouses != null)
-                {
-                    foreach (var warehouse in ViewBag.Warehouses)
-                    {
-                        @if (warehouse.Id != Model.WarehouseId)
-                        {
-                            <option value="@warehouse.Id">@warehouse.Name</option>
-                        }
-                        else
-                        {
-                            <option value="@warehouse.Id" selected>@warehouse.Name</option>
-                        }
-                    }
-                }
-            </select>
-        </div>
-    </div>
+                                <div class="form-group row mb-3">
+                                    <div class="col-3 text-left align-self-center">
+                                        <label class="col-form-label font-weight-bold">@L("SelectSourceWarehouse")</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-warehouse"></i></span>
+                                            </div>
+                                            <select name="CNWarehouseId" class="form-control form-control-sm" required>
+                                                <option value="">@L("SelectSourceWarehouse")</option>
+                                                @if (ViewBag.CNWarehouses != null)
+                                                {
+                                                    foreach (var warehouse in ViewBag.CNWarehouses)
+                                                    {
+                                                        @if (Model.CNWarehouseId == warehouse.Id)
+                                                        {
+                                                            <option value="@warehouse.Id" selected>@warehouse.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@warehouse.Id">@warehouse.Name</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-group row mb-4">
+                                    <div class="col-3 text-left align-self-center">
+                                        <label
+                                        class="col-form-label font-weight-bold">@L("SelectDestinationWarehouse")</label>
+                                    </div>
+                                    <div class="col-9">
+                                        <div class="input-group">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-warehouse"></i></span>
+                                            </div>
+                                            <select name="WarehouseId" class="form-control form-control-sm" required>
+                                                <option value="@Model.WarehouseId">@L("SelectDestinationWarehouse")</option>
+                                                @if (ViewBag.Warehouses != null)
+                                                {
+                                                    foreach (var warehouse in ViewBag.Warehouses)
+                                                    {
+                                                        @if (warehouse.Id != Model.WarehouseId)
+                                                        {
+                                                            <option value="@warehouse.Id">@warehouse.Name</option>
+                                                        }
+                                                        else
+                                                        {
+                                                            <option value="@warehouse.Id" selected>@warehouse.Name</option>
+                                                        }
+                                                    }
+                                                }
+                                            </select>
+                                        </div>
+                                    </div>
+                                </div>
 
-    <div class="row">
-        <div class="col-6 text-left">
-            <a href="/home" class="btn btn-secondary px-4 py-2">
-                <i class="fas fa-arrow-left mr-2"></i>@L("Back")
-            </a>
-        </div>
-        <div class="col-6 text-right">
-            <button type="submit" id="RegisterButton"
-                    class="btn btn-primary px-4 py-2">@L("Update") <i class="fas fa-save ml-2"></i></button>
-        </div>
-    </div>
-    </form>
+                                <div class="row">
+                                    <div class="col-6 text-left">
+                                        <a href="/home" class="btn btn-secondary px-4 py-2">
+                                            <i class="fas fa-arrow-left mr-2"></i>@L("Back")
+                                        </a>
+                                    </div>
+                                    <div class="col-6 text-right">
+                                        <button type="submit" id="RegisterButton"
+                                                class="btn btn-primary px-4 py-2">@L("Update") <i
+                                            class="fas fa-save ml-2"></i></button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-    </div>
-</section>
+        </section>
